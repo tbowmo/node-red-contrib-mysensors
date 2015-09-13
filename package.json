@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/tbowmo/node-red-contrib-mysensor/"
+    "url": "https://github.com/tbowmo/node-red-contrib-mysensors/"
   },
   "author": "Thomas Bowman Mørch",
   "license": "GPL-2.0",
