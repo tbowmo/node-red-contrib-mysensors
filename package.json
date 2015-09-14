@@ -28,6 +28,6 @@
     },
   "homepage": "https://github.com/tbowmo/node-red-contrib-mysensors",
   "bugs" : {
-	"url":"https://github.com/tbowmo/node-red-contrib-mysensors"
+	"url":"https://github.com/tbowmo/node-red-contrib-mysensors/issues"
   }
 }

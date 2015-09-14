@@ -3,7 +3,7 @@
 A node-RED mysensors protocol decoder / encoder / wrapper package. 
 Contains a node to decode / encode mysensors serial protocol to / from node-red messages, and a node for adding mysensors specific data like sensor type, nodeid etc. which can then be sent to mysensors network
 
-# Install
+## Install
 
 Within your local installation of Node-RED run:
 
@@ -11,7 +11,7 @@ Within your local installation of Node-RED run:
 
 Once installed, you will have two new nodes available : mysdecenc, and mysencap.
 
-# Node-RED mysdecenc
+## Node-RED mysdecenc
 
 This decodes the mysensors serial protocol packages, and enriches the Node-RED msg object with the following extra data:
 
@@ -24,11 +24,11 @@ msg.ack
 msg.subType
 ```
 
-... the following nodes will be able to use these properties to interact with the messages from the mysensors network. ...
+The following nodes will be able to use these properties to interact with the messages from the mysensors network
 
-If you feed the mysdecenc node with a msg object, that contains the above properties, it will output a message conforming to the mysensors serial API protocol, as described at http://www.mysensors.org/download/serial_api_15
+If you feed the mysdecenc node with a msg object, that contains the above properties, it will output a message conforming to the mysensors serial API protocol, as described at [mysensors website](http://www.mysensors.org/download/serial_api_15)
 
-# Node-RED mysencap
+## Node-RED mysencap
 
-This will add the message properties mention under mysdecenc, to the message object of an existing Node-RED message. By sending the output through mysdecenc, you can create a message that can be sent to the sensor network.
+This will add the message properties mention under mysdecenc to the message object of an existing Node-RED message. By sending the output through mysdecenc, you can create a message that can be sent to the sensor network.
 
