@@ -1,22 +1,3 @@
-<script type="text/javascript">
-    RED.nodes.registerType('mysencap',{
-        category: 'function',
-        color: '#a6bbcf',
-        defaults: {
-            name: {value:""},
-            nodeid: {value:0, required:true},
-            childid: {value:0, required:true},
-            subtype: {value:0, required:true}
-        },
-        inputs:1,
-        outputs:1,
-        icon: "envelope.png",
-        label: function() {
-            return this.name||"mysencap";
-        }
-    });
-</script>
-
 <script type="text/x-red" data-template-name="mysencap">
     <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
@@ -31,8 +12,76 @@
         <input type="text" id="node-input-childid" placeholder="Child id">       
     </div>
     <div class="form-row">
+        <label for="node-input-msgtype"><i class="icon-tag"></i> Message Type</label>
+	<select id="node-input-msgtype">
+	<!--option value="0">Presentation</option-->
+	<option value="1">Set</option>
+	<option value="2">Request</option>
+	<option value="3">Internal</option>	
+	</select>
+    </div>
+    <div class="form-row" id="node-input-row-subtype">
         <label for="node-input-subtype"><i class="icon-tag"></i> Child type</label>
         <select id="node-input-subtype">      
+        <select> 
+    </div>
+    <div class="form-row">
+        <label for="node-input-ack"><i class="icon-tag"></i> Ack</label>
+        <input type="checkbox" id="node-input-ack">       
+    </div>
+    <div class="form-row">
+        <label for="node-input-presentation"><i class="icon-tag"></i> Presentation</label>
+        <input type="checkbox" id="node-input-presentation">       
+    </div>
+    <div class="form-row node-presentation-opts">
+        <label for="node-input-presentationtext"><i class="icon-tag"></i> Text</label>
+        <input type="text" id="node-input-presentationtext">       
+    </div>
+    <div class="form-row node-presentation-opts">
+        <label for="node-input-presentationtype"><i class="icon-tag"></i> Type</label>
+        <select id="node-input-presentationtype">
+<option value="0">S_DOOR</option>
+<option value="1">S_MOTION</option>
+<option value="2">S_SMOKE</option>
+<option value="3">S_LIGHT</option>
+<option value="3">S_BINARY</option>
+<option value="4">S_DIMMER</option>
+<option value="5">S_COVER</option>
+<option value="6">S_TEMP</option>
+<option value="7">S_HUM</option>
+<option value="8">S_BARO</option>
+<option value="9">S_WIND</option>
+<option value="10">S_RAIN</option>
+<option value="11">S_UV</option>
+<option value="12">S_WEIGHT</option>
+<option value="13">S_POWER</option>
+<option value="14">S_HEATER</option>
+<option value="15">S_DISTANCE</option>
+<option value="16">S_LIGHT_LEVEL</option>
+<option value="17">S_ARDUINO_NODE</option>
+<option value="18">S_ARDUINO_REPEATER_NODE</option>
+<option value="19">S_LOCK</option>
+<option value="20">S_IR</option>
+<option value="21">S_WATER</option>
+<option value="22">S_AIR_QUALITY</option>
+<option value="23">S_CUSTOM</option>
+<option value="24">S_DUST</option>
+<option value="25">S_SCENE_CONTROLLER</option>
+<option value="26">S_RGB_LIGHT</option>
+<option value="27">S_RGBW_LIGHT</option>
+<option value="28">S_COLOR_SENSOR</option>
+<option value="29">S_HVAC</option>
+<option value="30">S_MULTIMETER</option>
+<option value="31">S_SPRINKLER</option>
+<option value="32">S_WATER_LEAK</option>
+<option value="33">S_SOUND</option>
+<option value="34">S_VIBRATION</option>
+<option value="35">S_MOISTURE</option>
+
+        </select>       
+    </div>
+</script>
+<div id="LIST_VAR" style="display:none;">
 <option value="0">V_TEMP</option>
 <option value="1">V_HUM</option>
 <option value="2">V_STATUS</option>
@@ -82,10 +131,27 @@
 <option value="44">V_HVAC_SETPOINT_COOL</option>
 <option value="45">V_HVAC_SETPOINT_HEAT</option>
 <option value="46">V_HVAC_FLOW_MODE</option>
-        <select> 
-    </div>
-</script>
-
+</div>
+<div id="LIST_INTERNAL" style="display:none">
+<option value="0">I_BATTERY_LEVEL</option>
+<option value="1">I_TIME</option>
+<option value="2">I_VERSION</option>
+<option value="3">I_ID_REQUEST</option>
+<option value="4">I_ID_RESPONSE</option>
+<option value="5">I_INCLUSION_MODE</option>
+<option value="6">I_CONFIG</option>
+<option value="7">I_FIND_PARENT</option>
+<option value="8">I_FIND_PARENT_RESPONSE</option>
+<option value="9">I_LOG_MESSAGE</option>
+<option value="10">I_CHILDREN</option>
+<option value="11">I_SKETCH_NAME</option>
+<option value="12">I_SKETCH_VERSION</option>
+<option value="13">I_REBOOT</option>
+<option value="14">I_GATEWAY_READY</option>
+<option value="15">I_REQUEST_SIGNING</option>
+<option value="16">I_GET_NONCE</option>
+<option value="17">I_GET_NONCE_RESPONSE</option>
+</div>
 <script type="text/x-red" data-help-name="mysencap">
     <p>Adds extra propperties to the message object, so it conforms to
     mysensor data. Send the resulting message through mysdecenc to convert
@@ -95,9 +161,65 @@
     <ul>
     <li>nodeId - configurable</li>
     <li>childSensorId - configurable</li>
-    <li>messageType - always 1 (set value)</li>
-    <li>ack - always 0 (do not request ack)</li>
+    <li>messageType - configurable</li>
+    <li>ack - configurable</li>
     <li>subType - configurable</li>
     <li>payload - left untouched</li>
     </ul>
+    <p>if "presentation" is checked, a presentation message will be sent
+    at startup of node-red (or a new flow is deployed). This can be used to
+    generate presentation of dummy nodes, that you create.
+    </p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('mysencap',{
+        category: 'function',
+        color: '#a6bbcf',
+        defaults: {
+            name: {value:""},
+            nodeid: {value:0, required:true},
+            childid: {value:0, required:true},
+            subtype: {value:0, required:true},
+            ack : {value:false, required:true},
+            msgtype: {value:0, required:true},
+            presentation: {value : false, required:false},
+            presentationtype: {value:0},
+            presentationtext: {value:""}
+            
+        },
+        inputs:1,
+        outputs:1,
+        icon: "envelope.png",
+        label: function() {
+            return this.name||"mysencap";
+        },
+        oneditprepare: function() {
+      	   var d = $("#LIST_VAR").html();
+      	   $("#node-input-subtype").html(d);
+           if (!$('#node-input-presentation').is(':checked')) $('.node-presentation-opts').hide();
+           
+           $("#node-input-msgtype").change(function() {
+               var id = $("#node-input-msgtype option:selected").val();
+               if (id == "0") {
+               	   var d = $("#LIST_PRESENTATION").html();
+                   $("#node-input-subtype").html(d);
+               } else if (id == "1" | id=="2") {
+               	   var d = $("#LIST_VAR").html();
+                   $("#node-input-subtype").html(d);
+               } else if (id == "3") {
+               	   var d = $("#LIST_INTERNAL").html();
+                   $("#node-input-subtype").html(d);
+               }
+           });
+           $('#node-input-presentation').click(function() {
+               if (this.checked) {
+                   $('.node-presentation-opts').show();
+               } else {
+                   $('.node-presentation-opts').hide();
+               }
+           });
+        }
+    });
+
 </script>
