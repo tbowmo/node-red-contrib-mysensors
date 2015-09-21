@@ -1,6 +1,6 @@
 # node-red-contrib-mysensor
 
-A node-RED mysensors protocol decoder / encoder / wrapper package. 
+A node-RED [mysensors](http://www.mysensors.org) protocol decoder / encoder / wrapper package. 
 Contains a node to decode / encode mysensors serial protocol to / from node-red messages, and a node for adding mysensors specific data like sensor type, nodeid etc. which can then be sent to mysensors network
 
 ## Install
@@ -23,6 +23,8 @@ msg.messageType
 msg.ack
 msg.subType
 ```
+
+see [mysensors API](http://www.mysensors.org/download/serial_api_15) for more info on the different parts
 
 The following nodes will be able to use these properties to interact with the messages from the mysensors network
 

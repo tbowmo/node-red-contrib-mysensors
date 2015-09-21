@@ -10,11 +10,11 @@ module.exports = function(RED) {
             msg.rawData = tokens;
             if(tokens.length == 6)
             {
-                msg.nodeId = tokens[0];
-                msg.childSensorId = tokens[1];
-                msg.messageType = tokens[2];
-                msg.ack = tokens[3];
-                msg.subType = tokens[4];
+                msg.nodeId = parseInt(tokens[0]);
+                msg.childSensorId = parseInt(tokens[1]);
+                msg.messageType = parseInt(tokens[2]);
+                msg.ack = parseInt(tokens[3]);
+                msg.subType = parseInt(tokens[4]);
                 msg.payload = tokens[5];
             }
             else
