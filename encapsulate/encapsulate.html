@@ -4,14 +4,6 @@
         <input type="text" id="node-input-name" placeholder="Name">       
     </div>
     <div class="form-row">
-        <label for="node-input-nodeid"><i class="icon-tag"></i> Node ID</label>
-        <input type="text" id="node-input-nodeid" placeholder="NodeId">       
-    </div>
-    <div class="form-row">
-        <label for="node-input-childid"><i class="icon-tag"></i> Child ID</label>
-        <input type="text" id="node-input-childid" placeholder="Child id">       
-    </div>
-    <div class="form-row">
         <label for="node-input-msgtype"><i class="icon-tag"></i> Message Type</label>
 	<select id="node-input-msgtype">
 	<!--option value="0">Presentation</option-->
@@ -19,6 +11,14 @@
 	<option value="2">Request</option>
 	<option value="3">Internal</option>	
 	</select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-nodeid"><i class="icon-tag"></i> Node ID</label>
+        <input type="text" id="node-input-nodeid" placeholder="NodeId">       
+    </div>
+    <div class="form-row node-childid">
+        <label for="node-input-childid"><i class="icon-tag"></i> Child ID</label>
+        <input type="text" id="node-input-childid" placeholder="Child id">       
     </div>
     <div class="form-row" id="node-input-row-subtype">
         <label for="node-input-subtype"><i class="icon-tag"></i> Child type</label>
@@ -204,10 +204,13 @@
                if (id == "0") {
                	   var d = $("#LIST_PRESENTATION").html();
                    $("#node-input-subtype").html(d);
+                   $(".node-childid").show();
                } else if (id == "1" | id=="2") {
                	   var d = $("#LIST_VAR").html();
                    $("#node-input-subtype").html(d);
+                   $(".node-childid").show();
                } else if (id == "3") {
+                   $(".node-childid").hide();
                	   var d = $("#LIST_INTERNAL").html();
                    $("#node-input-subtype").html(d);
                }

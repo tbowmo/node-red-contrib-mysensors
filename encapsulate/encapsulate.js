@@ -30,6 +30,7 @@ module.exports = function(RED) {
             msg.subType = node.subtype;
             msg.messageType = node.msgtype;
             msg.ack = (node.ack?1:0);
+            if (node.msgtype == 3) msg.childSensorId = 255;
             node.send(msg);
         });
 
