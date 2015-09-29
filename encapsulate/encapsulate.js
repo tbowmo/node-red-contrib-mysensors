@@ -9,17 +9,30 @@ module.exports = function(RED) {
         this.presentation = config.presentation;
         this.presentationtext = config.presentationtext;
         this.presentationtype = config.presentationtype;
+        this.fullpresentation = config.fullpresentation;
+        this.firmwarename = config.firmwarename;
+        this.firmwareversion = config.firmwareversion;
         var node = this;
-
-        if (this.presentation) {
+        
+        if (node.presentation) {
             setTimeout(function() {
                 var msg = {};
-                msg.payload = node.presentationtext;
                 msg.nodeId = node.nodeid;
-                msg.childsensorId = node.childid;
-                msg.subType = node.presentationtype;
                 msg.messageType = 0;
                 msg.ack = 0;
+                if (node.fullpresentation) {
+                    msg.childSensorId = 255; // Internal messages always send as childi 255
+                    msg.subType = 12; // Sketchname
+                    msg.payload = node.firmwarename;                
+                    node.send(msg);
+
+                    msg.subType = 13; // Sketchname
+                    msg.payload = node.firmwareversion;                
+                    node.send(msg);
+                }
+                msg.childSensorId = node.childid;
+                msg.subType = node.presentationtype;
+                msg.payload = node.presentationtext;
                 node.send(msg);
             }, 1000);
         }

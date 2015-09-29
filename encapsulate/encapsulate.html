@@ -80,6 +80,18 @@
 
         </select>       
     </div>
+    <div class="form-row node-presentation-opts">
+        <label for="node-input-fullpresentation"><i class="icon-tag"></i> Present firmware</label>
+        <input type="checkbox" id="node-input-fullpresentation">       
+    </div>
+    <div class="form-row node-presentation-full-opts">
+        <label for="node-input-firmwarename"><i class="icon-tag"></i> Firmware</label>
+        <input type="text" id="node-input-firmwarename">       
+    </div>
+    <div class="form-row node-presentation-full-opts">
+        <label for="node-input-firmwareversion"><i class="icon-tag"></i> Version</label>
+        <input type="text" id="node-input-firmwareversion">       
+    </div>
 </script>
 <div id="LIST_VAR" style="display:none;">
 <option value="0">V_TEMP</option>
@@ -185,7 +197,10 @@
             msgtype: {value:0, required:true},
             presentation: {value : false, required:false},
             presentationtype: {value:0},
-            presentationtext: {value:""}
+            presentationtext: {value:""},
+            fullpresentation: {value:false, required:false},
+            firmwarename : {value:""},
+            firmwareversion : {value:""}
             
         },
         inputs:1,
@@ -198,7 +213,8 @@
       	   var d = $("#LIST_VAR").html();
       	   $("#node-input-subtype").html(d);
            if (!$('#node-input-presentation').is(':checked')) $('.node-presentation-opts').hide();
-           
+	   if (!$('#node-input-fullpresentation').is(':checked'))$('.node-presentation-full-opts').hide();            
+
            $("#node-input-msgtype").change(function() {
                var id = $("#node-input-msgtype option:selected").val();
                if (id == "0") {
@@ -220,6 +236,15 @@
                    $('.node-presentation-opts').show();
                } else {
                    $('.node-presentation-opts').hide();
+               }
+               if (!$('#node-input-fullpresentation').is(':checked')) $('.node-presentation-full-opts').hide();
+               else $('.node-presentation-full-opts').show();
+           });
+           $('#node-input-fullpresentation').click(function() {
+               if (this.checked) {
+                   $('.node-presentation-full-opts').show();
+               } else {
+                   $('.node-presentation-full-opts').hide();
                }
            });
         }
