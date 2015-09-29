@@ -18,23 +18,24 @@ module.exports = function(RED) {
             setTimeout(function() {
                 var msg = {};
                 msg.nodeId = node.nodeid;
-                msg.messageType = 0;
                 msg.ack = 0;
                 if (node.fullpresentation) {
+                    msg.messageType = 3;
                     msg.childSensorId = 255; // Internal messages always send as childi 255
-                    msg.subType = 12; // Sketchname
+                    msg.subType = 11; // Sketchname
                     msg.payload = node.firmwarename;                
                     node.send(msg);
 
-                    msg.subType = 13; // Sketchname
+                    msg.subType = 12; // Sketchname
                     msg.payload = node.firmwareversion;                
                     node.send(msg);
                 }
+                msg.messageType = 0;
                 msg.childSensorId = node.childid;
                 msg.subType = node.presentationtype;
                 msg.payload = node.presentationtext;
                 node.send(msg);
-            }, 1000);
+            }, 5000);
         }
 
         this.on('input', function(msg) {
