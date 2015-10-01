@@ -6,7 +6,6 @@
     <div class="form-row">
         <label for="node-input-msgtype"><i class="icon-tag"></i> Message Type</label>
 	<select id="node-input-msgtype">
-	<!--option value="0">Presentation</option-->
 	<option value="1">Set</option>
 	<option value="2">Request</option>
 	<option value="3">Internal</option>	
@@ -23,7 +22,79 @@
     <div class="form-row" id="node-input-row-subtype">
         <label for="node-input-subtype"><i class="icon-tag"></i> Child type</label>
         <select id="node-input-subtype">      
+<option value="0">V_TEMP</option>
+<option value="1">V_HUM</option>
+<option value="2">V_STATUS</option>
+<option value="2">V_LIGHT</option>
+<option value="3">V_PERCENTAGE</option>
+<option value="3">V_DIMMER</option>
+<option value="4">V_PRESSURE</option>
+<option value="5">V_FORECAST</option>
+<option value="6">V_RAIN</option>
+<option value="7">V_RAINRATE</option>
+<option value="8">V_WIND</option>
+<option value="9">V_GUST</option>
+<option value="10">V_DIRECTION</option>
+<option value="11">V_UV</option>
+<option value="12">V_WEIGHT</option>
+<option value="13">V_DISTANCE</option>
+<option value="14">V_IMPEDANCE</option>
+<option value="15">V_ARMED</option>
+<option value="16">V_TRIPPED</option>
+<option value="17">V_WATT</option>
+<option value="18">V_KWH</option>
+<option value="19">V_SCENE_ON</option>
+<option value="20">V_SCENE_OFF</option>
+<option value="21">V_HVAC_FLOW_STATE</option>
+<option value="22">V_HVAC_SPEED</option>
+<option value="23">V_LIGHT_LEVEL</option>
+<option value="24">V_VAR1</option>
+<option value="25">V_VAR2</option>
+<option value="26">V_VAR3</option>
+<option value="27">V_VAR4</option>
+<option value="28">V_VAR5</option>
+<option value="29">V_UP</option>
+<option value="30">V_DOWN</option>
+<option value="31">V_STOP</option>
+<option value="32">V_IR_SEND</option>
+<option value="33">V_IR_RECEIVE</option>
+<option value="34">V_FLOW</option>
+<option value="35">V_VOLUME</option>
+<option value="36">V_LOCK_STATUS</option>
+<option value="37">V_LEVEL</option>
+<option value="38">V_VOLTAGE</option>
+<option value="39">V_CURRENT</option>
+<option value="40">V_RGB</option>
+<option value="41">V_RGBW</option>
+<option value="42">V_ID</option>
+<option value="43">V_UNIT_PREFIX</option>
+<option value="44">V_HVAC_SETPOINT_COOL</option>
+<option value="45">V_HVAC_SETPOINT_HEAT</option>
+<option value="46">V_HVAC_FLOW_MODE</option>
         <select> 
+    </div>
+    <div class="form-row" id="node-input-row-internal">
+        <label for="node-input-internal"><i class="icon-tag"></i> Internal msg</label>
+        <select id="node-input-internal">      
+<option value="0">I_BATTERY_LEVEL</option>
+<option value="1">I_TIME</option>
+<option value="2">I_VERSION</option>
+<option value="3">I_ID_REQUEST</option>
+<option value="4">I_ID_RESPONSE</option>
+<option value="5">I_INCLUSION_MODE</option>
+<option value="6">I_CONFIG</option>
+<option value="7">I_FIND_PARENT</option>
+<option value="8">I_FIND_PARENT_RESPONSE</option>
+<option value="9">I_LOG_MESSAGE</option>
+<option value="10">I_CHILDREN</option>
+<option value="11">I_SKETCH_NAME</option>
+<option value="12">I_SKETCH_VERSION</option>
+<option value="13">I_REBOOT</option>
+<option value="14">I_GATEWAY_READY</option>
+<option value="15">I_REQUEST_SIGNING</option>
+<option value="16">I_GET_NONCE</option>
+<option value="17">I_GET_NONCE_RESPONSE</option>
+    </select>
     </div>
     <div class="form-row">
         <label for="node-input-ack"><i class="icon-tag"></i> Ack</label>
@@ -93,77 +164,6 @@
         <input type="text" id="node-input-firmwareversion">       
     </div>
 </script>
-<div id="LIST_VAR" style="display:none;">
-<option value="0">V_TEMP</option>
-<option value="1">V_HUM</option>
-<option value="2">V_STATUS</option>
-<option value="2">V_LIGHT</option>
-<option value="3">V_PERCENTAGE</option>
-<option value="3">V_DIMMER</option>
-<option value="4">V_PRESSURE</option>
-<option value="5">V_FORECAST</option>
-<option value="6">V_RAIN</option>
-<option value="7">V_RAINRATE</option>
-<option value="8">V_WIND</option>
-<option value="9">V_GUST</option>
-<option value="10">V_DIRECTION</option>
-<option value="11">V_UV</option>
-<option value="12">V_WEIGHT</option>
-<option value="13">V_DISTANCE</option>
-<option value="14">V_IMPEDANCE</option>
-<option value="15">V_ARMED</option>
-<option value="16">V_TRIPPED</option>
-<option value="17">V_WATT</option>
-<option value="18">V_KWH</option>
-<option value="19">V_SCENE_ON</option>
-<option value="20">V_SCENE_OFF</option>
-<option value="21">V_HVAC_FLOW_STATE</option>
-<option value="22">V_HVAC_SPEED</option>
-<option value="23">V_LIGHT_LEVEL</option>
-<option value="24">V_VAR1</option>
-<option value="25">V_VAR2</option>
-<option value="26">V_VAR3</option>
-<option value="27">V_VAR4</option>
-<option value="28">V_VAR5</option>
-<option value="29">V_UP</option>
-<option value="30">V_DOWN</option>
-<option value="31">V_STOP</option>
-<option value="32">V_IR_SEND</option>
-<option value="33">V_IR_RECEIVE</option>
-<option value="34">V_FLOW</option>
-<option value="35">V_VOLUME</option>
-<option value="36">V_LOCK_STATUS</option>
-<option value="37">V_LEVEL</option>
-<option value="38">V_VOLTAGE</option>
-<option value="39">V_CURRENT</option>
-<option value="40">V_RGB</option>
-<option value="41">V_RGBW</option>
-<option value="42">V_ID</option>
-<option value="43">V_UNIT_PREFIX</option>
-<option value="44">V_HVAC_SETPOINT_COOL</option>
-<option value="45">V_HVAC_SETPOINT_HEAT</option>
-<option value="46">V_HVAC_FLOW_MODE</option>
-</div>
-<div id="LIST_INTERNAL" style="display:none">
-<option value="0">I_BATTERY_LEVEL</option>
-<option value="1">I_TIME</option>
-<option value="2">I_VERSION</option>
-<option value="3">I_ID_REQUEST</option>
-<option value="4">I_ID_RESPONSE</option>
-<option value="5">I_INCLUSION_MODE</option>
-<option value="6">I_CONFIG</option>
-<option value="7">I_FIND_PARENT</option>
-<option value="8">I_FIND_PARENT_RESPONSE</option>
-<option value="9">I_LOG_MESSAGE</option>
-<option value="10">I_CHILDREN</option>
-<option value="11">I_SKETCH_NAME</option>
-<option value="12">I_SKETCH_VERSION</option>
-<option value="13">I_REBOOT</option>
-<option value="14">I_GATEWAY_READY</option>
-<option value="15">I_REQUEST_SIGNING</option>
-<option value="16">I_GET_NONCE</option>
-<option value="17">I_GET_NONCE_RESPONSE</option>
-</div>
 <script type="text/x-red" data-help-name="mysencap">
     <p>Adds extra propperties to the message object, so it conforms to
     mysensor data. Send the resulting message through mysdecenc to convert
@@ -192,7 +192,8 @@
             name: {value:""},
             nodeid: {value:0, required:true},
             childid: {value:0, required:true},
-            subtype: {value:0, required:true},
+            subtype: {value:0},
+            internal: {value:0}, 
             ack : {value:false, required:true},
             msgtype: {value:0, required:true},
             presentation: {value : false, required:false},
@@ -213,24 +214,29 @@
       	   var d = $("#LIST_VAR").html();
       	   $("#node-input-subtype").html(d);
            if (!$('#node-input-presentation').is(':checked')) $('.node-presentation-opts').hide();
-	   if (!$('#node-input-fullpresentation').is(':checked'))$('.node-presentation-full-opts').hide();            
-
+	   if (!$('#node-input-fullpresentation').is(':checked'))$('.node-presentation-full-opts').hide();           
+	   
+	   sortOptions('node-input-subtype');
+	   sortOptions('node-input-internal');
+	   sortOptions('node-input-presentationtype');
            $("#node-input-msgtype").change(function() {
                var id = $("#node-input-msgtype option:selected").val();
                if (id == "0") {
-               	   var d = $("#LIST_PRESENTATION").html();
-                   $("#node-input-subtype").html(d);
+                   $("#node-input-row-subtype").show();
                    $(".node-childid").show();
+                   $("#node-input-row-internal").hide();
                } else if (id == "1" | id=="2") {
-               	   var d = $("#LIST_VAR").html();
-                   $("#node-input-subtype").html(d);
+                   $("#node-input-row-subtype").show();
                    $(".node-childid").show();
+                   $("#node-input-row-internal").hide();
                } else if (id == "3") {
+                   $("#node-input-row-subtype").hide();
+                   $("#node-input-row-internal").show();
                    $(".node-childid").hide();
                	   var d = $("#LIST_INTERNAL").html();
-                   $("#node-input-subtype").html(d);
                }
            });
+
            $('#node-input-presentation').click(function() {
                if (this.checked) {
                    $('.node-presentation-opts').show();
@@ -249,5 +255,15 @@
            });
         }
     });
-
+function sortOptions(options) {
+           var options = $('#'+options+' option');
+           var arr = options.map(function(_, o) { return { t:
+           $(o).text(), v: o.value }; }).get();
+           arr.sort(function(o1, o2) { return o1.t > o2.t ? 1 : o1.t <
+           o2.t ? -1 : 0; });
+           options.each(function(i, o) {
+              o.value = arr[i].v;
+              $(o).text(arr[i].t);
+           });
+}
 </script>
