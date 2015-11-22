@@ -1,0 +1,30 @@
+<script type="text/javascript">
+    RED.nodes.registerType('mysdebug',{
+        category: 'function',
+        color: '#a6bbcf',
+        defaults: {
+            name: {value:""}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "file.png",
+        label: function() {
+            return this.name||"mysdebug";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="mysdebug">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="mysdecenc">
+    <p>A function that parses <b>msg.payload</b> from mysensors serial
+    format, and outputs a nicely formatted payload usefull for debugging the
+    protocoll. Also, strips debug header from the payload, in case of debug
+    string from GW
+    </p>
+</script>
