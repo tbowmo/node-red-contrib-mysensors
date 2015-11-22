@@ -34,3 +34,6 @@ If you feed the mysdecenc node with a msg object, that contains the above proper
 
 This will add the message properties mention under mysdecenc to the message object of an existing Node-RED message. By sending the output through mysdecenc, you can create a message that can be sent to the sensor network.
 
+## Node-RED mysdebug
+
+This will decode the mysensors serial protocol payload, and enrich it with descriptions of sensor types etc. Meant as a debugging tool
