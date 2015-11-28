@@ -1,4 +1,4 @@
-var mys_common = require ('mysensors_common');
+var mys_common = require ('../mysensors-defines.json');
 module.exports = function(RED) {
     function Debugger(config) {
         RED.nodes.createNode(this,config);
