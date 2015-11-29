@@ -16,7 +16,11 @@
 {"htext":"I_GATEWAY_READY"},
 {"htext":"I_REQUEST_SIGNING"},
 {"htext":"I_GET_NONCE"},
-{"htext":"I_GET_NONCE_RESPONSE"}
+{"htext":"I_GET_NONCE_RESPONSE"},
+{"htext":"I_HEARTBEAT"},
+{"htext":"I_PRESENTATION"},
+{"htext":"I_DISCOVER"},
+{"htext":"I_DISCOVER_RESPONSE"}
 ],
 "presentation":[
 {"htext":"S_DOOR"},
@@ -54,7 +58,10 @@
 {"htext":"S_WATER_LEAK"},
 {"htext":"S_SOUND"},
 {"htext":"S_VIBRATION"},
-{"htext":"S_MOISTURE"}
+{"htext":"S_MOISTURE"},
+{"htext":"S_INFO"},
+{"htext":"S_GAS"},
+{"htext":"S_GPS"}
 ],
 "subtype":[
 {"htext":"V_TEMP"},
@@ -103,5 +110,9 @@
 {"htext":"V_UNIT_PREFIX"},
 {"htext":"V_HVAC_SETPOINT_COOL"},
 {"htext":"V_HVAC_SETPOINT_HEAT"},
-{"htext":"V_HVAC_FLOW_MODE"}
+{"htext":"V_HVAC_FLOW_MODE"},
+{"htext":"V_TEXT"},
+{"htext":"V_CUSTOM"},
+{"htext":"V_POSITION"},
+{"htext":"V_IR_RECORD"}
 ]}
