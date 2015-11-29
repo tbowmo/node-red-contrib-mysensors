@@ -1,3 +1,4 @@
+var mys_common = require ('../mysensors-defines.json');
 module.exports = function(RED) {
     function Encapsulate(config) {
         RED.nodes.createNode(this,config);
@@ -54,4 +55,8 @@ module.exports = function(RED) {
 
     }
     RED.nodes.registerType("mysencap",Encapsulate);
+    
+    RED.httpAdmin.get("/mysensordefs", RED.auth.needsPermission(''), function(req,res) {
+        res.json(mys_common);
+    });
 }

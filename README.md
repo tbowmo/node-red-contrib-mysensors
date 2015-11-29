@@ -36,4 +36,5 @@ This will add the message properties mention under mysdecenc to the message obje
 
 ## Node-RED mysdebug
 
-This will decode the mysensors serial protocol payload, and enrich it with descriptions of sensor types etc. Meant as a debugging tool
+This will decode the mysensors serial protocol payload, and enrich it with descriptions of sensor types etc. Meant as a debugging tool. Data will be sent out of the node, and can be used in a debug node, or dumped to disk, for file logging
+
