@@ -22,21 +22,21 @@ module.exports = function(RED) {
                 switch (messageType) {
                     case 0:
                         msgHeader = "PRESENTATION";
-                        msgSubType = mys_common.presentation[subType].htext;
+                        msgSubType = mys_common.presentation[subType];
                         break;
                     case 1:
                         msgHeader = "SET";
-                        msgSubType = mys_common.subtype[subType].htext;
+                        msgSubType = mys_common.subtype[subType];
                         break;
                     case 2:
                         msgHeader = "GET";
-                        msgSubType = mys_common.subtype[subType].htext;
+                        msgSubType = mys_common.subtype[subType];
                         break;
                     case 3:
-                        if (subType == 9) msg.payload = "GW Debug;" + payload;
+                        if (subType == 9) msg.payload = "GW Debug;" + debugDecode(payload);
                         else {
                             msgHeader = "INTERNAL";
-                            msgSubType = mys_common.internal[subType].htext;
+                            msgSubType = mys_common.internal[subType];
                         }
                         break;
                     default:
@@ -49,9 +49,70 @@ module.exports = function(RED) {
                 }
                 
             }
-            if (msg.payload != null) node.send(msg);
+            if (msg.payload != null && nodeId == 0) node.send(msg);
         });
     }
     RED.nodes.registerType("mysdebug",Debugger);
 }
 
+
+function debugDecode(payload) {
+    var payReturn = payload;
+    var commands = ['Presentation','SET','GET','Internal','Stream'];
+    var re = /(.+?):\s(.+?)\s(.+?):(.+)/; 
+    var str = payload
+    var index;
+    var cmd = 0;
+    var m;
+    if ((m = re.exec(str)) !== null) {
+        if (m.index === re.lastIndex) {
+            re.lastIndex++;
+        }
+        p = m[2].split('-');
+        payReturn = m[1];
+        if (m[1] == 'send') {
+            payReturn = payReturn + ";Sender="+p[0];
+            payReturn = payReturn + ";Last="+p[1];
+            payReturn = payReturn + ";To="+p[2];
+            payReturn = payReturn + ";Dest="+p[3];            
+        } else {
+            payReturn = payReturn + ";Sender="+p[0];
+            payReturn = payReturn + ";Last="+p[1];
+            payReturn = payReturn + ";Destination="+p[2];
+        }
+        p = m[3].split(',');
+        for (index = 0; index < p.length;index++) {
+            x = p[index].split('=');
+            console.log(x[0] + ":" + x[1]);
+            switch (x[0]) {
+                case 's': z = "ChildId="+x[1];
+                    break;
+                case 'c' : z = "Command="+commands[x[1]];
+                    cmd = x[1];
+                    break;
+                case 't' : 
+                    var sub = mys_common.subtype[x[1]];
+                    if (cmd == 0) sub = mys_common.presentation[x[1]];
+                    if (cmd == 3) sub = mys_common.internal[x[1]];
+                    z = "subType=" + sub; 
+                    break;
+                case 'pt' :
+                    z = "PayloadType="+mys_common.payloadtype[x[1]];
+                    break;
+                case 'l' :
+                    z = 'Length='+x[1];
+                    break;
+                case 'sg': 
+                    z = "Signing=" + (x[1]==1?'Signed':'Unsigned');
+                    break;
+                default: z = p[index];
+            }
+            payReturn = payReturn + ";" + z;
+        } 
+        
+        payReturn = payReturn + ";Payload="+m[4];
+                     // View your result using the m-variable.
+                         // eg m[0] etc.
+    }
+    return payReturn;
+}

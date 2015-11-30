@@ -168,7 +168,7 @@ function getSubTypes() {
              var index;
              var html = '';
              for (index = 0; index < data.subtype.length; ++index) {
-               html = html + '<option value='+index+'>'+data.subtype[index].htext+'</option>';
+               html = html + '<option value='+index+'>'+data.subtype[index]+'</option>';
              }
       	     $("#node-input-subtype").html(html);
            });
@@ -179,7 +179,7 @@ function getPresentationTypes() {
              var index;
              var html='';
              for (index = 0; index < data.presentation.length; ++index) {
-               html = html + '<option value='+index+'>'+data.presentation[index].htext+'</option>';
+               html = html + '<option value='+index+'>'+data.presentation[index]+'</option>';
              }
       	     $("#node-input-presentationtype").html(html);
            });
@@ -190,7 +190,7 @@ function getInternalTypes() {
              var index;
              var html='';
              for (index = 0; index < data.internal.length; ++index) {
-               html = html + '<option value='+index+'>'+data.internal[index].htext+'</option>';
+               html = html + '<option value='+index+'>'+data.internal[index]+'</option>';
              }
       	     $("#node-input-internal").html(html);
            });
