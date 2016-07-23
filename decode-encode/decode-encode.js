@@ -4,7 +4,7 @@ module.exports = function(RED) {
         var node = this;
         this.on('input', function(msg) {
             var message = msg.payload.toString();
-            message = message.replace('\\n','');
+            message = message.replace(/(\r\n|\n|\r)/gm, "");
             var tokens = message.split(";")
     
             msg.rawData = tokens;
