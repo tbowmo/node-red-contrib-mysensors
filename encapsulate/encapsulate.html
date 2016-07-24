@@ -149,10 +149,10 @@
            });
         }
     });
-function sortOptions(options) {
-           var selected = $('#'+options+' option:selected').val();
+function sortOptions(selectTag) {
+           var selected = $('#'+selectTag+' option:selected').val();
            
-           var options = $('#'+options+' option');
+           var options = $('#'+selectTag+' option');
            var arr = options.map(function(_, o) { return { t:
            $(o).text(), v: o.value }; }).get();
            arr.sort(function(o1, o2) { return o1.t > o2.t ? 1 : o1.t <
@@ -160,8 +160,9 @@ function sortOptions(options) {
            options.each(function(i, o) {
               o.value = arr[i].v;
               $(o).text(arr[i].t);
-              if (parseInt(arr[i].v) == parseInt(selected)) $(o).prop('selected',true);              
+//              if (parseInt(arr[i].v) == parseInt(selected)) $(o).prop('selected',true);              
            });
+           $('#'.selectTag).val(selected);
 }
 function getSubTypes() {
            $.getJSON('mysensordefs', function(data) {
