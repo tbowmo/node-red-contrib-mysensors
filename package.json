@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-mysensors",
-  "version": "0.7.7",
+  "version": "0.8.0",
   "description": "Mysensors related nodes, for decoding / encoding mysensors serial protocol, and wrapping arbitrary messages into mysensors compatible messages",
   "main": "index.js",
   "scripts": {

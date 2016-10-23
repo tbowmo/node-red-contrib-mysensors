@@ -21,19 +21,27 @@
     </div>
     <div class="form-row" id="node-input-row-subtype">
         <label for="node-input-subtype"><i class="icon-tag"></i> Child type</label>
-        <select id="node-input-subtype">      
+        <input type="text" id="node-input-subtype">      
+    </div>
+    <div class="form-row" id="node-input-row-subtype-select">
+        <label for="node-input-subtype-select"><i class="icon-tag"></i> Child type</label>
+        <select id="node-input-subtype-select">      
         <select> 
     </div>
     <div class="form-row" id="node-input-row-internal">
-        <label for="node-input-internal"><i class="icon-tag"></i> Internal msg</label>
-        <select id="node-input-internal">      
+        <label for="node-input-internal"><i class="icon-tag"></i> Internal msg hidden</label>
+        <input type="text" id="node-input-internal">
+    </div>
+    <div class="form-row" id="node-input-row-internal-select">
+        <label for="node-input-internal-select"><i class="icon-tag"></i> Internal msg</label>
+        <select id="node-input-internal-select">
         </select>
     </div>
-    <div class="form-row">
+    <div class="form-row node-ack">
         <label for="node-input-ack"><i class="icon-tag"></i> Ack</label>
         <input type="checkbox" id="node-input-ack">       
     </div>
-    <div class="form-row">
+    <div class="form-row node-presentation">
         <label for="node-input-presentation"><i class="icon-tag"></i> Presentation</label>
         <input type="checkbox" id="node-input-presentation">       
     </div>
@@ -41,9 +49,13 @@
         <label for="node-input-presentationtext"><i class="icon-tag"></i> Text</label>
         <input type="text" id="node-input-presentationtext">       
     </div>
-    <div class="form-row node-presentation-opts">
+    <div class="form-row" id="node-input-row-presentation">
         <label for="node-input-presentationtype"><i class="icon-tag"></i> Type</label>
-        <select id="node-input-presentationtype">
+        <input type="text" id="node-input-presentationtype">
+    </div>
+    <div class="form-row node-presentation-opts">
+        <label for="node-input-presentationtype-select"><i class="icon-tag"></i> Type</label>
+        <select id="node-input-presentationtype-select">
         </select>       
     </div>
     <div class="form-row node-presentation-opts">
@@ -81,7 +93,7 @@
 
 <script type="text/javascript">
     RED.nodes.registerType('mysencap',{
-        category: 'function',
+        category: 'mysensors',
         color: '#a6bbcf',
         defaults: {
             name: {value:""},
@@ -106,28 +118,34 @@
             return this.name||"mysencap";
         },
         oneditprepare: function() {
-           getSubTypes();          
-           getPresentationTypes();
-           if (!$('#node-input-presentation').is(':checked')) $('.node-presentation-opts').hide();
-	   if (!$('#node-input-fullpresentation').is(':checked'))$('.node-presentation-full-opts').hide();           
+           $('#node-input-row-internal').hide();
+           $('#node-input-row-subtype').hide();
+           $('#node-input-row-presentation').hide();
+
+           loadJsonTypes('subtype', 'node-input-subtype-select', 'node-input-subtype');          
+           loadJsonTypes('presentation','node-input-presentationtype-select','node-input-presentationtype');
+           loadJsonTypes('internal','node-input-internal-select','node-input-internal');
+           
+           if (!$('#node-input-presentation').is(':checked')) {
+           	$('.node-presentation-opts').hide();
+           }
 	   
-	   sortOptions('node-input-subtype');
-	   sortOptions('node-input-internal');
-	   sortOptions('node-input-presentationtype');
+	   if (!$('#node-input-fullpresentation').is(':checked')) {
+	   	$('.node-presentation-full-opts').hide();
+	   }
+
+	   if ($('#node-input-msgtype option:selected').val() == "3") {
+	   	showInternal();
+	   } else {
+	   	showSetReq();
+	   }
+	   
            $("#node-input-msgtype").change(function() {
                var id = $("#node-input-msgtype option:selected").val();
-               if (id == "0") {
-                   $("#node-input-row-subtype").show();
-                   $(".node-childid").show();
-                   $("#node-input-row-internal").hide();
-               } else if (id == "1" | id=="2") {
-                   $("#node-input-row-subtype").show();
-                   $(".node-childid").show();
-                   $("#node-input-row-internal").hide();
-               } else if (id == "3") {
-                   $("#node-input-row-subtype").hide();
-                   $("#node-input-row-internal").show();
-                   $(".node-childid").hide();
+               if (id == "3") {
+                 showInternal();
+               } else {
+                 showSetReq();
                }
            });
 
@@ -147,11 +165,31 @@
                    $('.node-presentation-full-opts').hide();
                }
            });
+        },
+        oneditsave : function() {
+	   	$('#node-input-internal').val($('#node-input-internal-select').val());
+	   	$('#node-input-subtype').val($('#node-input-subtype-select').val());
+	   	$('#node-input-presentationtype').val($('#node-input-presentationtype-select').val());
+        	
         }
     });
+
+function showSetReq() {
+  $("#node-input-row-subtype-select").show();
+  $("#node-input-row-internal-select").hide();
+  $(".node-childid").show();
+  $(".node-presentation").show();
+}
+
+function showInternal() {
+  $("#node-input-row-subtype-select").hide();
+  $("#node-input-row-internal-select").show();
+  $(".node-childid").hide();
+  $(".node-presentation").hide();
+}
+
 function sortOptions(selectTag) {
-           var selected = $('#'+selectTag+' option:selected').val();
-           
+           var selected = $('#'+selectTag).val();
            var options = $('#'+selectTag+' option');
            var arr = options.map(function(_, o) { return { t:
            $(o).text(), v: o.value }; }).get();
@@ -162,39 +200,19 @@ function sortOptions(selectTag) {
               $(o).text(arr[i].t);
 //              if (parseInt(arr[i].v) == parseInt(selected)) $(o).prop('selected',true);              
            });
-           $('#'.selectTag).val(selected);
+           $('#'+selectTag).val(selected);
 }
-function getSubTypes() {
+
+function loadJsonTypes(type, selectId, selection) {
            $.getJSON('mysensordefs', function(data) {
              var index;
              var html = '';
-             for (index = 0; index < data.subtype.length; ++index) {
+             for (index = 0; index < data[type].length; ++index) {
                html = html + '<option value='+index+'>'+data.subtype[index]+'</option>';
              }
-      	     $("#node-input-subtype").html(html);
+      	     $('#'+selectId).html(html);
+      	     $('#'+selectId).val($('#'+selection).val());
            });
+           sortOptions(selectId);
 }
-
-function getPresentationTypes() {
-           $.getJSON('mysensordefs', function(data) {
-             var index;
-             var html='';
-             for (index = 0; index < data.presentation.length; ++index) {
-               html = html + '<option value='+index+'>'+data.presentation[index]+'</option>';
-             }
-      	     $("#node-input-presentationtype").html(html);
-           });
-}
-
-function getInternalTypes() {
-           $.getJSON('mysensordefs', function(data) {
-             var index;
-             var html='';
-             for (index = 0; index < data.internal.length; ++index) {
-               html = html + '<option value='+index+'>'+data.internal[index]+'</option>';
-             }
-      	     $("#node-input-internal").html(html);
-           });
-}
-
 </script>
