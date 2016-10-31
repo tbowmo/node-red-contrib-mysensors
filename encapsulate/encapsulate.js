@@ -48,7 +48,7 @@ module.exports = function(RED) {
             msg.ack = (node.ack?1:0);
             if (node.msgtype == 3) {
                 msg.childSensorId = 255;
-                msgsubType = node.internal;
+                msg.subType = node.internal;
             }
             node.send(msg);
         });
