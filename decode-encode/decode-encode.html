@@ -3,13 +3,16 @@
         category: 'mysensors',
         color: '#a6bbcf',
         defaults: {
-            name: {value:""}
+            name: {value:""},
+            mqtt: {value: false, required:true}
         },
         inputs:1,
         outputs:1,
         icon: "file.png",
         label: function() {
-            return this.name||"mysdecenc";
+            var type = "mysdecenc_serial";
+            if (this.mqtt) type = "mysdecenc_mqtt";
+            return this.name||type;
         }
     });
 </script>
@@ -18,6 +21,10 @@
     <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-mqtt"><i class="icon-tag"></i> MQTT</label>
+        <input type="checkbox" id="node-input-mqtt">
     </div>
 </script>
 
@@ -37,4 +44,7 @@
     <p>if the input msg object contains a <b>nodeId</b> field, the reverse process
     will take place, and a mysensor serial api message will be assembled by
     the function</p>
+    <p>By checking off the MQTT option, this node operates on MQTT topics
+    instead of MySensors serial protocol.
+    </p>
 </script>
