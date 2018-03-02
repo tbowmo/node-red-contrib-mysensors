@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    RED.nodes.registerType('mysdecenc',{
+    RED.nodes.registerType('mysdecode',{
         category: 'mysensors',
         color: '#a6bbcf',
         defaults: {
@@ -10,14 +10,14 @@
         outputs:1,
         icon: "file.png",
         label: function() {
-            var type = "mysdecenc_serial";
-            if (this.mqtt) type = "mysdecenc_mqtt";
+            var type = "mysdecode_serial";
+            if (this.mqtt) type = "mysdecode_mqtt";
             return this.name||type;
         }
     });
 </script>
 
-<script type="text/x-red" data-template-name="mysdecenc">
+<script type="text/x-red" data-template-name="mysdecode">
     <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
@@ -28,9 +28,7 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="mysdecenc">
-    <p><b>DEPRECATION WARNING!</b> This node will be removed in an upcomming
-    release. Please use the nodes mysdecode / mysencode instead!</p>
+<script type="text/x-red" data-help-name="mysdecode">
     <p>A function that parses <b>msg.payload</b> from mysensors serial
     format, into the different part of the protocol, the msg object will
     contain the following afterwards
@@ -43,9 +41,6 @@
     <li>subType</li>
     <li>payload</li>
     </ul>
-    <p>if the input msg object contains a <b>nodeId</b> field, the reverse process
-    will take place, and a mysensor serial api message will be assembled by
-    the function</p>
     <p>By checking off the MQTT option, this node operates on MQTT topics
     instead of MySensors serial protocol.
     </p>

@@ -3,6 +3,10 @@
 A node-RED [mysensors](http://www.mysensors.org) protocol decoder / encoder / wrapper package. 
 Contains a node to decode / encode mysensors serial protocol to / from node-red messages, and a node for adding mysensors specific data like sensor type, nodeid etc. which can then be sent to mysensors network
 
+## Warning!
+In an upcomming release the node mysdecenc will be removed, it is only left
+here for legacy purpose, and to not break current flows.
+
 ## Install
 
 Within your local installation of Node-RED run:
@@ -11,9 +15,9 @@ Within your local installation of Node-RED run:
 
 Once installed, you will have two new nodes available : mysdecenc, and mysencap.
 
-## Node-RED mysdecenc
+## Node-RED mysdecode
 
-This decodes the mysensors serial protocol packages, and enriches the Node-RED msg object with the following extra data:
+This decodes the mysensors serial protocol packages or a MQTT topic from a mysensors MQTT gateway, and enriches the Node-RED msg object with the following extra data:
 
 ```
 msg.payload // Payload data from sensor network
@@ -28,7 +32,11 @@ see [mysensors API](http://www.mysensors.org/download/serial_api_15) for more in
 
 The following nodes will be able to use these properties to interact with the messages from the mysensors network
 
-If you feed the mysdecenc node with a msg object, that contains the above properties, it will output a message conforming to the mysensors serial API protocol, as described at [mysensors website](http://www.mysensors.org/download/serial_api_15)
+## Node-RED mysencode
+
+This encodes a message into either mysensors serial, or a mysensors mqtt
+topic. If using MQTT, then set topicRoot on the message, before sending it
+into this node, in order to set your own root topic
 
 ## Node-RED mysencap
 

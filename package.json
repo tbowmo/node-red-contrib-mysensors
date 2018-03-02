@@ -1,35 +1,64 @@
 {
-  "name": "node-red-contrib-mysensors",
-  "version": "0.9.0",
+  "_from": "node-red-contrib-mysensors@^1.0.0",
+  "_id": "node-red-contrib-mysensors@1.0.0",
+  "_inBundle": false,
+  "_integrity": "sha512-UWSzHx7K106mlmJBYw0GNsAegwdG/Z5zO8mp51gKofH0SSauzb/bc1kJOWYdHZUbqAtx+Uzc53D07zZ1IkNZSg==",
+  "_location": "/node-red-contrib-mysensors",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "node-red-contrib-mysensors@^1.0.0",
+    "name": "node-red-contrib-mysensors",
+    "escapedName": "node-red-contrib-mysensors",
+    "rawSpec": "^1.0.0",
+    "saveSpec": null,
+    "fetchSpec": "^1.0.0"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/node-red-contrib-mysensors/-/node-red-contrib-mysensors-1.0.0.tgz",
+  "_shasum": "863a1b104cf309275b240986b6e8d751f8517c72",
+  "_spec": "node-red-contrib-mysensors@^1.0.0",
+  "_where": "/opt/nodered",
+  "author": {
+    "name": "Thomas Bowman Mørch"
+  },
+  "bugs": {
+    "url": "https://github.com/tbowmo/node-red-contrib-mysensors/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
   "description": "Mysensors related nodes, for decoding / encoding mysensors serial protocol and MQTT topic, and wrapping arbitrary messages into mysensors compatible messages",
+  "homepage": "https://github.com/tbowmo/node-red-contrib-mysensors",
+  "keywords": [
+    "node-red",
+    "mysensors",
+    "decode",
+    "encode",
+    "wrap",
+    "encapsulate",
+    "debug"
+  ],
+  "license": "GPL-2.0",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "name": "node-red-contrib-mysensors",
+  "node-red": {
+    "nodes": {
+      "mysdecode": "decode/decode.js",
+      "mysencode": "encode/encode.js",
+      "mysdecenc": "decode-encode/decode-encode.js",
+      "mysencap": "encapsulate/encapsulate.js",
+      "mysdebug": "mysdebug/mysdebug.js"
+    }
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/tbowmo/node-red-contrib-mysensors"
+    "url": "git+https://github.com/tbowmo/node-red-contrib-mysensors.git"
   },
-  "author": "Thomas Bowman Mørch",
-  "license": "GPL-2.0",
-  "keywords": [ 
-      "node-red", 
-      "mysensors",
-      "decode",
-      "encode",
-      "wrap",
-      "encapsulate",
-      "debug"
-  ],
-    "node-red"     : {
-        "nodes": {
-            "mysdecenc": "decode-encode/decode-encode.js",
-            "mysencap": "encapsulate/encapsulate.js",
-            "mysdebug": "mysdebug/mysdebug.js"
-        }
-    },
-  "homepage": "https://github.com/tbowmo/node-red-contrib-mysensors",
-  "bugs" : {
-	"url":"https://github.com/tbowmo/node-red-contrib-mysensors/issues"
-  }
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.0.0"
 }

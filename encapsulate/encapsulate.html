@@ -115,7 +115,8 @@
         outputs:1,
         icon: "envelope.png",
         label: function() {
-            return this.name||"mysencap";
+            return this.name|| "encapsulate: " + this.nodeid + ":" + this.childid + ":" +
+            this.msgtype + ":0:" + this.subtype+"<payload>";
         },
         oneditprepare: function() {
            $('#node-input-row-internal').hide();
