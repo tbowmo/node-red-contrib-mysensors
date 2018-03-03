@@ -8,12 +8,15 @@
         },
         inputs:1,
         outputs:1,
-        icon: "file.png",
+        icon: "arrow-in.png",
         label: function() {
-            var type = "mysencode_serial";
-            if (this.mqtt) type = "mysencode_mqtt";
+            var type = "mysencode serial";
+            if (this.mqtt) type = "mysencode mqtt";
             return this.name||type;
-        }
+        },
+        inputLabels: "Message input",
+        outputLabels: ["MQTT / Mysensors output"],
+        align:"right"
     });
 </script>
 

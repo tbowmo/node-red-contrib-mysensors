@@ -8,12 +8,14 @@
         },
         inputs:1,
         outputs:1,
-        icon: "file.png",
+        icon: "arrow-in.png",
         label: function() {
-            var type = "mysdecode_serial";
-            if (this.mqtt) type = "mysdecode_mqtt";
+            var type = "mysdecode serial";
+            if (this.mqtt) type = "mysdecode mqtt";
             return this.name||type;
-        }
+        },
+        inputLabels: "MQTT topic or mysensors input",
+        outputLabels: ["decoded out"]
     });
 </script>
 
