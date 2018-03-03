@@ -7,8 +7,8 @@ module.exports = function(RED) {
             var message = msg.payload.toString();
             message = message.replace('\\n','');
             var tokens = message.split(";")
-            msg.payload = null;    
-            if(tokens.length == 6)
+            msg.payload = null;
+            if (tokens.length == 6)
             {
                 var nodeId = parseInt(tokens[0]);
                 var childSensorId = parseInt(tokens[1]);
@@ -39,15 +39,19 @@ module.exports = function(RED) {
                             msgSubType = mys_common.internal[subType];
                         }
                         break;
+                    case 4:
+                        msgHeader = "STREAM";
+                        msgSubType = mys_common.streamtype[subType];
+                        break;
                     default:
-                        msg.payload = "unsupported msgType " + messageType; 
-                        break;   
-                                                                       
+                        msg.payload = "unsupported msgType " + messageType;
+                        break;
                 }
+
                 if (msgSubType != null) {
                     msg.payload = msgHeader + ";nodeId:" + nodeId + ";childId:"+ childSensorId +";SubType:"+ msgSubType + ";ACK:"+ ack + ";Payload:"+ payload;
                 }
-                
+
             }
             if (msg.payload != null && nodeId == 0) node.send(msg);
         });
@@ -55,11 +59,10 @@ module.exports = function(RED) {
     RED.nodes.registerType("mysdebug",Debugger);
 }
 
-
 function debugDecode(payload) {
     var payReturn = payload;
     var commands = ['Presentation','SET','GET','Internal','Stream'];
-    var re = /(.+?):\s(.+?)\s(.+?):(.+)/; 
+    var re = /(.+?):\s(.+?)\s(.+?):(.+)/;
     var str = payload
     var index;
     var cmd = 0;
@@ -74,7 +77,7 @@ function debugDecode(payload) {
             payReturn = payReturn + ";Sender="+p[0];
             payReturn = payReturn + ";Last="+p[1];
             payReturn = payReturn + ";To="+p[2];
-            payReturn = payReturn + ";Dest="+p[3];            
+            payReturn = payReturn + ";Dest="+p[3];
         } else {
             payReturn = payReturn + ";Sender="+p[0];
             payReturn = payReturn + ";Last="+p[1];
@@ -90,11 +93,11 @@ function debugDecode(payload) {
                 case 'c' : z = "Command="+commands[x[1]];
                     cmd = x[1];
                     break;
-                case 't' : 
+                case 't' :
                     var sub = mys_common.subtype[x[1]];
                     if (cmd == 0) sub = mys_common.presentation[x[1]];
                     if (cmd == 3) sub = mys_common.internal[x[1]];
-                    z = "subType=" + sub; 
+                    z = "subType=" + sub;
                     break;
                 case 'pt' :
                     z = "PayloadType="+mys_common.payloadtype[x[1]];
@@ -102,14 +105,14 @@ function debugDecode(payload) {
                 case 'l' :
                     z = 'Length='+x[1];
                     break;
-                case 'sg': 
+                case 'sg':
                     z = "Signing=" + (x[1]==1?'Signed':'Unsigned');
                     break;
                 default: z = p[index];
             }
             payReturn = payReturn + ";" + z;
-        } 
-        
+        }
+
         payReturn = payReturn + ";Payload="+m[4];
                      // View your result using the m-variable.
                          // eg m[0] etc.
