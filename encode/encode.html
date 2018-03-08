@@ -4,14 +4,20 @@
         color: '#a6bbcf',
         defaults: {
             name: {value:""},
-            mqtt: {value: false, required:true}
+            mqtt: {value: false, required:true},
+            mqtttopic: {value:""}
         },
         inputs:1,
         outputs:1,
         icon: "arrow-in.png",
         label: function() {
             var type = "mysencode serial";
-            if (this.mqtt) type = "mysencode mqtt";
+            if (this.mqtt) {
+                type = "mysencode mqtt";
+                if (this.mqtttopic) {
+                    type = type + " " + this.mqtttopic;
+                }
+            }
             return this.name||type;
         },
         inputLabels: "Message input",
@@ -28,6 +34,10 @@
     <div class="form-row">
         <label for="node-input-mqtt"><i class="icon-tag"></i> MQTT</label>
         <input type="checkbox" id="node-input-mqtt">
+    </div>
+    <div class="form-row">
+        <label for="node-input-mqtttopic"><i class="icon-tag"></i> Topic root</label>
+        <input type="text" id="node-input-mqtttopic" placeholder="topic">
     </div>
 </script>
 
@@ -47,4 +57,5 @@
     <p>By checking off the MQTT option, this node operates on MQTT topics
     instead of MySensors serial protocol.
     </p>
+    <p>Setting Topic root overwrites incomming msg.topicRoot<p>
 </script>

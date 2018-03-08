@@ -3,8 +3,12 @@ module.exports = function(RED) {
         RED.nodes.createNode(this,config);
         var node = this;
         this.mqtt = config.mqtt;
+        this.topicRoot = config.mqtttopic;
         this.on('input', function(msg) {
             if (this.mqtt) {
+                if (this.topicRoot !== "") {
+                    msg.topicRoot = this.topicRoot;
+                }
                 if ('nodeId' in msg) {
                     var topic =  ((msg.topicRoot) ? (msg.topicRoot + "/") : "") + msg.nodeId + "/" + msg.childSensorId + "/" + msg.messageType + "/" + msg.ack + "/" + msg.subType;
                     msg.topic = topic;
