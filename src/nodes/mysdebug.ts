@@ -1,9 +1,11 @@
-var mys_common = require ('../mysensors-defines.json');
-module.exports = function(RED) {
-    function Debugger(config) {
+import { payloadType, presentation, mysensorsInternal, streamtype, subtype} from '../lib';
+import { Red } from 'node-red'
+
+function registerDebugger(RED: Red) {
+    function Debugger(config: any) {
         RED.nodes.createNode(this,config);
         var node = this;
-        this.on('input', function(msg) {
+        this.on('input', function(msg: MySensors.IMessage) {
             var message = msg.payload.toString();
             message = message.replace('\\n','');
             var tokens = message.split(";")
@@ -16,32 +18,31 @@ module.exports = function(RED) {
                 var ack = parseInt(tokens[3]);
                 var subType = parseInt(tokens[4]);
                 var payload = tokens[5];
-                var subTypeText = null;
                 var msgHeader = '';
-                var msgSubType = null;
+                var msgSubType: string;
                 switch (messageType) {
                     case 0:
                         msgHeader = "PRESENTATION";
-                        msgSubType = mys_common.presentation[subType];
+                        msgSubType = presentation[subType];
                         break;
                     case 1:
                         msgHeader = "SET";
-                        msgSubType = mys_common.subtype[subType];
+                        msgSubType = subtype[subType];
                         break;
                     case 2:
                         msgHeader = "GET";
-                        msgSubType = mys_common.subtype[subType];
+                        msgSubType = subtype[subType];
                         break;
                     case 3:
                         if (subType == 9) msg.payload = "GW Debug;" + debugDecode(payload);
                         else {
                             msgHeader = "INTERNAL";
-                            msgSubType = mys_common.internal[subType];
+                            msgSubType = mysensorsInternal[subType];
                         }
                         break;
                     case 4:
                         msgHeader = "STREAM";
-                        msgSubType = mys_common.streamtype[subType];
+                        msgSubType = streamtype[subType];
                         break;
                     default:
                         msg.payload = "unsupported msgType " + messageType;
@@ -59,19 +60,20 @@ module.exports = function(RED) {
     RED.nodes.registerType("mysdebug",Debugger);
 }
 
-function debugDecode(payload) {
+function debugDecode(payload: string) {
     var payReturn = payload;
     var commands = ['Presentation','SET','GET','Internal','Stream'];
     var re = /(.+?):\s(.+?)\s(.+?):(.+)/;
     var str = payload
-    var index;
-    var cmd = 0;
-    var m;
+    var index: number;
+    let cmd: number = 0;
+    var m: RegExpMatchArray;
+    let z: string;
     if ((m = re.exec(str)) !== null) {
         if (m.index === re.lastIndex) {
             re.lastIndex++;
         }
-        p = m[2].split('-');
+        let p = m[2].split('-');
         payReturn = m[1];
         if (m[1] == 'send') {
             payReturn = payReturn + ";Sender="+p[0];
@@ -85,28 +87,31 @@ function debugDecode(payload) {
         }
         p = m[3].split(',');
         for (index = 0; index < p.length;index++) {
-            x = p[index].split('=');
+            const x = p[index].split('=');
             console.log(x[0] + ":" + x[1]);
+            const i = Number(x[1]);
             switch (x[0]) {
-                case 's': z = "ChildId="+x[1];
+                case 's': 
+                    z = "ChildId=" + x[1];
                     break;
-                case 'c' : z = "Command="+commands[x[1]];
-                    cmd = x[1];
+                case 'c' :
+                    z = "Command=" + commands[i];
+                    cmd = Number(x[1]);
                     break;
                 case 't' :
-                    var sub = mys_common.subtype[x[1]];
-                    if (cmd == 0) sub = mys_common.presentation[x[1]];
-                    if (cmd == 3) sub = mys_common.internal[x[1]];
+                    var sub = subtype[i];
+                    if (cmd == 0) sub = presentation[i];
+                    if (cmd == 3) sub = mysensorsInternal[i];
                     z = "subType=" + sub;
                     break;
                 case 'pt' :
-                    z = "PayloadType="+mys_common.payloadtype[x[1]];
+                    z = "PayloadType=" + payloadType[i];
                     break;
                 case 'l' :
-                    z = 'Length='+x[1];
+                    z = 'Length=' + i;
                     break;
                 case 'sg':
-                    z = "Signing=" + (x[1]==1?'Signed':'Unsigned');
+                    z = "Signing=" + (i==1?'Signed':'Unsigned');
                     break;
                 default: z = p[index];
             }
@@ -119,3 +124,5 @@ function debugDecode(payload) {
     }
     return payReturn;
 }
+
+export = registerDebugger;

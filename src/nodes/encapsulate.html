@@ -205,11 +205,13 @@ function sortOptions(selectTag) {
 }
 
 function loadJsonTypes(type, selectId, selection) {
-           $.getJSON('mysensordefs', function(data) {
+           $.getJSON('mysensordefs/'+type, function(data) {
              var index;
              var html = '';
-             for (index = 0; index < data[type].length; ++index) {
-               html = html + '<option value='+index+'>'+data[type][index]+'</option>';
+             data = JSON.parse(data).data;
+             console.log(data);
+             for (index = 0; index < data.length; ++index) {
+               html = html + '<option value='+index+'>'+data[index]+'</option>';
              }
       	     $('#'+selectId).html(html);
       	     $('#'+selectId).val($('#'+selection).val());

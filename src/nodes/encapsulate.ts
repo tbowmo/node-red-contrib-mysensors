@@ -1,6 +1,9 @@
-var mys_common = require ('../mysensors-defines.json');
-module.exports = function(RED) {
-    function Encapsulate(config) {
+import { payloadType, presentation, subtype, mysensorsInternal } from '../lib';
+import { Red } from 'node-red';
+
+function registerEncapsulate(RED: Red) {
+    console.log(RED);
+    function Encapsulate(config: any) {
         RED.nodes.createNode(this,config);
         this.nodeid = config.nodeid;
         this.childid = config.childid;
@@ -18,7 +21,7 @@ module.exports = function(RED) {
         
         if (node.presentation) {
             setTimeout(function() {
-                var msg = {};
+                let msg: MySensors.IMessage;
                 msg.nodeId = node.nodeid;
                 msg.ack = 0;
                 if (node.fullpresentation) {
@@ -40,7 +43,7 @@ module.exports = function(RED) {
             }, 5000);
         }
 
-        this.on('input', function(msg) {
+        this.on('input', function(msg: MySensors.IMessage) {
             msg.nodeId = node.nodeid;
             msg.childSensorId = node.childid;
             msg.subType = node.subtype;
@@ -56,7 +59,22 @@ module.exports = function(RED) {
     }
     RED.nodes.registerType("mysencap",Encapsulate);
     
-    RED.httpAdmin.get("/mysensordefs", RED.auth.needsPermission(''), function(req,res) {
-        res.json(mys_common);
+    RED.httpAdmin.get("/mysensordefs/:id", RED.auth.needsPermission(''), function(req: any , res: any) {
+        var type = req.params.id;
+        let retVal: string = "";
+        switch (type) {
+            case "subtype": 
+                retVal = JSON.stringify({data: subtype});
+                break;
+            case "presentation":
+                retVal = JSON.stringify({data: presentation});
+                break;
+            case "internal":
+                retVal = JSON.stringify({data: mysensorsInternal});
+                break;
+        }
+        res.json(retVal);
     });
 }
+
+export = registerEncapsulate;

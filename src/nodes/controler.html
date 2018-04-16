@@ -1,0 +1,35 @@
+<script type="text/javascript">
+    RED.nodes.registerType('myscontroler',{
+        category: 'mysensors',
+        color: '#a6bbcf',
+        defaults: {
+            database: {value:"", type: "mysensorsdb"},
+            name: {value:""}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "file.png",
+        label: function() {
+            return this.name||"myscontroler";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="myscontroler">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-database"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-database" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="myscontroler">
+    <p>A function that parses <b>msg.payload</b> from mysensors serial
+    format, and outputs a nicely formatted payload usefull for debugging the
+    protocoll. Also, strips debug header from the payload, in case of debug
+    string from GW
+    </p>
+</script>

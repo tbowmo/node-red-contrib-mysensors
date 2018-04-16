@@ -1,10 +1,12 @@
-module.exports = function(RED) {
-    function MysensorsEncode(config) {
-        RED.nodes.createNode(this,config);
+import { Red } from 'node-red';
+
+function registerEncode(RED: Red) {
+    function MysensorsEncode(config: any) {
+        RED.nodes.createNode(this, config);
         var node = this;
         this.mqtt = config.mqtt;
         this.topicRoot = config.mqtttopic;
-        this.on('input', function(msg) {
+        this.on('input', function(msg: MySensors.IMessage) {
             if (this.mqtt) {
                 if (this.topicRoot !== "") {
                     msg.topicRoot = this.topicRoot;
@@ -16,8 +18,8 @@ module.exports = function(RED) {
             }
             else {
                 if ('nodeId' in msg) {
-                    pl = msg.nodeId+";"+msg.childSensorId+";"+msg.messageType+";"+msg.ack+";"+msg.subType+";"+msg.payload;
-                    msg = {payload:pl};
+                    let pl = msg.nodeId+";"+msg.childSensorId+";"+msg.messageType+";"+msg.ack+";"+msg.subType+";"+msg.payload;
+                    msg.payload = pl;
                 }
             }
             node.send(msg);
@@ -26,3 +28,4 @@ module.exports = function(RED) {
     RED.nodes.registerType("mysencode",MysensorsEncode);
 }
 
+export = registerEncode;
