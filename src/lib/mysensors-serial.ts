@@ -1,11 +1,11 @@
-import { FullMsg } from "./message";
+import { MysensorsMsg } from "./mysensors-msg";
 
 export class MysensorsSerial {
-    public static decode(msg: FullMsg): FullMsg {
+    public static decode(msg: MysensorsMsg): MysensorsMsg {
         var message = msg.payload.toString();
         message = message.replace(/(\r\n|\n|\r)/gm, "");
         var tokens = message.split(";");
-        let msgOut: FullMsg;
+        let msgOut: MysensorsMsg;
 
         if(tokens.length == 6)
         {
@@ -21,8 +21,8 @@ export class MysensorsSerial {
         return msgOut;
     }
 
-    public static encode(msg: FullMsg): FullMsg {
-        const msgOut: FullMsg = {
+    public static encode(msg: MysensorsMsg): MysensorsMsg {
+        const msgOut: MysensorsMsg = {
             payload: msg.nodeId+";"+msg.childSensorId+";"+msg.messageType+";"+msg.ack+";"+msg.subType+";"+msg.payload,
         }
         return msgOut;

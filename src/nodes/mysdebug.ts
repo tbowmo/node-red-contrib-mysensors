@@ -1,12 +1,12 @@
 import { mysensor_sensor, mysensor_data, mysensor_internal, mysensor_stream, mysensor_command, mysensor_payload } from '../lib/mysensors-types';
 import { Red } from 'node-red'
-import { FullMsg } from '../lib/message';
+import { MysensorsMsg } from '../lib/mysensors-msg';
 
 function registerDebugger(RED: Red) {
     function Debugger(config: any) {
         RED.nodes.createNode(this,config);
         var node = this;
-        this.on('input', function(msg: FullMsg) {
+        this.on('input', function(msg: MysensorsMsg) {
             var message = msg.payload.toString();
             message = message.replace('\\n','');
             var tokens = message.split(";")

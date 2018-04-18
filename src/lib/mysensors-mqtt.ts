@@ -1,16 +1,12 @@
-import { FullMsg } from "./message";
+import { MysensorsMsg } from "./mysensors-msg";
 
 export class MysensorsMqtt {
 
-    public static decode(msg: FullMsg): FullMsg {
-    
-        let topic = msg.topic.toString();
-        let split = topic.split("/");
-        let msgOut: FullMsg;
-        if (split.length < 6)
+    public static decode(msg: MysensorsMsg): MysensorsMsg {
+        let split = msg.topic.toString().split('/');
+        let msgOut: MysensorsMsg;
+        if (split.length >= 6)
         {
-            throw('');
-        } else {
             msgOut = {
                 topicRoot: split.slice(0,split.length-5).join("/"),
                 nodeId: parseInt( split[split.length-5] ),
@@ -24,8 +20,8 @@ export class MysensorsMqtt {
         return msgOut;
     }
 
-    public static encode(msg: FullMsg): FullMsg {
-        const msgOut: FullMsg = {
+    public static encode(msg: MysensorsMsg): MysensorsMsg {
+        const msgOut: MysensorsMsg = {
             topic: ((msg.topicRoot) ? (msg.topicRoot + "/") : "") + msg.nodeId + "/" + msg.childSensorId + "/" + msg.messageType + "/" + msg.ack + "/" + msg.subType,
             payload: msg.payload
         }

@@ -1,6 +1,6 @@
 import { mysensor_command, mysensor_data, mysensor_sensor, mysensor_internal } from '../lib/mysensors-types';
 import { Red } from 'node-red';
-import { FullMsg } from '../lib/message';
+import { MysensorsMsg } from '../lib/mysensors-msg';
 
 function registerEncapsulate(RED: Red) {
     function Encapsulate(config: any) {
@@ -21,7 +21,7 @@ function registerEncapsulate(RED: Red) {
         
         if (node.presentation) {
             setTimeout(function() {
-                let msg: FullMsg;
+                let msg: MysensorsMsg;
                 msg.nodeId = node.nodeid;
                 msg.ack = 0;
                 if (node.fullpresentation) {
@@ -43,7 +43,7 @@ function registerEncapsulate(RED: Red) {
             }, 5000);
         }
 
-        this.on('input', function(msg: FullMsg) {
+        this.on('input', function(msg: MysensorsMsg) {
             msg.nodeId = node.nodeid;
             msg.childSensorId = node.childid;
             msg.subType = node.subtype;
