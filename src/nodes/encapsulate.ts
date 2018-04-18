@@ -1,8 +1,8 @@
-import { payloadType, presentation, subtype, mysensorsInternal } from '../lib';
+import { mysensor_command, mysensor_data, mysensor_sensor, mysensor_internal } from '../lib/mysensors-types';
 import { Red } from 'node-red';
+import { FullMsg } from '../lib/message';
 
 function registerEncapsulate(RED: Red) {
-    console.log(RED);
     function Encapsulate(config: any) {
         RED.nodes.createNode(this,config);
         this.nodeid = config.nodeid;
@@ -21,7 +21,7 @@ function registerEncapsulate(RED: Red) {
         
         if (node.presentation) {
             setTimeout(function() {
-                let msg: MySensors.IMessage;
+                let msg: FullMsg;
                 msg.nodeId = node.nodeid;
                 msg.ack = 0;
                 if (node.fullpresentation) {
@@ -43,7 +43,7 @@ function registerEncapsulate(RED: Red) {
             }, 5000);
         }
 
-        this.on('input', function(msg: MySensors.IMessage) {
+        this.on('input', function(msg: FullMsg) {
             msg.nodeId = node.nodeid;
             msg.childSensorId = node.childid;
             msg.subType = node.subtype;
@@ -61,19 +61,19 @@ function registerEncapsulate(RED: Red) {
     
     RED.httpAdmin.get("/mysensordefs/:id", RED.auth.needsPermission(''), function(req: any , res: any) {
         var type = req.params.id;
-        let retVal: string = "";
+        let mysVal: any;
         switch (type) {
             case "subtype": 
-                retVal = JSON.stringify({data: subtype});
+                mysVal = mysensor_data;
                 break;
             case "presentation":
-                retVal = JSON.stringify({data: presentation});
+                mysVal = mysensor_sensor;
                 break;
             case "internal":
-                retVal = JSON.stringify({data: mysensorsInternal});
+                mysVal = mysensor_internal;
                 break;
         }
-        res.json(retVal);
+        res.json(JSON.stringify(mysVal));
     });
 }
 

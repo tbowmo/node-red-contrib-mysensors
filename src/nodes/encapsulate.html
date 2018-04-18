@@ -209,7 +209,6 @@ function loadJsonTypes(type, selectId, selection) {
              var index;
              var html = '';
              data = JSON.parse(data).data;
-             console.log(data);
              for (index = 0; index < data.length; ++index) {
                html = html + '<option value='+index+'>'+data[index]+'</option>';
              }

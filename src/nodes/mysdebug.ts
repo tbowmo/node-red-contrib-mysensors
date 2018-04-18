@@ -1,11 +1,12 @@
-import { payloadType, presentation, mysensorsInternal, streamtype, subtype} from '../lib';
+import { mysensor_sensor, mysensor_data, mysensor_internal, mysensor_stream, mysensor_command, mysensor_payload } from '../lib/mysensors-types';
 import { Red } from 'node-red'
+import { FullMsg } from '../lib/message';
 
 function registerDebugger(RED: Red) {
     function Debugger(config: any) {
         RED.nodes.createNode(this,config);
         var node = this;
-        this.on('input', function(msg: MySensors.IMessage) {
+        this.on('input', function(msg: FullMsg) {
             var message = msg.payload.toString();
             message = message.replace('\\n','');
             var tokens = message.split(";")
@@ -23,26 +24,26 @@ function registerDebugger(RED: Red) {
                 switch (messageType) {
                     case 0:
                         msgHeader = "PRESENTATION";
-                        msgSubType = presentation[subType];
+                        msgSubType = mysensor_sensor[subType];
                         break;
                     case 1:
                         msgHeader = "SET";
-                        msgSubType = subtype[subType];
+                        msgSubType = mysensor_data[subType];
                         break;
                     case 2:
                         msgHeader = "GET";
-                        msgSubType = subtype[subType];
+                        msgSubType = mysensor_data[subType];
                         break;
                     case 3:
                         if (subType == 9) msg.payload = "GW Debug;" + debugDecode(payload);
                         else {
                             msgHeader = "INTERNAL";
-                            msgSubType = mysensorsInternal[subType];
+                            msgSubType = mysensor_internal[subType];
                         }
                         break;
                     case 4:
                         msgHeader = "STREAM";
-                        msgSubType = streamtype[subType];
+                        msgSubType = mysensor_stream[subType];
                         break;
                     default:
                         msg.payload = "unsupported msgType " + messageType;
@@ -99,13 +100,13 @@ function debugDecode(payload: string) {
                     cmd = Number(x[1]);
                     break;
                 case 't' :
-                    var sub = subtype[i];
-                    if (cmd == 0) sub = presentation[i];
-                    if (cmd == 3) sub = mysensorsInternal[i];
+                    var sub = mysensor_command[i];
+                    if (cmd == 0) sub = mysensor_sensor[i];
+                    if (cmd == 3) sub = mysensor_internal[i];
                     z = "subType=" + sub;
                     break;
                 case 'pt' :
-                    z = "PayloadType=" + payloadType[i];
+                    z = "PayloadType=" + mysensor_payload[i];
                     break;
                 case 'l' :
                     z = 'Length=' + i;

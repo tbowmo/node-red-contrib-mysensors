@@ -1,4 +1,7 @@
 import { Red } from 'node-red';
+import { FullMsg } from '../lib/message';
+import { MysensorsMqtt } from '../lib/mysensors-mqtt';
+import { MysensorsSerial } from '../lib/mysensors-serial';
 
 function registerEncode(RED: Red) {
     function MysensorsEncode(config: any) {
@@ -6,23 +9,23 @@ function registerEncode(RED: Red) {
         var node = this;
         this.mqtt = config.mqtt;
         this.topicRoot = config.mqtttopic;
-        this.on('input', function(msg: MySensors.IMessage) {
+        this.on('input', function(msg: FullMsg) {
+            let msgOut: FullMsg;
             if (this.mqtt) {
                 if (this.topicRoot !== "") {
                     msg.topicRoot = this.topicRoot;
                 }
+                
                 if ('nodeId' in msg) {
-                    var topic =  ((msg.topicRoot) ? (msg.topicRoot + "/") : "") + msg.nodeId + "/" + msg.childSensorId + "/" + msg.messageType + "/" + msg.ack + "/" + msg.subType;
-                    msg.topic = topic;
+                    msgOut = MysensorsMqtt.encode(msg);
                 }
             }
             else {
                 if ('nodeId' in msg) {
-                    let pl = msg.nodeId+";"+msg.childSensorId+";"+msg.messageType+";"+msg.ack+";"+msg.subType+";"+msg.payload;
-                    msg.payload = pl;
+                    msgOut = MysensorsSerial.encode(msg);
                 }
             }
-            node.send(msg);
+            node.send(msgOut);
         });
     }
     RED.nodes.registerType("mysencode",MysensorsEncode);
