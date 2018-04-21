@@ -1,76 +1,78 @@
 import { mysensor_sensor, mysensor_data, mysensor_internal, mysensor_stream, mysensor_command, mysensor_payload } from '../lib/mysensors-types';
-import { Red } from 'node-red'
-import { MysensorsMsg } from '../lib/mysensors-msg';
+import { Node, Red, NodeProperties } from 'node-red'
+import { MysensorsMsg, MysensorsMsgDefined } from '../lib/mysensors-msg';
+import { NullCheck } from '../lib/nullcheck';
 
-function registerDebugger(RED: Red) {
-    function Debugger(config: any) {
+export = (RED: Red) => {
+    RED.nodes.registerType("mysdebug", function (this: Node, config: NodeProperties) {
         RED.nodes.createNode(this,config);
-        var node = this;
-        this.on('input', function(msg: MysensorsMsg) {
-            var message = msg.payload.toString();
+
+        this.on('input', (msg: MysensorsMsg) => {
+            let message = msg.payload.toString();
             message = message.replace('\\n','');
-            var tokens = message.split(";")
-            msg.payload = null;
+            let tokens = message.split(";")
+            msg.payload = "";
             if (tokens.length == 6)
             {
-                var nodeId = parseInt(tokens[0]);
-                var childSensorId = parseInt(tokens[1]);
-                var messageType = parseInt(tokens[2]);
-                var ack = parseInt(tokens[3]);
-                var subType = parseInt(tokens[4]);
-                var payload = tokens[5];
-                var msgHeader = '';
-                var msgSubType: string;
-                switch (messageType) {
-                    case 0:
+                const m: MysensorsMsgDefined = {
+                    nodeId: parseInt(tokens[0]),
+                    childSensorId: parseInt(tokens[1]),
+                    messageType: parseInt(tokens[2]),
+                    ack: tokens[3] === "1"? 1: 0,
+                    subType: parseInt(tokens[4]),
+                    payload: tokens[5]
+                };
+                let msgHeader = '';
+                let msgSubType: string | null = null;
+                switch (m.messageType) {
+                    case mysensor_command.C_PRESENTATION:
                         msgHeader = "PRESENTATION";
-                        msgSubType = mysensor_sensor[subType];
+                        msgSubType = mysensor_sensor[m.subType];
                         break;
-                    case 1:
+                    case mysensor_command.C_SET:
                         msgHeader = "SET";
-                        msgSubType = mysensor_data[subType];
+                        msgSubType = mysensor_data[m.subType];
                         break;
-                    case 2:
-                        msgHeader = "GET";
-                        msgSubType = mysensor_data[subType];
+                    case mysensor_command.C_REQ:
+                        msgHeader = "REQ";
+                        msgSubType = mysensor_data[m.subType];
                         break;
-                    case 3:
-                        if (subType == 9) msg.payload = "GW Debug;" + debugDecode(payload);
+                    case mysensor_command.C_INTERNAL:
+                        if (m.subType == 9) msg.payload = "GW Debug;" + debugDecode(m.payload);
                         else {
                             msgHeader = "INTERNAL";
-                            msgSubType = mysensor_internal[subType];
+                            msgSubType = mysensor_internal[m.subType];
                         }
                         break;
-                    case 4:
+                    case mysensor_command.C_STREAM:
                         msgHeader = "STREAM";
-                        msgSubType = mysensor_stream[subType];
+                        msgSubType = mysensor_stream[m.subType];
                         break;
                     default:
-                        msg.payload = "unsupported msgType " + messageType;
+                        msg.payload = "unsupported msgType " + m.messageType;
                         break;
                 }
 
                 if (msgSubType != null) {
-                    msg.payload = msgHeader + ";nodeId:" + nodeId + ";childId:"+ childSensorId +";SubType:"+ msgSubType + ";ACK:"+ ack + ";Payload:"+ payload;
+                    msg.payload = msgHeader + ";nodeId:" + m.nodeId + ";childId:"+ m.childSensorId +";SubType:"+ msgSubType + ";ACK:"+ m.ack + ";Payload:"+ m.payload;
                 }
 
             }
-            if (msg.payload != null && nodeId == 0) node.send(msg);
+            this.send(msg);
         });
-    }
-    RED.nodes.registerType("mysdebug",Debugger);
+    });
 }
 
 function debugDecode(payload: string) {
-    var payReturn = payload;
-    var commands = ['Presentation','SET','GET','Internal','Stream'];
-    var re = /(.+?):\s(.+?)\s(.+?):(.+)/;
-    var str = payload
-    var index: number;
+    let payReturn = payload;
+    let commands = ['Presentation','SET','GET','Internal','Stream'];
+    let re = /(.+?):\s(.+?)\s(.+?):(.+)/;
+    let str = NullCheck.isUndefinedOrNull(payload)?'': payload;
+    let index: number;
     let cmd: number = 0;
-    var m: RegExpMatchArray;
+    let m: RegExpExecArray| null;
     let z: string;
-    if ((m = re.exec(str)) !== null) {
+    if ((m = re.exec(str))) {
         if (m.index === re.lastIndex) {
             re.lastIndex++;
         }
@@ -100,7 +102,7 @@ function debugDecode(payload: string) {
                     cmd = Number(x[1]);
                     break;
                 case 't' :
-                    var sub = mysensor_command[i];
+                    let sub = mysensor_command[i];
                     if (cmd == 0) sub = mysensor_sensor[i];
                     if (cmd == 3) sub = mysensor_internal[i];
                     z = "subType=" + sub;
@@ -120,10 +122,6 @@ function debugDecode(payload: string) {
         }
 
         payReturn = payReturn + ";Payload="+m[4];
-                     // View your result using the m-variable.
-                         // eg m[0] etc.
     }
     return payReturn;
 }
-
-export = registerDebugger;

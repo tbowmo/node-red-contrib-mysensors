@@ -1,20 +1,21 @@
 import { Red } from "node-red";
 import { Controler } from "../lib/controler";
-import { MysensorsMsg } from "../lib/mysensors-msg";
+import { MysensorsMsg, MysensorsMsgNull } from "../lib/mysensors-msg";
+import { IControlerConfig, IControlerProperties, IDbConfigNode } from "./common";
 
-function registerMysensorControler(RED: Red) {
-    function MysensorsControler(config: any) {
-        RED.nodes.createNode(this, config);
-        this.name = config.name;
-        this.file = config.file;
-        this.database = RED.nodes.getNode(config.database)
-        let node = this;
-        node.controler = new Controler(node.database.file);
-        node.on('input', function(msg: MysensorsMsg) {
-            node.send((node.controler as Controler).messageHandler(msg));
-        });
-    }
-    RED.nodes.registerType('myscontroler', MysensorsControler);
+export = (RED: Red) => {
+    RED.nodes.registerType('myscontroler', function (this: IControlerConfig, props: IControlerProperties) {
+        RED.nodes.createNode(this, props);
+        if (props.database) {
+            this.database = RED.nodes.getNode(props.database);
+            if (this.database.file) {
+                this.controler = new Controler(this.database.file);
+                this.on('input', (msg: MysensorsMsg) => {
+                    (this.controler as Controler).messageHandler(msg).then((msg: MysensorsMsgNull) => {
+                        this.send(msg);
+                    });
+                });
+            }
+        }
+    });
 }
-
-export = registerMysensorControler;

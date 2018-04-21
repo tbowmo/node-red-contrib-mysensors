@@ -27,9 +27,15 @@
 </script>
 
 <script type="text/x-red" data-help-name="myscontroler">
-    <p>A function that parses <b>msg.payload</b> from mysensors serial
-    format, and outputs a nicely formatted payload usefull for debugging the
-    protocoll. Also, strips debug header from the payload, in case of debug
-    string from GW
+    <p>Controller node
+
+        Detects automtically if input is one of the following:
+        <ul>
+            <li>Serial gateway</i>
+            <li>MQTT input</i>
+            <li>Decoded Mysensors package</i>
+        </ul>
+        if any of the above is detected on the input, the same format is used on the output, if any response is sent out.
+
     </p>
 </script>

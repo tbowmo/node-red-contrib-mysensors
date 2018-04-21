@@ -1,11 +1,9 @@
-import { Red } from "node-red";
+import { Node, Red } from "node-red";
+import { IDbConfigNode, IDBProperties } from "./common";
 
-function registerMysensorsDb(RED: Red) {
-    function MysensorsDb(config: any) {
+export = (RED: Red) => {
+    RED.nodes.registerType('mysensorsdb', function MysensorsDb(this: IDbConfigNode, config: IDBProperties) {
         RED.nodes.createNode(this, config);
         this.file = config.file;
-    }
-    RED.nodes.registerType('mysensorsdb', MysensorsDb);
+    });
 }
-
-export = registerMysensorsDb;

@@ -176,45 +176,45 @@
     });
 
 function showSetReq() {
-  $("#node-input-row-subtype-select").show();
-  $("#node-input-row-internal-select").hide();
-  $(".node-childid").show();
-  $(".node-presentation").show();
+    $("#node-input-row-subtype-select").show();
+    $("#node-input-row-internal-select").hide();
+    $(".node-childid").show();
+    $(".node-presentation").show();
 }
 
 function showInternal() {
-  $("#node-input-row-subtype-select").hide();
-  $("#node-input-row-internal-select").show();
-  $(".node-childid").hide();
-  $(".node-presentation").hide();
+    $("#node-input-row-subtype-select").hide();
+    $("#node-input-row-internal-select").show();
+    $(".node-childid").hide();
+    $(".node-presentation").hide();
 }
 
 function sortOptions(selectTag) {
-           var selected = $('#'+selectTag).val();
-           var options = $('#'+selectTag+' option');
-           var arr = options.map(function(_, o) { return { t:
-           $(o).text(), v: o.value }; }).get();
-           arr.sort(function(o1, o2) { return o1.t > o2.t ? 1 : o1.t <
-           o2.t ? -1 : 0; });
-           options.each(function(i, o) {
-              o.value = arr[i].v;
-              $(o).text(arr[i].t);
+    var selected = $('#'+selectTag).val();
+    var options = $('#'+selectTag+' option');
+    var arr = options.map(function(_, o) { return { t:
+    $(o).text(), v: o.value }; }).get();
+    arr.sort(function(o1, o2) { return o1.t > o2.t ? 1 : o1.t <
+    o2.t ? -1 : 0; });
+    options.each(function(i, o) {
+        o.value = arr[i].v;
+        $(o).text(arr[i].t);
 //              if (parseInt(arr[i].v) == parseInt(selected)) $(o).prop('selected',true);              
-           });
-           $('#'+selectTag).val(selected);
+    });
+    $('#'+selectTag).val(selected);
 }
 
 function loadJsonTypes(type, selectId, selection) {
-           $.getJSON('mysensordefs/'+type, function(data) {
-             var index;
-             var html = '';
-             data = JSON.parse(data).data;
-             for (index = 0; index < data.length; ++index) {
-               html = html + '<option value='+index+'>'+data[index]+'</option>';
-             }
-      	     $('#'+selectId).html(html);
-      	     $('#'+selectId).val($('#'+selection).val());
-           });
-           sortOptions(selectId);
+    $.getJSON('mysensordefs/'+type, function(data) {
+        var index;
+        var html = '';
+        data = JSON.parse(data).data;
+        for (index = 0; index < data.length; ++index) {
+        html = html + '<option value='+index+'>'+data[index]+'</option>';
+        }
+        $('#'+selectId).html(html);
+        $('#'+selectId).val($('#'+selection).val());
+    });
+    sortOptions(selectId);
 }
 </script>

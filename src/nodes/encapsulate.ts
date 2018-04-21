@@ -1,66 +1,63 @@
 import { mysensor_command, mysensor_data, mysensor_sensor, mysensor_internal } from '../lib/mysensors-types';
 import { Red } from 'node-red';
 import { MysensorsMsg } from '../lib/mysensors-msg';
+import { IEncapsulateConfig, IEncapsulateProperties } from 'node-red-contrib-mysensors/src/nodes/common';
 
-function registerEncapsulate(RED: Red) {
-    function Encapsulate(config: any) {
+export = (RED: Red) => {
+    RED.nodes.registerType("mysencap", function (this: IEncapsulateConfig, config: IEncapsulateProperties) {
         RED.nodes.createNode(this,config);
-        this.nodeid = config.nodeid;
-        this.childid = config.childid;
-        this.subtype = config.subtype;
-        this.msgtype = config.msgtype;
-        this.ack = config.ack;
-        this.presentation = config.presentation;
-        this.presentationtext = config.presentationtext;
-        this.presentationtype = config.presentationtype;
-        this.fullpresentation = config.fullpresentation;
-        this.internal = config.internal;
-        this.firmwarename = config.firmwarename;
-        this.firmwareversion = config.firmwareversion;
-        var node = this;
+        this.sensor = {
+            nodeId: config.nodeId,
+            childSensorId: config.childId,
+            subType: config.subType,
+            messageType: config.msgtype,
+            ack: config.ack?1:0,
+            payload: ''
+        };
+        this.presentation = config.presentation || false;
+        this.presentationtext = config.presentationtext || '';
+        this.presentationtype = config.presentationtype || 0;
+        this.fullpresentation = config.fullpresentation || false;
+        this.internal = config.internal || 0;
+        this.firmwarename = config.firmwarename  || '';
+        this.firmwareversion = config.firmwareversion || '';
         
-        if (node.presentation) {
-            setTimeout(function() {
-                let msg: MysensorsMsg;
-                msg.nodeId = node.nodeid;
+        if (this.presentation) {
+            setTimeout(() => {
+                let msg: MysensorsMsg = this.sensor;
                 msg.ack = 0;
-                if (node.fullpresentation) {
+                if (this.fullpresentation) {
                     msg.messageType = 3;
                     msg.childSensorId = 255; // Internal messages always send as childi 255
                     msg.subType = 11; // Sketchname
-                    msg.payload = node.firmwarename;                
-                    node.send(msg);
+                    msg.payload = this.firmwarename;                
+                    this.send(msg);
 
                     msg.subType = 12; // Sketchname
-                    msg.payload = node.firmwareversion;                
-                    node.send(msg);
+                    msg.payload = this.firmwareversion;                
+                    this.send(msg);
                 }
                 msg.messageType = 0;
-                msg.childSensorId = node.childid;
-                msg.subType = node.presentationtype;
-                msg.payload = node.presentationtext;
-                node.send(msg);
+                msg.subType = this.presentationtype;
+                msg.payload = this.presentationtext;
+                this.send(msg);
             }, 5000);
         }
 
-        this.on('input', function(msg: MysensorsMsg) {
-            msg.nodeId = node.nodeid;
-            msg.childSensorId = node.childid;
-            msg.subType = node.subtype;
-            msg.messageType = node.msgtype;
-            msg.ack = (node.ack?1:0);
-            if (node.msgtype == 3) {
-                msg.childSensorId = 255;
-                msg.subType = node.internal;
+        this.on('input', (msg: MysensorsMsg) => {
+            const msgOut = this.sensor;
+            msgOut.payload = msg.payload;
+            if (this.sensor.messageType == 3) {
+                msgOut.childSensorId = 255;
+                msgOut.subType = this.internal;
             }
-            node.send(msg);
+            this.send(msgOut);
         });
 
-    }
-    RED.nodes.registerType("mysencap",Encapsulate);
+    });
     
     RED.httpAdmin.get("/mysensordefs/:id", RED.auth.needsPermission(''), function(req: any , res: any) {
-        var type = req.params.id;
+        let type = req.params.id;
         let mysVal: any;
         switch (type) {
             case "subtype": 
@@ -73,8 +70,6 @@ function registerEncapsulate(RED: Red) {
                 mysVal = mysensor_internal;
                 break;
         }
-        res.json(JSON.stringify(mysVal));
+        res.json(JSON.stringify({data:Object.keys(mysVal).filter(k => typeof mysVal[k as any] === "number")}));
     });
 }
-
-export = registerEncapsulate;

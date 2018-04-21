@@ -1,19 +1,17 @@
-import { Red } from 'node-red';
-import { MysensorsMsg } from '../lib/mysensors-msg';
+import { Node, Red } from 'node-red';
+import { MysensorsMsg, MysensorsMsgNull } from '../lib/mysensors-msg';
 import { MysensorsMqtt } from '../lib/mysensors-mqtt';
 import { MysensorsSerial } from '../lib/mysensors-serial';
+import { IEncodeProperties } from './common';
 
-function registerEncode(RED: Red) {
-    function MysensorsEncode(config: any) {
-        RED.nodes.createNode(this, config);
-        var node = this;
-        this.mqtt = config.mqtt;
-        this.topicRoot = config.mqtttopic;
-        this.on('input', function(msg: MysensorsMsg) {
-            let msgOut: MysensorsMsg;
-            if (this.mqtt) {
-                if (this.topicRoot !== "") {
-                    msg.topicRoot = this.topicRoot;
+export = (RED: Red) => {
+    RED.nodes.registerType('mysencode', function(this: Node, props: IEncodeProperties) {
+        RED.nodes.createNode(this, props);
+        this.on('input', (msg: MysensorsMsg) => {
+            let msgOut: MysensorsMsgNull = null;
+            if (props.mqtt) {
+                if (props.topicRoot !== "") {
+                    msg.topicRoot = props.topicRoot;
                 }
                 
                 if ('nodeId' in msg) {
@@ -25,10 +23,7 @@ function registerEncode(RED: Red) {
                     msgOut = MysensorsSerial.encode(msg);
                 }
             }
-            node.send(msgOut);
+            this.send(msgOut);
         });
-    }
-    RED.nodes.registerType("mysencode",MysensorsEncode);
-}
-
-export = registerEncode;
+    });
+};

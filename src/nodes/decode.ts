@@ -1,25 +1,22 @@
-import { MysensorsMqtt } from "../lib/mysensors-mqtt";
-import { MysensorsSerial } from "../lib/mysensors-serial";
-import { Red } from 'node-red';
-import { MysensorsMsg } from "../lib/mysensors-msg";
+import { IDecodeProperties } from './common';
+import { MysensorsMqtt } from '../lib/mysensors-mqtt';
+import { MysensorsMsg, MysensorsMsgNull } from '../lib/mysensors-msg';
+import { MysensorsSerial } from '../lib/mysensors-serial';
+import { Node, Red } from 'node-red';
 
-function registerDecode(RED: Red) {
-    function MysensorsDecode(config: any) {
-        RED.nodes.createNode(this,config);
-        var node = this;
-        this.mqtt = config.mqtt;
-        this.on('input', function(msg: MysensorsMsg) {
-            let msgOut: MysensorsMsg;
-            if (this.mqtt) {
+export = (RED: Red) => {
+    RED.nodes.registerType("mysdecode", function (this: Node, config: IDecodeProperties) {
+        RED.nodes.createNode(this, config);
+        config.mqtt;
+        this.on('input', (msg: MysensorsMsg) => {
+            let msgOut: MysensorsMsgNull;
+            if (config.mqtt) {
                 msgOut = MysensorsMqtt.decode(msg);
             } 
             else {
                 msgOut = MysensorsSerial.decode(msg);
             }
-            node.send(msgOut);
+            this.send(msgOut);
         });
-    }
-    RED.nodes.registerType("mysdecode",MysensorsDecode);
+    });
 }
-
-export = registerDecode;
