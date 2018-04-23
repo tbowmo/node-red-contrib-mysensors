@@ -4,13 +4,38 @@
         color: '#a6bbcf',
         defaults: {
             database: {value:"", type: "mysensorsdb"},
-            name: {value:""}
+            name: {value:""},
+            handleid: {value: true}
         },
         inputs:1,
         outputs:1,
         icon: "file.png",
         label: function() {
             return this.name||"myscontroler";
+        },
+        oneditprepare: function() {
+            $.getJSON('mysensornodes/' + this.database, function(data) {
+                data = JSON.parse(data).data;
+                var html = '';
+                for(index = 0; index < data.length; ++index) {
+                    var c = data[index];
+                    html = html + `<tr>
+                        <td>
+                            ${c.id}
+                        </td>
+                        <td>
+                            ${c.sketchName}
+                        </td>
+                        <td>
+                            ${c.sketchVersion}
+                        </td>
+                        <td>
+                            ${c.lastHeard}
+                        </td>
+                        </tr>`;
+                }
+                $('#nodelist').html(html);
+            });
         }
     });
 </script>
@@ -23,6 +48,25 @@
     <div class="form-row">
         <label for="node-input-database"><i class="icon-tag"></i> Name</label>
         <input type="text" id="node-input-database" placeholder="Name">
+    </div>
+    <div class="form-row">
+            <label for="node-input-handleid"><i class="icon-tag"></i> Handle IDs</label>
+            <input type="checkbox" id="node-input-handleid" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label><i class="icon-book"></i> List of nodes</label>
+        <table border="1px" style="width:100%">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>sketch</th>
+                    <th>version</th>
+                    <th>last heard</th>
+                </tr>
+            </thead>
+            <tbody id="nodelist">
+            </tbody>
+        </table>
     </div>
 </script>
 

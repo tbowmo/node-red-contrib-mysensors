@@ -1,7 +1,8 @@
 import { Node, NodeProperties, NodeId } from "node-red";
-import { Controler } from "node-red-contrib-mysensors/src/lib/controler";
-import { MysensorsMsg } from "node-red-contrib-mysensors/src/lib/mysensors-msg";
-import { mysensor_sensor } from "node-red-contrib-mysensors/src/lib/mysensors-types";
+import { MysensorsControler } from "../lib/mysensors-controler";
+import { MysensorsMsg } from "../lib/mysensors-msg";
+import { mysensor_sensor } from "../lib/mysensors-types";
+import { Database } from "../lib/database";
 
 /* Encode */
 export interface IEncodeProperties extends NodeProperties {
@@ -17,6 +18,7 @@ export interface IDecodeProperties extends NodeProperties {
 /* DB */ 
 export interface IDbConfigNode extends Node {
     file?: string;
+    database: Database
 }
 
 export interface IDBProperties extends NodeProperties {
@@ -26,11 +28,13 @@ export interface IDBProperties extends NodeProperties {
 /* Controler */
 export interface IControlerProperties extends NodeProperties {
     database?: NodeId;
+    handleid?: boolean;
 }
 
 export interface IControlerConfig extends Node {
-    controler: Controler;
+    controler: MysensorsControler;
     database: IDbConfigNode;
+    handleid: boolean;
 }
 
 /* Encapsulate */

@@ -1,7 +1,7 @@
 import { mysensor_command, mysensor_data, mysensor_sensor, mysensor_internal } from '../lib/mysensors-types';
 import { Red } from 'node-red';
 import { MysensorsMsg } from '../lib/mysensors-msg';
-import { IEncapsulateConfig, IEncapsulateProperties } from 'node-red-contrib-mysensors/src/nodes/common';
+import { IEncapsulateConfig, IEncapsulateProperties } from './common';
 
 export = (RED: Red) => {
     RED.nodes.registerType("mysencap", function (this: IEncapsulateConfig, config: IEncapsulateProperties) {

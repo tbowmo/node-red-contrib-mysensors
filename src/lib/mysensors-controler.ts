@@ -1,23 +1,16 @@
 import { MysensorsMsg, MysensorsMsgNull } from './mysensors-msg'
 import { mysensor_command, mysensor_internal } from "./mysensors-types";
-import { open, Database } from 'sqlite';
 import { NullCheck } from './nullcheck';
 import { MysensorsMqtt } from './mysensors-mqtt';
 import { MysensorsSerial } from './mysensors-serial';
+import { Database } from './database';
 
-export class Controler {
-    private dbPromise: Promise<Database>;
-    private tick: any;
+export class MysensorsControler {
 
-    constructor(private dbname: string, private reconnect: number = 2000) {
-        if (NullCheck.isUndefinedNullOrEmpty(this.dbname)) {
-            throw('No dbname set');
-        }
-        this.dbPromise = open(this.dbname);       
-    }
+    constructor(private database: Database, private handleIds: boolean) { }
+
 
     public async messageHandler(msg: MysensorsMsg): Promise<MysensorsMsgNull> {
-        const db = await this.dbPromise;
         let msgOut: MysensorsMsgNull = null;
         let inputType = 0;
         if (NullCheck.isUndefinedOrNull(msg.nodeId)) {
@@ -33,8 +26,7 @@ export class Controler {
                 msg = msgTmp;
             }
         }
-        await db.all(`insert or ignore into node (id) values (${msg.nodeId})`, []);
-        await db.all(`update node set lastHeard=CURRENT_TIMESTAMP where id=${msg.nodeId}`);
+        if (msg.nodeId) await this.database.nodeHeard(msg.nodeId);
         if (msg.messageType === mysensor_command.C_INTERNAL) {
             switch (msg.subType) {
                 case mysensor_internal.I_ID_REQUEST:
@@ -62,10 +54,13 @@ export class Controler {
         return msgOut;
     }
 
-    private async handleIdRequest(msg: MysensorsMsg): Promise<MysensorsMsg> {
+    private async handleIdRequest(msg: MysensorsMsg): Promise<MysensorsMsg | null> {
         msg.subType = mysensor_internal.I_ID_RESPONSE;
-        msg.payload = "20";
-        return msg;
+        if (this.handleIds) {
+            msg.payload = (await this.database.getFreeNodeId()).toString();
+            return msg;
+        }
+        return null;
     }
 
     private async handleDebug(msg: MysensorsMsg): Promise<void> {
@@ -73,13 +68,13 @@ export class Controler {
     }
 
     private async handleSketchVersion(msg: MysensorsMsg): Promise<void>{
-        const db = await this.dbPromise;
         let sql: string = '';
-        if(msg.subType === mysensor_internal.I_SKETCH_VERSION) {
-            sql = `update node set sketchVersion="${msg.payload}" where id=${msg.nodeId}`;
-        } else if (msg.subType === mysensor_internal.I_SKETCH_NAME) {
-            sql = `update node set sketchName="${msg.payload}" where id=${msg.nodeId}`;
+        if(msg.subType === mysensor_internal.I_SKETCH_VERSION && msg.nodeId) {
+            this.database.sketchVersion(msg.nodeId, msg.payload);
+        } else if (msg.subType === mysensor_internal.I_SKETCH_NAME && msg.nodeId) {
+            this.database.sketchName(msg.nodeId, msg.payload);
         }
-        await db.all(sql, []);
     }
+
 }
+
