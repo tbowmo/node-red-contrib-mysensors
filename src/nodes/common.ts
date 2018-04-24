@@ -1,5 +1,5 @@
 import { Node, NodeProperties, NodeId } from "node-red";
-import { MysensorsControler } from "../lib/mysensors-controler";
+import { MysensorsController } from "../lib/mysensors-controller";
 import { MysensorsMsg } from "../lib/mysensors-msg";
 import { mysensor_sensor } from "../lib/mysensors-types";
 import { Database } from "../lib/database";
@@ -32,7 +32,7 @@ export interface IControlerProperties extends NodeProperties {
 }
 
 export interface IControlerConfig extends Node {
-    controler: MysensorsControler;
+    controler: MysensorsController;
     database: IDbConfigNode;
     handleid: boolean;
 }

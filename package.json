@@ -34,7 +34,7 @@
       "mysencode": "dist/nodes/encode.js",
       "mysencap": "dist/nodes/encapsulate.js",
       "mysdebug": "dist/nodes/mysdebug.js",
-      "myscontroler": "dist/nodes/controler.js",
+      "myscontroler": "dist/nodes/controller.js",
       "mysdb": "dist/nodes/mysensors-db.js"
     }
   },
