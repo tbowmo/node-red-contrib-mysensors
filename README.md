@@ -1,11 +1,7 @@
 # node-red-contrib-mysensors
 
-A node-RED [mysensors](http://www.mysensors.org) protocol decoder / encoder / wrapper package.
+A node-RED [mysensors](http://www.mysensors.org) protocol decoder / encoder / wrapper package, including basic controller functionality
 Contains a node to decode / encode mysensors serial protocol to / from node-red messages, and a node for adding mysensors specific data like sensor type, nodeid etc. which can then be sent to mysensors network
-
-## Warning!
-In an upcomming release the node mysdecenc will be removed, it is only left
-here for legacy purpose, and to not break current flows.
 
 ## Install
 
@@ -45,3 +41,7 @@ This will add the message properties mention under mysdecenc to the message obje
 ## Node-RED mysdebug
 
 This will decode the mysensors serial protocol payload, and enrich it with descriptions of sensor types etc. Meant as a debugging tool. Data will be sent out of the node, and can be used in a debug node, or dumped to disk, for file logging
+
+## Node-RED myscontroller
+
+This node can handle ID assignment to nodes on your network. Will respond with a new ID everytime it sees a request for an ID from a node.
