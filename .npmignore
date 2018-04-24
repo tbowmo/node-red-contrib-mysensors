@@ -36,10 +36,11 @@ node_modules
 _lib
 _nodes
 
-dist/**/*
-
-src/**/*.js
-src/**/*.js.map
-src/lib/**/*.d.ts
+typings/**/*
+typings/browser.d.ts
+# typings/main/**
+# typings/main.d.ts
 
 gh-pages
+out/
+data/
