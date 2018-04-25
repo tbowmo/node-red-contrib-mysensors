@@ -3,12 +3,12 @@
   "author": {
     "name": "Thomas Bowman Mørch"
   },
-  "version": "2.0.0",
+  "version": "2.0.1",
   "scripts": {
     "build": "mkdir -p dist/nodes/ && cp -a src/nodes/*.html dist/nodes/ && tsc ",
-    "prepublish": "typings install && tsc",
-    "tsinstall": "typings install && tsc",
-    "test": "tsc && mocha dist/**/*.spec.js"
+    "pretest": "tsc",
+    "prepublish": "build",
+    "test": "mocha dist/**/*.spec.js"
   },
   "bugs": {
     "url": "https://github.com/tbowmo/node-red-contrib-mysensors/issues"

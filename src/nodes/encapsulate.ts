@@ -1,15 +1,16 @@
 import { mysensor_command, mysensor_data, mysensor_sensor, mysensor_internal } from '../lib/mysensors-types';
-import { Red } from 'node-red';
+import { Red, NodeProperties } from 'node-red';
 import { MysensorsMsg } from '../lib/mysensors-msg';
 import { IEncapsulateConfig, IEncapsulateProperties } from './common';
 
 export = (RED: Red) => {
-    RED.nodes.registerType("mysencap", function (this: IEncapsulateConfig, config: IEncapsulateProperties) {
+    RED.nodes.registerType("mysencap", function (this: IEncapsulateConfig, props: NodeProperties) {
+        const config = props as IEncapsulateProperties;
         RED.nodes.createNode(this,config);
         this.sensor = {
-            nodeId: config.nodeId,
-            childSensorId: config.childId,
-            subType: config.subType,
+            nodeId: config.nodeid,
+            childSensorId: config.childid,
+            subType: config.subtype,
             messageType: config.msgtype,
             ack: config.ack?1:0,
             payload: ''

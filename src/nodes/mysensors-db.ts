@@ -1,10 +1,11 @@
-import { Node, Red } from "node-red";
+import { Node, Red, NodeProperties } from "node-red";
 import { IDbConfigNode, IDBProperties } from "./common";
 import { Database } from "../lib/database";
 import { resolve } from "path";
 
 export = (RED: Red) => {
-    RED.nodes.registerType('mysensorsdb', function MysensorsDb(this: IDbConfigNode, config: IDBProperties) {
+    RED.nodes.registerType('mysensorsdb', function MysensorsDb(this: IDbConfigNode, props: NodeProperties) {
+        const config = props as IDBProperties;
         RED.nodes.createNode(this, config);
         this.file = config.file;
         try {

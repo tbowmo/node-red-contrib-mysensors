@@ -6,13 +6,13 @@ import { Database } from "../lib/database";
 
 /* Encode */
 export interface IEncodeProperties extends NodeProperties {
-    mqtt?: boolean;
-    topicRoot?: string;
+    mqtt: boolean,
+    mqtttopic: string
 }
 
 /* Decode */
 export interface IDecodeProperties extends NodeProperties {
-    mqtt?: boolean;
+    mqtt: boolean;
 }
 
 /* DB */ 
@@ -22,7 +22,7 @@ export interface IDbConfigNode extends Node {
 }
 
 export interface IDBProperties extends NodeProperties {
-    file?: string;
+    file: string;
 }
 
 /* Controler */
@@ -51,16 +51,16 @@ export interface IEncapsulateConfig extends Node {
 }
 
 export interface IEncapsulateProperties extends NodeProperties {
-    nodeId?: number;
-    childId?: number
-    subType?: number;
-    msgtype?: number;
-    ack?: boolean;
-    presentation?: boolean;
-    presentationtext?: string;
-    presentationtype?: number;
-    fullpresentation?: boolean;
-    internal?: number;
-    firmwarename?: string;
-    firmwareversion?: string;
+    nodeid: number,
+    childid: number,
+    subtype: number,
+    internal: number, 
+    ack : boolean,
+    msgtype: number,
+    presentation: boolean,
+    presentationtype: number,
+    presentationtext: string,
+    fullpresentation: boolean,
+    firmwarename : string,
+    firmwareversion : string
 }
