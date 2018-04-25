@@ -7,7 +7,7 @@
   "scripts": {
     "build": "mkdir -p dist/nodes/ && cp -a src/nodes/*.html dist/nodes/ && tsc ",
     "pretest": "tsc",
-    "prepublish": "build",
+    "prepublish": "npm run build",
     "test": "mocha dist/**/*.spec.js"
   },
   "bugs": {
