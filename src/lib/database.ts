@@ -1,5 +1,5 @@
-import { NullCheck } from "./nullcheck";
-import { mysensor_sensor } from "./mysensors-types";
+import { NullCheck } from './nullcheck';
+import { mysensor_sensor } from './mysensors-types';
 import { open } from 'sqlite';
 
 export interface NodeData {
@@ -67,12 +67,12 @@ export class Database {
 
     public async sketchName(nodeId: number, name: string): Promise<void> {
         const db = await this.dbPromise;
-        await db.run(`update node set sketchName="${name}" where id=${nodeId}`);
+        await db.run(`update node set sketchName='${name}' where id=${nodeId}`);
     }
 
     public async sketchVersion(nodeId: number, version: string): Promise<void> {
         const db = await this.dbPromise;
-        await db.run( `update node set sketchVersion="${version}", lastRestart=CURRENT_TIMESTAMP where id=${nodeId}`);
+        await db.run( `update node set sketchVersion='${version}', lastRestart=CURRENT_TIMESTAMP where id=${nodeId}`);
     }
 
     public async getNodeList(): Promise<NodeData[]> {

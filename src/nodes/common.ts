@@ -1,8 +1,8 @@
-import { Node, NodeProperties, NodeId } from "node-red";
-import { MysensorsController } from "../lib/mysensors-controller";
-import { MysensorsMsg } from "../lib/mysensors-msg";
-import { mysensor_sensor } from "../lib/mysensors-types";
-import { Database } from "../lib/database";
+import { Node, NodeProperties, NodeId } from 'node-red';
+import { MysensorsController } from '../lib/mysensors-controller';
+import { IMysensorsMsg } from '../lib/mysensors-msg';
+import { mysensor_sensor } from '../lib/mysensors-types';
+import { Database } from '../lib/database';
 
 /* Encode */
 export interface IEncodeProperties extends NodeProperties {
@@ -39,7 +39,7 @@ export interface IControlerConfig extends Node {
 
 /* Encapsulate */
 export interface IEncapsulateConfig extends Node {
-    sensor: MysensorsMsg;
+    sensor: IMysensorsMsg;
     presentation: boolean;
     presentationtext: string;
     presentationtype: mysensor_sensor;

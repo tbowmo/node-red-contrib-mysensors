@@ -1,7 +1,7 @@
-import { Node, Red, NodeProperties } from "node-red";
-import { IDbConfigNode, IDBProperties } from "./common";
-import { Database } from "../lib/database";
-import { resolve } from "path";
+import { Node, Red, NodeProperties } from 'node-red';
+import { IDbConfigNode, IDBProperties } from './common';
+import { Database } from '../lib/database';
+import { resolve } from 'path';
 
 export = (RED: Red) => {
     RED.nodes.registerType('mysensorsdb', function MysensorsDb(this: IDbConfigNode, props: NodeProperties) {
@@ -13,7 +13,7 @@ export = (RED: Red) => {
                 this.database = new Database(this.file);
             }
         } catch (error) {
-            if(error.code === "SQLITE_CANTOPEN") {
+            if(error.code === 'SQLITE_CANTOPEN') {
                 this.error(`${error.name}: ${error.message} ${resolve(config.file || '')}`);
                 return;
            }

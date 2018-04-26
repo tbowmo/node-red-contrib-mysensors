@@ -60,7 +60,7 @@ export enum  mysensor_data {
 	V_PERCENTAGE			= 3,	//!< S_DIMMER. Used for sending a percentage value 0-100 (%).
 	V_DIMMER				= 3,	//!< \deprecated Same as V_PERCENTAGE
 	V_PRESSURE				= 4,	//!< S_BARO. Atmospheric Pressure
-	V_FORECAST				= 5,	//!< S_BARO. Whether forecast. string of "stable", "sunny", "cloudy", "unstable", "thunderstorm" or "unknown"
+	V_FORECAST				= 5,	//!< S_BARO. Whether forecast. string of 'stable', 'sunny', 'cloudy', 'unstable', 'thunderstorm' or 'unknown'
 	V_RAIN					= 6,	//!< S_RAIN. Amount of rain
 	V_RAINRATE				= 7,	//!< S_RAIN. Rate of rain
 	V_WIND					= 8,	//!< S_WIND. Wind speed
@@ -76,9 +76,9 @@ export enum  mysensor_data {
 	V_KWH					= 18,	//!< S_POWER. Accumulated number of KWH for a power meter
 	V_SCENE_ON				= 19,	//!< S_SCENE_CONTROLLER. Turn on a scene
 	V_SCENE_OFF				= 20,	//!< S_SCENE_CONTROLLER. Turn of a scene
-	V_HVAC_FLOW_STATE		= 21,	//!< S_HEATER, S_HVAC. HVAC flow state ("Off", "HeatOn", "CoolOn", or "AutoChangeOver")
+	V_HVAC_FLOW_STATE		= 21,	//!< S_HEATER, S_HVAC. HVAC flow state ('Off', 'HeatOn', 'CoolOn', or 'AutoChangeOver')
 	V_HEATER				= 21,	//!< \deprecated Same as V_HVAC_FLOW_STATE
-	V_HVAC_SPEED			= 22,	//!< S_HVAC, S_HEATER. HVAC/Heater fan speed ("Min", "Normal", "Max", "Auto")
+	V_HVAC_SPEED			= 22,	//!< S_HVAC, S_HEATER. HVAC/Heater fan speed ('Min', 'Normal', 'Max', 'Auto')
 	V_LIGHT_LEVEL			= 23,	//!< S_LIGHT_LEVEL. Uncalibrated light level. 0-100%. Use V_LEVEL for light level in lux
 	V_VAR1					= 24,	//!< VAR1
 	V_VAR2					= 25,	//!< VAR2
@@ -102,10 +102,10 @@ export enum  mysensor_data {
 	V_UNIT_PREFIX			= 43,	//!< Allows sensors to send in a string representing the unit prefix to be displayed in GUI, not parsed by controller! E.g. cm, m, km, inch.
 	V_HVAC_SETPOINT_COOL	= 44,	//!< S_HVAC. HVAC cool setpoint (Integer between 0-100)
 	V_HVAC_SETPOINT_HEAT	= 45,	//!< S_HEATER, S_HVAC. HVAC/Heater setpoint (Integer between 0-100)
-	V_HVAC_FLOW_MODE		= 46,	//!< S_HVAC. Flow mode for HVAC ("Auto", "ContinuousOn", "PeriodicOn")
+	V_HVAC_FLOW_MODE		= 46,	//!< S_HVAC. Flow mode for HVAC ('Auto', 'ContinuousOn', 'PeriodicOn')
 	V_TEXT					= 47,	//!< S_INFO. Text message to display on LCD or controller device
 	V_CUSTOM				= 48,	//!< Custom messages used for controller/inter node specific commands, preferably using S_CUSTOM device type.
-	V_POSITION				= 49,	//!< GPS position and altitude. Payload: latitude;longitude;altitude(m). E.g. "55.722526;13.017972;18"
+	V_POSITION				= 49,	//!< GPS position and altitude. Payload: latitude;longitude;altitude(m). E.g. '55.722526;13.017972;18'
 	V_IR_RECORD				= 50,	//!< Record IR codes S_IR for playback
 	V_PH					= 51,	//!< S_WATER_QUALITY, water PH
 	V_ORP					= 52,	//!< S_WATER_QUALITY, water ORP : redox potential in mV

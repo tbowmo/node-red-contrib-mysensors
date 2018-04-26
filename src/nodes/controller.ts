@@ -1,8 +1,8 @@
-import { Red } from "node-red";
-import { MysensorsController } from "../lib/mysensors-controller";
-import { MysensorsMsg, MysensorsMsgNull } from "../lib/mysensors-msg";
-import { IControlerConfig, IControlerProperties, IDbConfigNode } from "./common";
-import { Database } from "../lib/database";
+import { Red } from 'node-red';
+import { MysensorsController } from '../lib/mysensors-controller';
+import { IMysensorsMsg } from '../lib/mysensors-msg';
+import { IControlerConfig, IControlerProperties, IDbConfigNode } from './common';
+import { Database } from '../lib/database';
 
 export = (RED: Red) => {
     RED.nodes.registerType('myscontroler', function (this: IControlerConfig, props: IControlerProperties) {
@@ -11,8 +11,8 @@ export = (RED: Red) => {
             this.database = RED.nodes.getNode(props.database) as IDbConfigNode;
             if (this.database.database) {
                 this.controler = new MysensorsController(this.database.database, props.handleid || false);
-                this.on('input', (msg: MysensorsMsg) => {
-                    (this.controler as MysensorsController).messageHandler(msg).then((msg: MysensorsMsgNull) => {
+                this.on('input', (msg: IMysensorsMsg) => {
+                    (this.controler as MysensorsController).messageHandler(msg).then((msg: IMysensorsMsg| undefined) => {
                         this.send(msg);
                     });
                 });
@@ -20,7 +20,7 @@ export = (RED: Red) => {
         }
     });
 
-    RED.httpAdmin.get("/mysensornodes/:id", RED.auth.needsPermission(''), async(req: any , res: any) => {
+    RED.httpAdmin.get('/mysensornodes/:id', RED.auth.needsPermission(''), async(req: any , res: any) => {
         const dbNode = RED.nodes.getNode(req.params.id) as IDbConfigNode;
        if (dbNode.database) {
             const x = await dbNode.database.getNodeList();

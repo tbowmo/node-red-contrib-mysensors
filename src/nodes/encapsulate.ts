@@ -1,10 +1,10 @@
 import { mysensor_command, mysensor_data, mysensor_sensor, mysensor_internal } from '../lib/mysensors-types';
 import { Red, NodeProperties } from 'node-red';
-import { MysensorsMsg } from '../lib/mysensors-msg';
+import { IMysensorsMsg } from '../lib/mysensors-msg';
 import { IEncapsulateConfig, IEncapsulateProperties } from './common';
 
 export = (RED: Red) => {
-    RED.nodes.registerType("mysencap", function (this: IEncapsulateConfig, props: NodeProperties) {
+    RED.nodes.registerType('mysencap', function (this: IEncapsulateConfig, props: NodeProperties) {
         const config = props as IEncapsulateProperties;
         RED.nodes.createNode(this,config);
         this.sensor = {
@@ -25,7 +25,7 @@ export = (RED: Red) => {
         
         if (this.presentation) {
             setTimeout(() => {
-                let msg: MysensorsMsg = this.sensor;
+                let msg: IMysensorsMsg = this.sensor;
                 msg.ack = 0;
                 if (this.fullpresentation) {
                     msg.messageType = 3;
@@ -45,7 +45,7 @@ export = (RED: Red) => {
             }, 5000);
         }
 
-        this.on('input', (msg: MysensorsMsg) => {
+        this.on('input', (msg: IMysensorsMsg) => {
             const msgOut = this.sensor;
             msgOut.payload = msg.payload;
             if (this.sensor.messageType == 3) {
@@ -57,20 +57,20 @@ export = (RED: Red) => {
 
     });
     
-    RED.httpAdmin.get("/mysensordefs/:id", RED.auth.needsPermission(''), function(req: any , res: any) {
+    RED.httpAdmin.get('/mysensordefs/:id', RED.auth.needsPermission(''), function(req: any , res: any) {
         let type = req.params.id;
         let mysVal: any;
         switch (type) {
-            case "subtype": 
+            case 'subtype': 
                 mysVal = mysensor_data;
                 break;
-            case "presentation":
+            case 'presentation':
                 mysVal = mysensor_sensor;
                 break;
-            case "internal":
+            case 'internal':
                 mysVal = mysensor_internal;
                 break;
         }
-        res.json(JSON.stringify({data:Object.keys(mysVal).filter(k => typeof mysVal[k as any] === "number")}));
+        res.json(JSON.stringify({data:Object.keys(mysVal).filter(k => typeof mysVal[k as any] === 'number')}));
     });
 }
