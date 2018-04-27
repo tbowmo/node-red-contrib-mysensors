@@ -1,13 +1,13 @@
-import { Node, NodeProperties, NodeId } from 'node-red';
+import { Node, NodeId, NodeProperties } from 'node-red';
+import { Database } from '../lib/database';
 import { MysensorsController } from '../lib/mysensors-controller';
 import { IMysensorsMsg } from '../lib/mysensors-msg';
 import { mysensor_sensor } from '../lib/mysensors-types';
-import { Database } from '../lib/database';
 
 /* Encode */
 export interface IEncodeProperties extends NodeProperties {
-    mqtt: boolean,
-    mqtttopic: string
+    mqtt: boolean;
+    mqtttopic: string;
 }
 
 /* Decode */
@@ -15,10 +15,10 @@ export interface IDecodeProperties extends NodeProperties {
     mqtt: boolean;
 }
 
-/* DB */ 
+/* DB */
 export interface IDbConfigNode extends Node {
     file?: string;
-    database: Database
+    database: Database;
 }
 
 export interface IDBProperties extends NodeProperties {
@@ -51,16 +51,16 @@ export interface IEncapsulateConfig extends Node {
 }
 
 export interface IEncapsulateProperties extends NodeProperties {
-    nodeid: number,
-    childid: number,
-    subtype: number,
-    internal: number, 
-    ack : boolean,
-    msgtype: number,
-    presentation: boolean,
-    presentationtype: number,
-    presentationtext: string,
-    fullpresentation: boolean,
-    firmwarename : string,
-    firmwareversion : string
+    nodeid: number;
+    childid: number;
+    subtype: number;
+    internal: number;
+    ack: boolean;
+    msgtype: number;
+    presentation: boolean;
+    presentationtype: number;
+    presentationtext: string;
+    fullpresentation: boolean;
+    firmwarename: string;
+    firmwareversion: string;
 }

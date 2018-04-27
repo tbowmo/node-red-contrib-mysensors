@@ -1,9 +1,9 @@
-import { IMysensorsMsg } from './mysensors-msg'
+import { Database } from './database';
+import { MysensorsMqtt } from './mysensors-mqtt';
+import { IMysensorsMsg } from './mysensors-msg';
+import { MysensorsSerial } from './mysensors-serial';
 import { mysensor_command, mysensor_internal } from './mysensors-types';
 import { NullCheck } from './nullcheck';
-import { MysensorsMqtt } from './mysensors-mqtt';
-import { MysensorsSerial } from './mysensors-serial';
-import { Database } from './database';
 
 export class MysensorsController {
 
@@ -11,10 +11,9 @@ export class MysensorsController {
 
     public async messageHandler(msg: IMysensorsMsg): Promise<IMysensorsMsg | undefined> {
         let inputType = 0;
-        let msgOut: IMysensorsMsg | undefined;
         if (NullCheck.isUndefinedOrNull(msg.nodeId)) {
             let msgTmp: IMysensorsMsg | undefined;
-            if(NullCheck.isUndefinedNullOrEmpty(msg.topic)) {
+            if (NullCheck.isUndefinedNullOrEmpty(msg.topic)) {
                 inputType = 1;
                 msgTmp = MysensorsSerial.decode(msg);
             } else {
@@ -25,7 +24,7 @@ export class MysensorsController {
                 msg = msgTmp;
             }
         }
-        
+
         if (msg.nodeId) {
             await this.database.nodeHeard(msg.nodeId);
         }
@@ -41,7 +40,7 @@ export class MysensorsController {
                 case mysensor_internal.I_DEBUG:
                     await this.handleDebug(msg);
                     break;
-            };            
+            }
         }
     }
 
@@ -65,12 +64,12 @@ export class MysensorsController {
     }
 
     private async handleDebug(msg: IMysensorsMsg): Promise<void> {
-
+        //
     }
 
-    private async handleSketchVersion(msg: IMysensorsMsg): Promise<void>{
-        let sql: string = '';
-        if(msg.subType === mysensor_internal.I_SKETCH_VERSION && msg.nodeId) {
+    private async handleSketchVersion(msg: IMysensorsMsg): Promise<void> {
+        const sql: string = '';
+        if (msg.subType === mysensor_internal.I_SKETCH_VERSION && msg.nodeId) {
             this.database.sketchVersion(msg.nodeId, msg.payload);
         } else if (msg.subType === mysensor_internal.I_SKETCH_NAME && msg.nodeId) {
             this.database.sketchName(msg.nodeId, msg.payload);
@@ -78,4 +77,3 @@ export class MysensorsController {
     }
 
 }
-

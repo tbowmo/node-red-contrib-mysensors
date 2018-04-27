@@ -1,20 +1,18 @@
-import { mysensor_command, mysensor_data, mysensor_sensor, mysensor_internal } from '../lib/mysensors-types';
-import { Red, NodeProperties } from 'node-red';
+import { NodeProperties, Red } from 'node-red';
 import { IMysensorsMsg } from '../lib/mysensors-msg';
+import {
+    mysensor_command,
+    mysensor_data,
+    mysensor_internal,
+    mysensor_sensor,
+    } from '../lib/mysensors-types';
 import { IEncapsulateConfig, IEncapsulateProperties } from './common';
 
 export = (RED: Red) => {
-    RED.nodes.registerType('mysencap', function (this: IEncapsulateConfig, props: NodeProperties) {
+    RED.nodes.registerType('mysencap', function(this: IEncapsulateConfig, props: NodeProperties) {
         const config = props as IEncapsulateProperties;
-        RED.nodes.createNode(this,config);
-        this.sensor = {
-            nodeId: config.nodeid,
-            childSensorId: config.childid,
-            subType: config.subtype,
-            messageType: config.msgtype,
-            ack: config.ack?1:0,
-            payload: ''
-        };
+        RED.nodes.createNode(this, config);
+        this.sensor = getSensor(config);
         this.presentation = config.presentation || false;
         this.presentationtext = config.presentationtext || '';
         this.presentationtype = config.presentationtype || 0;
@@ -22,20 +20,20 @@ export = (RED: Red) => {
         this.internal = config.internal || 0;
         this.firmwarename = config.firmwarename  || '';
         this.firmwareversion = config.firmwareversion || '';
-        
+
         if (this.presentation) {
             setTimeout(() => {
-                let msg: IMysensorsMsg = this.sensor;
+                const msg = getSensor(config);
                 msg.ack = 0;
                 if (this.fullpresentation) {
                     msg.messageType = 3;
                     msg.childSensorId = 255; // Internal messages always send as childi 255
                     msg.subType = 11; // Sketchname
-                    msg.payload = this.firmwarename;                
+                    msg.payload = this.firmwarename;
                     this.send(msg);
 
                     msg.subType = 12; // Sketchname
-                    msg.payload = this.firmwareversion;                
+                    msg.payload = this.firmwareversion;
                     this.send(msg);
                 }
                 msg.messageType = 0;
@@ -48,7 +46,7 @@ export = (RED: Red) => {
         this.on('input', (msg: IMysensorsMsg) => {
             const msgOut = this.sensor;
             msgOut.payload = msg.payload;
-            if (this.sensor.messageType == 3) {
+            if (this.sensor.messageType === 3) {
                 msgOut.childSensorId = 255;
                 msgOut.subType = this.internal;
             }
@@ -56,12 +54,12 @@ export = (RED: Red) => {
         });
 
     });
-    
-    RED.httpAdmin.get('/mysensordefs/:id', RED.auth.needsPermission(''), function(req: any , res: any) {
-        let type = req.params.id;
+
+    RED.httpAdmin.get('/mysensordefs/:id', RED.auth.needsPermission(''), (req: any , res: any) => {
+        const type = req.params.id;
         let mysVal: any;
         switch (type) {
-            case 'subtype': 
+            case 'subtype':
                 mysVal = mysensor_data;
                 break;
             case 'presentation':
@@ -71,6 +69,18 @@ export = (RED: Red) => {
                 mysVal = mysensor_internal;
                 break;
         }
-        res.json(JSON.stringify({data:Object.keys(mysVal).filter(k => typeof mysVal[k as any] === 'number')}));
+        res.json(JSON.stringify({data: Object.keys(mysVal).filter((k) => typeof mysVal[k as any] === 'number')}));
     });
+};
+
+function getSensor(config: IEncapsulateProperties): IMysensorsMsg {
+    const sensor: IMysensorsMsg = {
+        ack: config.ack ? 1 : 0,
+        childSensorId: config.childid * 1,
+        messageType: config.msgtype * 1,
+        nodeId: config.nodeid * 1,
+        payload: '',
+        subType: config.subtype * 1,
+    };
+    return sensor;
 }
