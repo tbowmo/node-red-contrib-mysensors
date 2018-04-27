@@ -5,11 +5,11 @@
     </div>
     <div class="form-row">
         <label for="node-input-msgtype"><i class="icon-tag"></i> Message Type</label>
-	<select id="node-input-msgtype">
-	<option value="1">Set</option>
-	<option value="2">Request</option>
-	<option value="3">Internal</option>	
-	</select>
+        <select id="node-input-msgtype">
+            <option value="1">Set</option>
+            <option value="2">Request</option>
+            <option value="3">Internal</option>
+        </select>
     </div>
     <div class="form-row">
         <label for="node-input-nodeid"><i class="icon-tag"></i> Node ID</label>
@@ -78,12 +78,12 @@
     mysensors node, or sent off to other things.
     </p>
     <ul>
-    <li>nodeId - configurable</li>
-    <li>childSensorId - configurable</li>
-    <li>messageType - configurable</li>
-    <li>ack - configurable</li>
-    <li>subType - configurable</li>
-    <li>payload - left untouched</li>
+        <li>nodeId - configurable</li>
+        <li>childSensorId - configurable</li>
+        <li>messageType - configurable</li>
+        <li>ack - configurable</li>
+        <li>subType - configurable</li>
+        <li>payload - left untouched</li>
     </ul>
     <p>if "presentation" is checked, a presentation message will be sent
     at startup of node-red (or a new flow is deployed). This can be used to
@@ -119,59 +119,58 @@
             this.msgtype + ":0:" + this.subtype+"<payload>";
         },
         oneditprepare: function() {
-           $('#node-input-row-internal').hide();
-           $('#node-input-row-subtype').hide();
-           $('#node-input-row-presentation').hide();
+            $('#node-input-row-internal').hide();
+            $('#node-input-row-subtype').hide();
+            $('#node-input-row-presentation').hide();
 
-           loadJsonTypes('subtype', 'node-input-subtype-select', 'node-input-subtype');          
-           loadJsonTypes('presentation','node-input-presentationtype-select','node-input-presentationtype');
-           loadJsonTypes('internal','node-input-internal-select','node-input-internal');
+            loadJsonTypes('subtype', 'node-input-subtype-select', 'node-input-subtype');          
+            loadJsonTypes('presentation','node-input-presentationtype-select','node-input-presentationtype');
+            loadJsonTypes('internal','node-input-internal-select','node-input-internal');
            
-           if (!$('#node-input-presentation').is(':checked')) {
-           	$('.node-presentation-opts').hide();
-           }
-	   
-	   if (!$('#node-input-fullpresentation').is(':checked')) {
-	   	$('.node-presentation-full-opts').hide();
-	   }
+            if (!$('#node-input-presentation').is(':checked')) {
+                $('.node-presentation-opts').hide();
+            }
+       
+            if (!$('#node-input-fullpresentation').is(':checked')) {
+                $('.node-presentation-full-opts').hide();
+            }
 
-	   if ($('#node-input-msgtype option:selected').val() == "3") {
-	   	showInternal();
-	   } else {
-	   	showSetReq();
-	   }
-	   
-           $("#node-input-msgtype").change(function() {
-               var id = $("#node-input-msgtype option:selected").val();
-               if (id == "3") {
-                 showInternal();
-               } else {
-                 showSetReq();
-               }
-           });
+            if ($('#node-input-msgtype option:selected').val() == "3") {
+                showInternal();
+            } else {
+                showSetReq();
+            }
+       
+            $("#node-input-msgtype").change(function() {
+                var id = $("#node-input-msgtype option:selected").val();
+                if (id == "3") {
+                    showInternal();
+                } else {
+                    showSetReq();
+                }
+            });
 
-           $('#node-input-presentation').click(function() {
-               if (this.checked) {
-                   $('.node-presentation-opts').show();
-               } else {
-                   $('.node-presentation-opts').hide();
-               }
-               if (!$('#node-input-fullpresentation').is(':checked')) $('.node-presentation-full-opts').hide();
-               else $('.node-presentation-full-opts').show();
-           });
-           $('#node-input-fullpresentation').click(function() {
-               if (this.checked) {
-                   $('.node-presentation-full-opts').show();
-               } else {
-                   $('.node-presentation-full-opts').hide();
-               }
-           });
+            $('#node-input-presentation').click(function() {
+                if (this.checked) {
+                    $('.node-presentation-opts').show();
+                } else {
+                    $('.node-presentation-opts').hide();
+                }
+                if (!$('#node-input-fullpresentation').is(':checked')) $('.node-presentation-full-opts').hide();
+                else $('.node-presentation-full-opts').show();
+            });
+            $('#node-input-fullpresentation').click(function() {
+                if (this.checked) {
+                    $('.node-presentation-full-opts').show();
+                } else {
+                    $('.node-presentation-full-opts').hide();
+                }
+            });
         },
         oneditsave : function() {
-	   	$('#node-input-internal').val($('#node-input-internal-select').val());
-	   	$('#node-input-subtype').val($('#node-input-subtype-select').val());
-	   	$('#node-input-presentationtype').val($('#node-input-presentationtype-select').val());
-        	
+            $('#node-input-internal').val($('#node-input-internal-select').val());
+            $('#node-input-subtype').val($('#node-input-subtype-select').val());
+            $('#node-input-presentationtype').val($('#node-input-presentationtype-select').val());
         }
     });
 

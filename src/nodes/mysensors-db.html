@@ -3,7 +3,7 @@
         category: 'config',
         defaults: {
             name: {value: ""},
-            file: {value:"sqlite", required: true}
+            file: {value: "sqlite", required: true}
         },
         label: function() {
             return this.name || this.file;
@@ -13,8 +13,8 @@
 
 <script type="text/x-red" data-template-name="mysensorsdb">
     <div class="form-row">
-            <label for="node-config-input-name"><i class="icon-tag"></i> Name</label>
-            <input type="text" id="node-config-input-name" placeholder="Name">
+        <label for="node-config-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-config-input-name" placeholder="Name">
     </div>
     <div class="form-row">
         <label for="node-config-input-file"><i class="icon-bookmark"></i> File</label>

@@ -3,9 +3,9 @@
         category: 'mysensors',
         color: '#a6bbcf',
         defaults: {
-            name: {value:""},
+            name: {value: ""},
             mqtt: {value: false, required:true},
-            mqtttopic: {value:""}
+            mqtttopic: {value: ""}
         },
         inputs:1,
         outputs:1,
@@ -18,7 +18,7 @@
                     type = type + " " + this.mqtttopic;
                 }
             }
-            return this.name||type;
+            return this.name || type;
         },
         inputLabels: "Message input",
         outputLabels: ["MQTT / Mysensors output"],
