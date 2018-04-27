@@ -66,6 +66,11 @@ export class Database {
         await db.close();
     }
 
+    public async setParent(node: string, last: string): Promise<void> {
+        const db = await this.dbPromise;
+        await db.run(`update node set parentId=${last} where id=${node}`);
+    }
+
     private async checkDb(): Promise<void> {
         const db = await this.dbPromise;
         await db.run(`CREATE TABLE IF NOT EXISTS node (

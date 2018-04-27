@@ -1,5 +1,8 @@
 import { Node, NodeProperties, Red } from 'node-red';
+import { MysensorsDebugDecode } from '../lib/mysensors-debug';
+import { MysensorsMqtt } from '../lib/mysensors-mqtt';
 import { IMysensorsMsg } from '../lib/mysensors-msg';
+import { MysensorsSerial } from '../lib/mysensors-serial';
 import {
     mysensor_command,
     mysensor_data,
@@ -9,63 +12,64 @@ import {
     mysensor_stream,
     } from '../lib/mysensors-types';
 import { NullCheck } from '../lib/nullcheck';
+import { IDebugConfig } from './common';
 
 export = (RED: Red) => {
-    RED.nodes.registerType('mysdebug', function(this: Node, config: NodeProperties) {
+    RED.nodes.registerType('mysdebug', function(this: IDebugConfig, config: NodeProperties) {
         RED.nodes.createNode(this, config);
+        this.mysDbg = new MysensorsDebugDecode();
 
         this.on('input', (msg: IMysensorsMsg) => {
-            let message = msg.payload.toString();
-            message = message.replace('\\n', '');
-            const tokens = message.split(';');
-            msg.payload = '';
-            if (tokens.length === 6) {
-                const m: IMysensorsMsg = {
-                    ack: tokens[3] === '1' ? 1 : 0,
-                    childSensorId: parseInt(tokens[1], 10),
-                    messageType: parseInt(tokens[2], 10),
-                    nodeId: parseInt(tokens[0], 10),
-                    payload: tokens[5],
-                    subType: parseInt(tokens[4], 10),
-                };
+            if (NullCheck.isUndefinedOrNull(msg.nodeId)) {
+                let msgTmp: IMysensorsMsg | undefined;
+                if (NullCheck.isUndefinedNullOrEmpty(msg.topic)) {
+                    msgTmp = MysensorsSerial.decode(msg);
+                } else {
+                    msgTmp = MysensorsMqtt.decode(msg);
+                }
+                if (NullCheck.isDefinedOrNonNull(msgTmp)) {
+                    msg = msgTmp;
+                }
+            }
+            if (NullCheck.isDefinedOrNonNull(msg.nodeId)) {
                 let msgHeader = '';
                 let msgSubType: string | null = null;
-                if (NullCheck.isDefinedOrNonNull(m.subType)) {
-                    switch (m.messageType) {
+                if (NullCheck.isDefinedOrNonNull(msg.subType)) {
+                    switch (msg.messageType) {
                         case mysensor_command.C_PRESENTATION:
                             msgHeader = 'PRESENTATION';
-                            msgSubType = mysensor_sensor[m.subType];
+                            msgSubType = mysensor_sensor[msg.subType];
                             break;
                         case mysensor_command.C_SET:
                             msgHeader = 'SET';
-                            msgSubType = mysensor_data[m.subType];
+                            msgSubType = mysensor_data[msg.subType];
                             break;
                         case mysensor_command.C_REQ:
                             msgHeader = 'REQ';
-                            msgSubType = mysensor_data[m.subType];
+                            msgSubType = mysensor_data[msg.subType];
                             break;
                         case mysensor_command.C_INTERNAL:
-                            if (m.subType === 9) { msg.payload = 'GW Debug;' + debugDecode(m.payload); } else {
+                            if (msg.subType === 9) { msg.payload = this.mysDbg.decode(msg.payload); } else {
                                 msgHeader = 'INTERNAL';
-                                msgSubType = mysensor_internal[m.subType];
+                                msgSubType = mysensor_internal[msg.subType];
                             }
                             break;
                         case mysensor_command.C_STREAM:
                             msgHeader = 'STREAM';
-                            msgSubType = mysensor_stream[m.subType];
+                            msgSubType = mysensor_stream[msg.subType];
                             break;
                         default:
-                            msg.payload = 'unsupported msgType ' + m.messageType;
+                            msg.payload = 'unsupported msgType ' + msg.messageType;
                             break;
                     }
                 }
                 if (msgSubType != null) {
                     msg.payload = msgHeader +
-                        ';nodeId:' + m.nodeId +
-                        ';childId:' + m.childSensorId +
+                        ';nodeId:' + msg.nodeId +
+                        ';childId:' + msg.childSensorId +
                         ';SubType:' + msgSubType +
-                        ';ACK:' + m.ack +
-                        ';Payload:' + m.payload;
+                        ';ACK:' + msg.ack +
+                        ';Payload:' + msg.payload;
                 }
 
             }
@@ -73,65 +77,3 @@ export = (RED: Red) => {
         });
     });
 };
-
-function debugDecode(payload: string) {
-    let payReturn = payload;
-    const commands = ['Presentation', 'SET', 'GET', 'Internal', 'Stream'];
-    const re = /(.+?):\s(.+?)\s(.+?):(.+)/;
-    const str = NullCheck.isUndefinedOrNull(payload) ? '' : payload;
-    let index: number;
-    let cmd: number = 0;
-    const m: RegExpExecArray| null = re.exec(str);
-    let z: string;
-    if (m) {
-        if (m.index === re.lastIndex) {
-            re.lastIndex++;
-        }
-        let p = m[2].split('-');
-        payReturn = m[1];
-        if (m[1] === 'send') {
-            payReturn = payReturn + ';Sender=' + p[0];
-            payReturn = payReturn + ';Last=' + p[1];
-            payReturn = payReturn + ';To=' + p[2];
-            payReturn = payReturn + ';Dest=' + p[3];
-        } else {
-            payReturn = payReturn + ';Sender=' + p[0];
-            payReturn = payReturn + ';Last=' + p[1];
-            payReturn = payReturn + ';Destination=' + p[2];
-        }
-        p = m[3].split(',');
-        for (index = 0; index < p.length; index++) {
-            const x = p[index].split('=');
-            const i = Number(x[1]);
-            switch (x[0]) {
-                case 's':
-                    z = 'ChildId=' + x[1];
-                    break;
-                case 'c' :
-                    z = 'Command=' + commands[i];
-                    cmd = Number(x[1]);
-                    break;
-                case 't' :
-                    let sub = mysensor_command[i];
-                    if (cmd === 0) { sub = mysensor_sensor[i]; }
-                    if (cmd === 3) { sub = mysensor_internal[i]; }
-                    z = 'subType=' + sub;
-                    break;
-                case 'pt' :
-                    z = 'PayloadType=' + mysensor_payload[i];
-                    break;
-                case 'l' :
-                    z = 'Length=' + i;
-                    break;
-                case 'sg':
-                    z = 'Signing=' + (i === 1 ? 'Signed' : 'Unsigned');
-                    break;
-                default: z = p[index];
-            }
-            payReturn = payReturn + ';' + z;
-        }
-
-        payReturn = payReturn + ';Payload=' + m[4];
-    }
-    return payReturn;
-}

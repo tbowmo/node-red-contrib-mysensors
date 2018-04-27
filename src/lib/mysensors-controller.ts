@@ -37,7 +37,7 @@ export class MysensorsController {
                 case mysensor_internal.I_SKETCH_VERSION:
                     await this.handleSketchVersion(msg);
                     break;
-                case mysensor_internal.I_DEBUG:
+                case mysensor_internal.I_LOG_MESSAGE:
                     await this.handleDebug(msg);
                     break;
             }
@@ -64,7 +64,11 @@ export class MysensorsController {
     }
 
     private async handleDebug(msg: IMysensorsMsg): Promise<void> {
-        //
+        const r = /TSF:MSG:READ,(\d+)-(\d+)-(\d+)/;
+        const m = r.exec(msg.payload);
+        if (NullCheck.isDefinedOrNonNull(m)) {
+            this.database.setParent(m[1], m[2]);
+        }
     }
 
     private async handleSketchVersion(msg: IMysensorsMsg): Promise<void> {

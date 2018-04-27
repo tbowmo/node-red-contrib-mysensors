@@ -21,10 +21,13 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="mysdecenc">
-    <p>A function that parses <b>msg.payload</b> from mysensors serial
-    format, and outputs a nicely formatted payload usefull for debugging the
-    protocoll. Also, strips debug header from the payload, in case of debug
-    string from GW
+<script type="text/x-red" data-help-name="mysdebug">
+    <p>
+        This node parses the payload of a mysensors debug message, and outputs a nicely formatted payload usefull
+        for debugging the protocoll. Also, strips debug header from the payload, in case of debug string from GW
+    </p>
+    <p>
+        It is transport agnostic, meaning that it will automatically detects if input is directly from a serial port,
+        MQTT with topic set, or if it is already decoded by a mysdecode node.
     </p>
 </script>

@@ -1,6 +1,7 @@
 import { Node, NodeId, NodeProperties } from 'node-red';
 import { Database } from '../lib/database';
 import { MysensorsController } from '../lib/mysensors-controller';
+import { MysensorsDebugDecode } from '../lib/mysensors-debug';
 import { IMysensorsMsg } from '../lib/mysensors-msg';
 import { mysensor_sensor } from '../lib/mysensors-types';
 
@@ -63,4 +64,8 @@ export interface IEncapsulateProperties extends NodeProperties {
     fullpresentation: boolean;
     firmwarename: string;
     firmwareversion: string;
+}
+
+export interface IDebugConfig extends Node {
+    mysDbg: MysensorsDebugDecode;
 }
