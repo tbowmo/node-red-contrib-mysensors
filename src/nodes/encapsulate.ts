@@ -76,11 +76,11 @@ export = (RED: Red) => {
 function getSensor(config: IEncapsulateProperties): IMysensorsMsg {
     const sensor: IMysensorsMsg = {
         ack: config.ack ? 1 : 0,
-        childSensorId: config.childid * 1,
-        messageType: config.msgtype * 1,
-        nodeId: config.nodeid * 1,
+        childSensorId: Number(config.childid),
+        messageType: Number(config.msgtype),
+        nodeId: Number(config.nodeid),
         payload: '',
-        subType: config.subtype * 1,
+        subType: Number(config.subtype),
     };
     return sensor;
 }

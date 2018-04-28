@@ -32,6 +32,9 @@
                         <td>
                             ${c.lastHeard}
                         </td>
+                        <td>
+                            ${(c.parentId !== c.id && c.parentId !== null)?c.parentId:''}
+                        </td>
                         </tr>`;
                 }
                 $('#nodelist').html(html);
@@ -62,6 +65,7 @@
                     <th>sketch</th>
                     <th>version</th>
                     <th>last heard</th>
+                    <th>via</th>
                 </tr>
             </thead>
             <tbody id="nodelist">
