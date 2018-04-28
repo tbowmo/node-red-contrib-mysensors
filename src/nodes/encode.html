@@ -22,7 +22,23 @@
         },
         inputLabels: "Message input",
         outputLabels: ["MQTT / Mysensors output"],
-        align:"right"
+        align:"right",
+        oneditprepare: function() {
+            if ($('#node-input-mqtt').is(':checked')) {
+                $('#node-input-row-mqtttopic').show();
+            } else {
+                $('#node-input-row-mqtttopic').hide();
+            }
+
+            $('#node-input-mqtt').click(function() {
+                if (this.checked) {
+                    $('#node-input-row-mqtttopic').show();
+                } else {
+                    $('#node-input-row-mqtttopic').hide();
+                }
+            });
+            
+        }
     });
 </script>
 
@@ -35,7 +51,7 @@
         <label for="node-input-mqtt"><i class="icon-tag"></i> MQTT</label>
         <input type="checkbox" id="node-input-mqtt">
     </div>
-    <div class="form-row">
+    <div class="form-row" id="node-input-row-mqtttopic">
         <label for="node-input-mqtttopic"><i class="icon-tag"></i> Topic root</label>
         <input type="text" id="node-input-mqtttopic" placeholder="topic">
     </div>
