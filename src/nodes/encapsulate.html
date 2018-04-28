@@ -1,7 +1,7 @@
 <script type="text/x-red" data-template-name="mysencap">
     <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
-        <input type="text" id="node-input-name" placeholder="Name">       
+        <input type="text" id="node-input-name" placeholder="Name">
     </div>
     <div class="form-row">
         <label for="node-input-msgtype"><i class="icon-tag"></i> Message Type</label>
@@ -13,20 +13,20 @@
     </div>
     <div class="form-row">
         <label for="node-input-nodeid"><i class="icon-tag"></i> Node ID</label>
-        <input type="text" id="node-input-nodeid" placeholder="NodeId">       
+        <input type="text" id="node-input-nodeid" placeholder="NodeId">
     </div>
     <div class="form-row node-childid">
         <label for="node-input-childid"><i class="icon-tag"></i> Child ID</label>
-        <input type="text" id="node-input-childid" placeholder="Child id">       
+        <input type="text" id="node-input-childid" placeholder="Child id">
     </div>
     <div class="form-row" id="node-input-row-subtype">
         <label for="node-input-subtype"><i class="icon-tag"></i> Child type hide</label>
-        <input type="text" id="node-input-subtype">      
+        <input type="text" id="node-input-subtype">
     </div>
     <div class="form-row" id="node-input-row-subtype-select">
         <label for="node-input-subtype-select"><i class="icon-tag"></i> Child type</label>
-        <select id="node-input-subtype-select">      
-        <select> 
+        <select id="node-input-subtype-select">
+        <select>
     </div>
     <div class="form-row" id="node-input-row-internal">
         <label for="node-input-internal"><i class="icon-tag"></i> Internal msg hidden</label>
@@ -39,15 +39,15 @@
     </div>
     <div class="form-row node-ack">
         <label for="node-input-ack"><i class="icon-tag"></i> Ack</label>
-        <input type="checkbox" id="node-input-ack">       
+        <input type="checkbox" id="node-input-ack">
     </div>
     <div class="form-row node-presentation">
         <label for="node-input-presentation"><i class="icon-tag"></i> Presentation</label>
-        <input type="checkbox" id="node-input-presentation">       
+        <input type="checkbox" id="node-input-presentation">
     </div>
     <div class="form-row node-presentation-opts">
         <label for="node-input-presentationtext"><i class="icon-tag"></i> Text</label>
-        <input type="text" id="node-input-presentationtext">       
+        <input type="text" id="node-input-presentationtext">
     </div>
     <div class="form-row" id="node-input-row-presentation">
         <label for="node-input-presentationtype"><i class="icon-tag"></i> Type hide</label>
@@ -56,19 +56,19 @@
     <div class="form-row node-presentation-opts">
         <label for="node-input-presentationtype-select"><i class="icon-tag"></i> Type</label>
         <select id="node-input-presentationtype-select">
-        </select>       
+        </select>
     </div>
     <div class="form-row node-presentation-opts">
         <label for="node-input-fullpresentation"><i class="icon-tag"></i> Present firmware</label>
-        <input type="checkbox" id="node-input-fullpresentation">       
+        <input type="checkbox" id="node-input-fullpresentation">
     </div>
     <div class="form-row node-presentation-full-opts">
         <label for="node-input-firmwarename"><i class="icon-tag"></i> Firmware</label>
-        <input type="text" id="node-input-firmwarename">       
+        <input type="text" id="node-input-firmwarename">
     </div>
     <div class="form-row node-presentation-full-opts">
         <label for="node-input-firmwareversion"><i class="icon-tag"></i> Version</label>
-        <input type="text" id="node-input-firmwareversion">       
+        <input type="text" id="node-input-firmwareversion">
     </div>
 </script>
 <script type="text/x-red" data-help-name="mysencap">
@@ -100,7 +100,7 @@
             nodeid: {value:0, required:true},
             childid: {value:0, required:true},
             subtype: {value:0},
-            internal: {value:0}, 
+            internal: {value:0},
             ack : {value:false, required:true},
             msgtype: {value:1, required:true},
             presentation: {value : false, required:false},
@@ -109,7 +109,7 @@
             fullpresentation: {value:false, required:false},
             firmwarename : {value:""},
             firmwareversion : {value:""}
-            
+
         },
         inputs:1,
         outputs:1,
@@ -123,14 +123,14 @@
             $('#node-input-row-subtype').hide();
             $('#node-input-row-presentation').hide();
 
-            loadJsonTypes('subtype', 'node-input-subtype-select', 'node-input-subtype');          
+            loadJsonTypes('subtype', 'node-input-subtype-select', 'node-input-subtype');
             loadJsonTypes('presentation','node-input-presentationtype-select','node-input-presentationtype');
             loadJsonTypes('internal','node-input-internal-select','node-input-internal');
-           
+
             if (!$('#node-input-presentation').is(':checked')) {
                 $('.node-presentation-opts').hide();
             }
-       
+
             if (!$('#node-input-fullpresentation').is(':checked')) {
                 $('.node-presentation-full-opts').hide();
             }
@@ -140,7 +140,7 @@
             } else {
                 showSetReq();
             }
-       
+
             $("#node-input-msgtype").change(function() {
                 var id = $("#node-input-msgtype option:selected").val();
                 if (id == "3") {
@@ -198,7 +198,7 @@ function sortOptions(selectTag) {
     options.each(function(i, o) {
         o.value = arr[i].v;
         $(o).text(arr[i].t);
-//              if (parseInt(arr[i].v) == parseInt(selected)) $(o).prop('selected',true);              
+//              if (parseInt(arr[i].v) == parseInt(selected)) $(o).prop('selected',true);
     });
     $('#'+selectTag).val(selected);
 }
