@@ -5,11 +5,13 @@ Contains a node to decode / encode mysensors serial protocol to / from node-red 
 
 ## Install
 
+Please note, that you probably need to have node 6 and above for version 2.1 and above (I got reports of problems with node v4).
+
 Within your local installation of Node-RED run:
 
 `npm install node-red-contrib-mysensors`
 
-Once installed, you will have two new nodes available : mysdecenc, and mysencap.
+Once installed, restart your node-red server, and you will have a set of new nodes available in your palette under mysensors:
 
 ## Node-RED mysdecode
 
@@ -45,3 +47,5 @@ This will decode the mysensors serial protocol payload, and enrich it with descr
 ## Node-RED myscontroller
 
 This node can handle ID assignment to nodes on your network. Will respond with a new ID everytime it sees a request for an ID from a node.
+You need to define a database location, which should be a path to a writable location/file in your filesystem. The node will create the file pointed to, and create the needed tables using sqlite3 format.
+

@@ -1,7 +1,9 @@
 import { Database } from './database';
-import { MysensorsMqtt } from './mysensors-mqtt';
-import { IMysensorsMsg } from './mysensors-msg';
-import { MysensorsSerial } from './mysensors-serial';
+import { Decode } from './decoder/decode';
+import { MysensorsDecoder } from './decoder/mysensors-decoder';
+import { MysensorsMqtt } from './decoder/mysensors-mqtt';
+import { MysensorsSerial } from './decoder/mysensors-serial';
+import { IMysensorsMsg, MsgOrigin } from './mysensors-msg';
 import { mysensor_command, mysensor_internal } from './mysensors-types';
 import { NullCheck } from './nullcheck';
 
@@ -10,21 +12,7 @@ export class MysensorsController {
     constructor(private database: Database, private handleIds: boolean) { }
 
     public async messageHandler(msg: IMysensorsMsg): Promise<IMysensorsMsg | undefined> {
-        let inputType = 0;
-        if (NullCheck.isUndefinedOrNull(msg.nodeId)) {
-            let msgTmp: IMysensorsMsg | undefined;
-            if (NullCheck.isUndefinedNullOrEmpty(msg.topic)) {
-                inputType = 1;
-                msgTmp = MysensorsSerial.decode(msg);
-            } else {
-                inputType = 2;
-                msgTmp = MysensorsMqtt.decode(msg);
-            }
-            if (NullCheck.isDefinedOrNonNull(msgTmp)) {
-                msg = msgTmp;
-            }
-        }
-
+        msg = Decode(msg);
         if (msg.nodeId) {
             await this.database.nodeHeard(msg.nodeId);
         }
@@ -32,7 +20,7 @@ export class MysensorsController {
         if (msg.messageType === mysensor_command.C_INTERNAL) {
             switch (msg.subType) {
                 case mysensor_internal.I_ID_REQUEST:
-                    return this.encode(await this.handleIdRequest(msg), inputType);
+                    return this.encode(await this.handleIdRequest(msg));
                 case mysensor_internal.I_SKETCH_NAME:
                 case mysensor_internal.I_SKETCH_VERSION:
                     await this.handleSketchVersion(msg);
@@ -42,17 +30,6 @@ export class MysensorsController {
                     break;
             }
         }
-    }
-
-    private encode(msg: IMysensorsMsg| undefined, inputType: number) {
-        if (NullCheck.isDefinedOrNonNull(msg)) {
-            if (inputType === 1) {
-                msg = MysensorsSerial.encode(msg);
-            } else if (inputType === 2) {
-                msg = MysensorsMqtt.encode(msg);
-            }
-        }
-        return msg;
     }
 
     private async handleIdRequest(msg: IMysensorsMsg): Promise<IMysensorsMsg | undefined> {
@@ -78,6 +55,19 @@ export class MysensorsController {
         } else if (msg.subType === mysensor_internal.I_SKETCH_NAME && msg.nodeId) {
             this.database.sketchName(msg.nodeId, msg.payload);
         }
+    }
+
+    private encode(msg: IMysensorsMsg| undefined) {
+        let encoder: MysensorsDecoder| undefined;
+        if (NullCheck.isDefinedOrNonNull(msg)) {
+            if (msg.origin === MsgOrigin.serial) {
+                encoder = new MysensorsSerial();
+            } else if (msg.origin === MsgOrigin.mqtt) {
+                encoder = new MysensorsMqtt();
+            }
+        }
+        if (encoder === undefined || msg === undefined) { return msg; }
+        return encoder.encode(msg);
     }
 
 }

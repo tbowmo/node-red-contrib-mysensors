@@ -1,19 +1,20 @@
 import { Node, NodeProperties, Red } from 'node-red';
-import { MysensorsMqtt } from '../lib/mysensors-mqtt';
+import { MysensorsMqtt } from '../lib/decoder/mysensors-mqtt';
+import { MysensorsSerial } from '../lib/decoder/mysensors-serial';
 import { IMysensorsMsg } from '../lib/mysensors-msg';
-import { MysensorsSerial } from '../lib/mysensors-serial';
-import { IDecodeProperties } from './common';
+import { IDecodeEncodeConf, IDecodeProperties } from './common';
 
 export = (RED: Red) => {
-    RED.nodes.registerType('mysdecode', function(this: Node, props: NodeProperties) {
+    RED.nodes.registerType('mysdecode', function(this: IDecodeEncodeConf, props: NodeProperties) {
         const config = props as IDecodeProperties;
+        if (config.mqtt) {
+            this.decoder = new MysensorsMqtt();
+        } else {
+            this.decoder = new MysensorsSerial();
+        }
         RED.nodes.createNode(this, config);
         this.on('input', (msg: IMysensorsMsg) => {
-            if (config.mqtt) {
-                this.send(MysensorsMqtt.decode(msg));
-            } else {
-                this.send(MysensorsSerial.decode(msg));
-            }
+            this.send(this.decoder.decode(msg));
         });
     });
 };

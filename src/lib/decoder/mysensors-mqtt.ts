@@ -1,9 +1,10 @@
-import { IMysensorsMsg, INodeMessage } from './mysensors-msg';
-import { NullCheck } from './nullcheck';
+import { IMysensorsMsg, INodeMessage, MsgOrigin } from '../mysensors-msg';
+import { NullCheck } from '../nullcheck';
+import { MysensorsDecoder } from './mysensors-decoder';
 
-export class MysensorsMqtt {
+export class MysensorsMqtt extends MysensorsDecoder {
 
-    public static decode(msg: INodeMessage): IMysensorsMsg| undefined {
+    public decode(msg: INodeMessage): IMysensorsMsg| undefined {
         if (NullCheck.isDefinedNonNullAndNotEmpty(msg.topic)) {
             const msgOut = msg as IMysensorsMsg;
             const split = msg.topic.toString().split('/');
@@ -14,12 +15,13 @@ export class MysensorsMqtt {
                 msgOut.messageType = parseInt( split[split.length - 3], 10 );
                 msgOut.ack = (split[split.length - 2] === '1') ? 1 : 0;
                 msgOut.subType = parseInt( split[split.length - 1], 10 );
-                return msgOut;
+                msgOut.origin = MsgOrigin.mqtt;
+                return this.enrich(msgOut);
             }
         }
     }
 
-    public static encode(msg: IMysensorsMsg): INodeMessage| undefined {
+    public encode(msg: IMysensorsMsg): INodeMessage| undefined {
         if (NullCheck.isDefinedOrNonNull(msg.nodeId)) {
             msg.topic =  (NullCheck.isDefinedNonNullAndNotEmpty(msg.topicRoot) ? (msg.topicRoot + '/') : '')
                 + msg.nodeId + '/'

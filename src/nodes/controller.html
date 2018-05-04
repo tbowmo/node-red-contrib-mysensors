@@ -84,6 +84,11 @@
             <li>Decoded Mysensors package</i>
         </ul>
         if any of the above is detected on the input, the same format is used on the output, if any response is sent out.
-
     </p>
+    <p>
+        start by defining a database file for this node, the node will create the specified file for you. Make sure that the file is
+        placed somewhere, that is kept during reboots etc (/tmp is not a good choise).
+        if you are running with the official node-red docker image, you could place the file in /data/<filename>, this will then be available in the volume that you should have defined, when creating the docker container
+    </p>
+    
 </script>

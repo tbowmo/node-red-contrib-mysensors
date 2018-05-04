@@ -1,8 +1,9 @@
-import { IMysensorsMsg, INodeMessage } from './mysensors-msg';
-import { NullCheck } from './nullcheck';
+import { IMysensorsMsg, INodeMessage, MsgOrigin } from '../mysensors-msg';
+import { NullCheck } from '../nullcheck';
+import { MysensorsDecoder } from './mysensors-decoder';
 
-export class MysensorsSerial {
-    public static decode(msg: INodeMessage): IMysensorsMsg| undefined {
+export class MysensorsSerial extends MysensorsDecoder {
+    public decode(msg: INodeMessage): IMysensorsMsg| undefined {
         let message = msg.payload.toString();
         message = message.replace(/(\r\n|\n|\r)/gm, '');
         const tokens = message.split(';');
@@ -14,11 +15,12 @@ export class MysensorsSerial {
             msgOut.ack = tokens[3] === '1' ? 1 : 0;
             msgOut.subType = parseInt(tokens[4], 10);
             msgOut.payload = tokens[5];
-            return msgOut;
+            msgOut.origin = MsgOrigin.serial;
+            return this.enrich(msgOut);
         }
     }
 
-    public static encode(msg: IMysensorsMsg): INodeMessage| undefined {
+    public encode(msg: IMysensorsMsg): INodeMessage| undefined {
         if (NullCheck.isDefinedOrNonNull(msg) && NullCheck.isDefinedOrNonNull(msg.nodeId)) {
             msg.payload = msg.nodeId + ';'
                 + msg.childSensorId + ';'

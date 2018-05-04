@@ -216,5 +216,4 @@ export class MysensorsDebugDecode {
         }
         return '';
     }
-
 }

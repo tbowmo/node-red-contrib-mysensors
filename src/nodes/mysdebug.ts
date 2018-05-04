@@ -1,8 +1,7 @@
 import { Node, NodeProperties, Red } from 'node-red';
+import { Decode } from '../lib/decoder/decode';
 import { MysensorsDebugDecode } from '../lib/mysensors-debug';
-import { MysensorsMqtt } from '../lib/mysensors-mqtt';
 import { IMysensorsMsg } from '../lib/mysensors-msg';
-import { MysensorsSerial } from '../lib/mysensors-serial';
 import {
     mysensor_command,
     mysensor_data,
@@ -20,17 +19,7 @@ export = (RED: Red) => {
         this.mysDbg = new MysensorsDebugDecode();
 
         this.on('input', (msg: IMysensorsMsg) => {
-            if (NullCheck.isUndefinedOrNull(msg.nodeId)) {
-                let msgTmp: IMysensorsMsg | undefined;
-                if (NullCheck.isUndefinedNullOrEmpty(msg.topic)) {
-                    msgTmp = MysensorsSerial.decode(msg);
-                } else {
-                    msgTmp = MysensorsMqtt.decode(msg);
-                }
-                if (NullCheck.isDefinedOrNonNull(msgTmp)) {
-                    msg = msgTmp;
-                }
-            }
+            msg = Decode(msg);
             if (NullCheck.isDefinedOrNonNull(msg.nodeId)) {
                 let msgHeader = '';
                 let msgSubType: string | null = null;
