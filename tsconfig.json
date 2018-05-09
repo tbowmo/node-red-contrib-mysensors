@@ -11,7 +11,9 @@
     "declaration": false,
     "listFiles": false,
     "strict": true,
-    "outDir": "./dist/"
+    "outDir": "./dist/",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
   },
   "include": [
     "**/*.ts"

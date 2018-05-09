@@ -1,6 +1,5 @@
 import { open } from 'sqlite';
 import { IDatabase, INodeData } from './database.interface';
-import { mysensor_sensor } from './mysensors-types';
 import { NullCheck } from './nullcheck';
 
 export class Database implements IDatabase {

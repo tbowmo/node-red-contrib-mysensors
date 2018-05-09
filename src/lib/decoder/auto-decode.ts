@@ -1,6 +1,5 @@
 import { IMysensorsMsg, MsgOrigin } from '../mysensors-msg';
 import { NullCheck } from '../nullcheck';
-import { MysensorsDecoder } from './mysensors-decoder';
 import { MysensorsMqtt } from './mysensors-mqtt';
 import { MysensorsSerial } from './mysensors-serial';
 

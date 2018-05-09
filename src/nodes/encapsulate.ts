@@ -1,7 +1,6 @@
 import { NodeProperties, Red } from 'node-red';
 import { IMysensorsMsg } from '../lib/mysensors-msg';
 import {
-    mysensor_command,
     mysensor_data,
     mysensor_internal,
     mysensor_sensor,

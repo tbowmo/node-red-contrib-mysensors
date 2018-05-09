@@ -1,7 +1,6 @@
 import { IDatabase } from './database.interface';
 import { AutoDecode } from './decoder/auto-decode';
 import { IDecoder } from './decoder/decoder.interface';
-import { MysensorsDecoder } from './decoder/mysensors-decoder';
 import { MysensorsMqtt } from './decoder/mysensors-mqtt';
 import { MysensorsSerial } from './decoder/mysensors-serial';
 import { IMysensorsMsg, MsgOrigin } from './mysensors-msg';
@@ -50,7 +49,6 @@ export class MysensorsController {
     }
 
     private async handleSketchVersion(msg: IMysensorsMsg): Promise<void> {
-        const sql: string = '';
         if (msg.subType === mysensor_internal.I_SKETCH_VERSION && msg.nodeId) {
             this.database.sketchVersion(msg.nodeId, msg.payload);
         } else if (msg.subType === mysensor_internal.I_SKETCH_NAME && msg.nodeId) {

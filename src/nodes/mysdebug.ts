@@ -1,4 +1,4 @@
-import { Node, NodeProperties, Red } from 'node-red';
+import { NodeProperties, Red } from 'node-red';
 import { AutoDecode } from '../lib/decoder/auto-decode';
 import { MysensorsDebugDecode } from '../lib/mysensors-debug';
 import { IMysensorsMsg } from '../lib/mysensors-msg';
@@ -6,7 +6,6 @@ import {
     mysensor_command,
     mysensor_data,
     mysensor_internal,
-    mysensor_payload,
     mysensor_sensor,
     mysensor_stream,
     } from '../lib/mysensors-types';

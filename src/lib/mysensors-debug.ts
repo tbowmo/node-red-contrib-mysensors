@@ -191,9 +191,9 @@ export class MysensorsDebugDecode {
             if (r.re instanceof RegExp) {
                 if (r.re.test(msg)) {
                     msg = msg.replace(r.re, r.d);
-                    msg = msg.replace(/{command:(\d+)}/g, (match, m1) => mysensor_command[m1]);
-                    msg = msg.replace(/{pt:(\d+)}/g, (match, m1) => mysensor_payload[m1]);
-                    return msg.replace(/{type:(\d+):(\d+)}/g, (match, cmd, type) => {
+                    msg = msg.replace(/{command:(\d+)}/g, (__, m1) => mysensor_command[m1]);
+                    msg = msg.replace(/{pt:(\d+)}/g, (__, m1) => mysensor_payload[m1]);
+                    return msg.replace(/{type:(\d+):(\d+)}/g, (__, cmd, type) => {
                         return this.type(Number(cmd), Number(type));
                     });
                 }
