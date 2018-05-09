@@ -1,5 +1,5 @@
 import { Red } from 'node-red';
-import { Database } from '../lib/database';
+import { Database } from '../lib/database-sqlite';
 import { MysensorsController } from '../lib/mysensors-controller';
 import { IMysensorsMsg } from '../lib/mysensors-msg';
 import { IControlerConfig, IControlerProperties, IDbConfigNode } from './common';

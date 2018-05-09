@@ -1,6 +1,6 @@
 import { Node, NodeId, NodeProperties } from 'node-red';
-import { Database } from '../lib/database';
-import { MysensorsDecoder } from '../lib/decoder/mysensors-decoder';
+import { IDatabase } from '../lib/database.interface';
+import { IDecoder } from '../lib/decoder/decoder.interface';
 import { MysensorsController } from '../lib/mysensors-controller';
 import { MysensorsDebugDecode } from '../lib/mysensors-debug';
 import { IMysensorsMsg } from '../lib/mysensors-msg';
@@ -17,13 +17,13 @@ export interface IDecodeProperties extends NodeProperties {
     mqtt: boolean;
 }
 export interface IDecodeEncodeConf extends Node {
-    decoder: MysensorsDecoder;
+    decoder: IDecoder;
 }
 
 /* DB */
 export interface IDbConfigNode extends Node {
     file?: string;
-    database: Database;
+    database: IDatabase;
 }
 
 export interface IDBProperties extends NodeProperties {

@@ -1,6 +1,6 @@
 import { Node, NodeProperties, Red } from 'node-red';
 import { resolve } from 'path';
-import { Database } from '../lib/database';
+import { Database } from '../lib/database-sqlite';
 import { IDbConfigNode, IDBProperties } from './common';
 
 export = (RED: Red) => {

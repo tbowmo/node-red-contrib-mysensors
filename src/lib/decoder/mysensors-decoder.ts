@@ -1,4 +1,4 @@
-import { IMysensorsMsg, INodeMessage, MsgOrigin } from '../mysensors-msg';
+import { IMysensorsMsg } from '../mysensors-msg';
 import {
     mysensor_command,
     mysensor_data,
@@ -7,13 +7,8 @@ import {
     mysensor_stream,
     } from '../mysensors-types';
 import { NullCheck } from '../nullcheck';
-import { MysensorsMqtt } from './mysensors-mqtt';
-import { MysensorsSerial } from './mysensors-serial';
 
 export abstract class MysensorsDecoder {
-    public abstract decode(msg: INodeMessage): IMysensorsMsg| undefined;
-    public abstract encode(msg: IMysensorsMsg): INodeMessage| undefined;
-
     protected enrich(msg: IMysensorsMsg): IMysensorsMsg {
         if (NullCheck.isDefinedOrNonNull(msg.messageType)) {
             msg.messageTypeStr = mysensor_command[msg.messageType];

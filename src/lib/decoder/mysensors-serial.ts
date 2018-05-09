@@ -1,8 +1,9 @@
 import { IMysensorsMsg, INodeMessage, MsgOrigin } from '../mysensors-msg';
 import { NullCheck } from '../nullcheck';
+import { IDecoder } from './decoder.interface';
 import { MysensorsDecoder } from './mysensors-decoder';
 
-export class MysensorsSerial extends MysensorsDecoder {
+export class MysensorsSerial extends MysensorsDecoder implements IDecoder {
     public decode(msg: INodeMessage): IMysensorsMsg| undefined {
         let message = msg.payload.toString();
         message = message.replace(/(\r\n|\n|\r)/gm, '');

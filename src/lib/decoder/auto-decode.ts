@@ -4,7 +4,7 @@ import { MysensorsDecoder } from './mysensors-decoder';
 import { MysensorsMqtt } from './mysensors-mqtt';
 import { MysensorsSerial } from './mysensors-serial';
 
-export function Decode(msg: IMysensorsMsg): IMysensorsMsg {
+export function AutoDecode(msg: IMysensorsMsg): IMysensorsMsg {
     if (NullCheck.isUndefinedOrNull(msg.nodeId)) {
         let msgTmp: IMysensorsMsg | undefined;
         if (NullCheck.isUndefinedNullOrEmpty(msg.topic)) {

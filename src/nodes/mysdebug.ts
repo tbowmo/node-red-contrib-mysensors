@@ -1,5 +1,5 @@
 import { Node, NodeProperties, Red } from 'node-red';
-import { Decode } from '../lib/decoder/decode';
+import { AutoDecode } from '../lib/decoder/auto-decode';
 import { MysensorsDebugDecode } from '../lib/mysensors-debug';
 import { IMysensorsMsg } from '../lib/mysensors-msg';
 import {
@@ -19,7 +19,7 @@ export = (RED: Red) => {
         this.mysDbg = new MysensorsDebugDecode();
 
         this.on('input', (msg: IMysensorsMsg) => {
-            msg = Decode(msg);
+            msg = AutoDecode(msg);
             if (NullCheck.isDefinedOrNonNull(msg.nodeId)) {
                 let msgHeader = '';
                 let msgSubType: string | null = null;

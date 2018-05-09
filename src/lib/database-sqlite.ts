@@ -1,25 +1,9 @@
 import { open } from 'sqlite';
+import { IDatabase, INodeData } from './database.interface';
 import { mysensor_sensor } from './mysensors-types';
 import { NullCheck } from './nullcheck';
 
-export interface INodeData {
-    id: number;
-    sketchName: string;
-    sketchVersion: string;
-    lastHeard: Date;
-    parentId: number;
-    used: 0|1;
-    sensors: ISensorData[];
-    lastRestart: Date;
-}
-
-export interface ISensorData {
-    id: number;
-    nodeId: number;
-    sType: mysensor_sensor;
-}
-
-export class Database {
+export class Database implements IDatabase {
     private dbPromise: any;
 
     /**

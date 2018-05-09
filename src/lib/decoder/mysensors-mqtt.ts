@@ -1,8 +1,9 @@
 import { IMysensorsMsg, INodeMessage, MsgOrigin } from '../mysensors-msg';
 import { NullCheck } from '../nullcheck';
+import { IDecoder } from './decoder.interface';
 import { MysensorsDecoder } from './mysensors-decoder';
 
-export class MysensorsMqtt extends MysensorsDecoder {
+export class MysensorsMqtt extends MysensorsDecoder implements IDecoder {
 
     public decode(msg: INodeMessage): IMysensorsMsg| undefined {
         if (NullCheck.isDefinedNonNullAndNotEmpty(msg.topic)) {

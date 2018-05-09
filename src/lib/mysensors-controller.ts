@@ -1,5 +1,6 @@
-import { Database } from './database';
-import { Decode } from './decoder/decode';
+import { IDatabase } from './database.interface';
+import { AutoDecode } from './decoder/auto-decode';
+import { IDecoder } from './decoder/decoder.interface';
 import { MysensorsDecoder } from './decoder/mysensors-decoder';
 import { MysensorsMqtt } from './decoder/mysensors-mqtt';
 import { MysensorsSerial } from './decoder/mysensors-serial';
@@ -9,10 +10,10 @@ import { NullCheck } from './nullcheck';
 
 export class MysensorsController {
 
-    constructor(private database: Database, private handleIds: boolean) { }
+    constructor(private database: IDatabase, private handleIds: boolean) { }
 
     public async messageHandler(msg: IMysensorsMsg): Promise<IMysensorsMsg | undefined> {
-        msg = Decode(msg);
+        msg = AutoDecode(msg);
         if (msg.nodeId) {
             await this.database.nodeHeard(msg.nodeId);
         }
@@ -58,7 +59,7 @@ export class MysensorsController {
     }
 
     private encode(msg: IMysensorsMsg| undefined) {
-        let encoder: MysensorsDecoder| undefined;
+        let encoder: IDecoder| undefined;
         if (NullCheck.isDefinedOrNonNull(msg)) {
             if (msg.origin === MsgOrigin.serial) {
                 encoder = new MysensorsSerial();
@@ -69,5 +70,4 @@ export class MysensorsController {
         if (encoder === undefined || msg === undefined) { return msg; }
         return encoder.encode(msg);
     }
-
 }
