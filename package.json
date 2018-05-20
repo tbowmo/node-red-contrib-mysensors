@@ -43,7 +43,7 @@
     "url": "git+https://github.com/tbowmo/node-red-contrib-mysensors.git"
   },
   "dependencies": {
-    "sqlite": "^2.9.1"
+    "sqlite": "^2.9.2"
   },
   "devDependencies": {
     "@types/chai": "^4.1.3",
