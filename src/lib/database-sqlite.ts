@@ -1,7 +1,7 @@
+import * as path from 'path';
 import { open } from 'sqlite';
 import { IDatabase, INodeData } from './database.interface';
 import { NullCheck } from './nullcheck';
-
 export class Database implements IDatabase {
     private dbPromise: any;
 
@@ -13,7 +13,9 @@ export class Database implements IDatabase {
         if (NullCheck.isUndefinedNullOrEmpty(this.file)) {
             throw new Error('No dbname set');
         }
-        this.dbPromise = open(this.file);
+        this.dbPromise = Promise.resolve()
+            .then(() => open(this.file))
+            .then((db) => db.migrate({migrationsPath: path.dirname(__dirname) + '/migrations'}));
         this.checkDb();
     }
 
@@ -56,22 +58,7 @@ export class Database implements IDatabase {
 
     private async checkDb(): Promise<void> {
         const db = await this.dbPromise;
-        await db.run(`CREATE TABLE IF NOT EXISTS node (
-            id integer PRIMARY KEY AUTOINCREMENT,
-            sketchName varchar,
-            sketchVersion varchar,
-            lastHeard timestamp,
-            parentId integer,
-            lastRestart timestamp,
-            used boolean
-        );`);
 
-        await db.run(`CREATE TABLE IF NOT EXISTS child (
-            id integer,
-            nodeId integer,
-            sType integer,
-            lastHeard timestamp
-        );`);
         const x = await db.get('select count(id) cnt from node');
         if (x.cnt === 0) {
             for (let i = 0; i <= 255; i++) {
