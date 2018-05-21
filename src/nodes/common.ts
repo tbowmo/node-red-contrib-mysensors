@@ -30,14 +30,14 @@ export interface IDBProperties extends NodeProperties {
     file: string;
 }
 
-/* Controler */
-export interface IControlerProperties extends NodeProperties {
+/* Controller */
+export interface IControllerProperties extends NodeProperties {
     database?: NodeId;
     handleid?: boolean;
 }
 
-export interface IControlerConfig extends Node {
-    controler: MysensorsController;
+export interface IControllerConfig extends Node {
+    controller: MysensorsController;
     database: IDbConfigNode;
     handleid: boolean;
 }

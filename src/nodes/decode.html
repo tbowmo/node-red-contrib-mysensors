@@ -31,19 +31,30 @@
 </script>
 
 <script type="text/x-red" data-help-name="mysdecode">
-    <p>A function that parses <b>msg.payload</b> from mysensors serial
-    format, into the different part of the protocol, the msg object will
-    contain the following afterwards
+    <p>
+        Parses either <code>msg.payload</code> from mysensors serial format, or <code>msg.topic</code> if MQTT type is chosen
     </p>
-    <ul>
-        <li>nodeId</li>
-        <li>childSensorId</li>
-        <li>messageType</li>
-        <li>ack</li>
-        <li>subType</li>
-        <li>payload</li>
-    </ul>
-    <p>By checking off the MQTT option, this node operates on MQTT topics
-    instead of MySensors serial protocol.
+    <h3>Output</h3>
+    <dl class="message-properties">
+        <dt>nodeId <span class="property-type">number</span></dt>
+        <dd></dd>
+        <dt>childSensorId <span class="property-type">number</span></dt>
+        <dd></dd>
+        <dt>messageType <span class="property-type">number</span></dt>
+        <dd></dd>
+        <dt>ack <span class="property-type">0 or 1</span></dt>
+        <dd></dd>
+        <dt>subType <span class="property-type">number</span></dt>
+        <dd></dd>
+        <dt>payload <span class="property-type">string</span></dt>
+        <dd></dd>
+        <dt>messageTypeStr <span class="property-type">string</span></dt>
+        <dd>String representation of the messageType</dd>
+        <dt>subTypeStr <span class="property-type">string</span></dt>
+        <dd>String representation of subType</dd>
+    </dl>
+    <h3>Details</h3>
+    <p>
+        By checking off the MQTT option, this node operates on MQTT topics instead of MySensors serial protocol.
     </p>
 </script>

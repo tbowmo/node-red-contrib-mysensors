@@ -57,20 +57,45 @@
 </script>
 
 <script type="text/x-red" data-help-name="mysencode">
-    <p>This will encode messages into mysensors serial / mqtt topic
-    compatible messages, that can be sent of to other parts afterwards.
+    <p>
+        Encodes messages into mysensors serial / mqtt topic compatible messages, that can be sent to either a gateway,
+        or a controller that understands mysensors serial protocol or mqtt topic format.
     </p>
-    <p>Input message is required to include the following parameters:</p>
-    <ul>
-    <li>nodeId</li>
-    <li>childSensorId</li>
-    <li>messageType</li>
-    <li>ack</li>
-    <li>subType</li>
-    <li>payload</li>
-    </ul>
-    <p>By checking off the MQTT option, this node operates on MQTT topics
-    instead of MySensors serial protocol.
-    </p>
-    <p>Setting Topic root overwrites incomming msg.topicRoot<p>
+    <h3>Input</h3>
+    <dl class="message-properties">
+        <dt>nodeId <span class="property-type">number</span></dt>
+        <dd>Required</dd>
+        <dt>childSensorId <span class="property-type">number</span></dt>
+        <dd>Required</dd>
+        <dt>messageType <span class="property-type">number</span></dt>
+        <dd>Required</dd>
+        <dt>ack <span class="property-type">0 or 1</span></dt>
+        <dd>Required</dd>
+        <dt>subType <span class="property-type">number</span></dt>
+        <dd>Required</dd>
+        <dt>payload <span class="property-type">string</span></dt>
+        <dd>Optional</dd>
+        <dt>topicRoot <span class="property-type">string</span></dt>
+        <dd>Optional</dd>
+    </dl>
+
+    <h3>Output - MQTT</h3>
+    <dl class="message-properties">
+        <dt>topic <span class="property-type">string</span></dt>
+        <dd>topic configured as topicRoot/nodeId/childSensorId/messageType/ack/subType</dd>
+        <dt>payload <span class="property-type">string</span></dt>
+        <dd>left untouched</dd>
+    </dl>
+
+    <h3>Output - Serial</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">string</span></dt>
+        <dd>nodeId;childSensorId;messageType;ack;subType;payload</dd>
+    </dl>
+    
+    <h3>Details</h3>
+    <p>
+        By checking off the MQTT option, this node create a MQTT topic, compatible with mysensors, instead of MySensors serial protocol.
+        Setting Topic root overwrites incomming msg.topicRoot for MQTT mode.
+    <p>
 </script>

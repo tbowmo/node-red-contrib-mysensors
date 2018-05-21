@@ -24,7 +24,10 @@ msg.childSensorId
 msg.messageType
 msg.ack
 msg.subType
+msg.messageTypeStr
+msg.subTypeStr
 ```
+The last two parameters are text representations for message type and sub type. No other mysensros node is actively using these values.
 
 see [mysensors API v2.x](http://www.mysensors.org/download/serial_api_20) for more info on the different parts
 
@@ -33,12 +36,23 @@ The following nodes will be able to use these properties to interact with the me
 ## Node-RED mysencode
 
 This encodes a message into either mysensors serial, or a mysensors mqtt
-topic. If using MQTT, then set topicRoot on the message, before sending it
-into this node, in order to set your own root topic
+topic.
+
+If using MQTT, then set topicRoot on the message, before sending it
+into this node, in order to set your own root topic, or set it in the node to set the topicRoot like
+
+<code>topicRoot</code>/nodeId/childSensorId/ack/subType
 
 ## Node-RED mysencap
 
-This will add the message properties mention under mysdecenc to the message object of an existing Node-RED message. By sending the output through mysdecenc, you can create a message that can be sent to the sensor network.
+This will add the message properties mentioned under mysdecenc to the message object of an existing Node-RED message. By sending the output through mysencode, you can create a message that can be sent to your sensor network, or sent to another controller that understands MySensors serial protocol or MQTT topic format.
+
+If you want to send it to another controller as a serial port format, use socat for creating a dummy serial port (on linux):
+
+```
+socat PTY,link=/dev/ttyS80,mode=666,group=dialout,raw PTY,link=/dev/ttyUSB20,mode=666,group=dialout,raw &
+```
+Now use <code>/dev/ttyS80</code> in a serial port node in node-red, and use <code>/dev/ttyUSB20</code> in your chosen controller.
 
 ## Node-RED mysdebug
 
@@ -49,3 +63,4 @@ This will decode the mysensors serial protocol payload, and enrich it with descr
 This node can handle ID assignment to nodes on your network. Will respond with a new ID everytime it sees a request for an ID from a node.
 You need to define a database location, which should be a path to a writable location/file in your filesystem. The node will create the file pointed to, and create the needed tables using sqlite3 format.
 
+The controller keeps track of when it hears the nodes, sketch name / version reported during presentation etc. and will be shown when you look at the configuration page of the node.

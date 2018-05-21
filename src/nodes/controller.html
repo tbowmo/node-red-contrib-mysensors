@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    RED.nodes.registerType('myscontroler',{
+    RED.nodes.registerType('myscontroller',{
         category: 'mysensors',
         color: '#a6bbcf',
         defaults: {
@@ -11,7 +11,7 @@
         outputs:1,
         icon: "cog.png",
         label: function() {
-            return this.name||"myscontroler";
+            return this.name||"myscontroller";
         },
         oneditprepare: function() {
             $.getJSON('mysensornodes/' + this.database, function(data) {
@@ -43,7 +43,7 @@
     });
 </script>
 
-<script type="text/x-red" data-template-name="myscontroler">
+<script type="text/x-red" data-template-name="myscontroller">
     <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
@@ -74,21 +74,31 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="myscontroler">
-    <p>Controller node
+<script type="text/x-red" data-help-name="myscontroller">
+    <p>Controller node for mysensors network. It is capable of keeping track of used node IDs, and can hand out ned node IDs upon request from new nodes</p>
 
-        Detects automtically if input is one of the following:
+    <h3>Input</h3>
+    <p>
+        The myscontroller node automatically detects if the input is in one of the following formats:
         <ul>
             <li>Serial gateway</i>
             <li>MQTT input</i>
             <li>Decoded Mysensors package</i>
         </ul>
-        if any of the above is detected on the input, the same format is used on the output, if any response is sent out.
+        It will use the same format on the output, as detected on input.
     </p>
+    <h1>Output</h1>
     <p>
-        start by defining a database file for this node, the node will create the specified file for you. Make sure that the file is
-        placed somewhere, that is kept during reboots etc (/tmp is not a good choise).
-        if you are running with the official node-red docker image, you could place the file in /data/<filename>, this will then be available in the volume that you should have defined, when creating the docker container
+        Currently the only time a new message is emitted, is if an ID request is received on the input. Then the emitted message will be a response for the ID request
     </p>
-    
+    <h1>Data collection</h1>
+    <p>
+        The node collects data about nodes that it hears on the mysensors network, such as nodeID, sketchname, timestamp for when it was heard last etc.
+
+        the current list of nodes will be shown in the configuration panel of the controller node
+    </p>
+    <h1>Database</h1>
+    <p>
+        Before using this node, you need to define a database file.
+    </p>
 </script>

@@ -72,22 +72,31 @@
     </div>
 </script>
 <script type="text/x-red" data-help-name="mysencap">
-    <p>Adds extra propperties to the message object, so it conforms to
-    mysensor data. Send the resulting message through mysencode to convert
-    into mysensors serial / mqtt topic format, that can be sent to either a
-    mysensors node, or sent off to other things.
+    <p>
+        Adds extra propperties to the message object, so it conforms to mysensor data. Send the resulting message through mysencode to convert 
+        into mysensors serial / mqtt topic format, that can be sent to either a mysensors node, or sent to another controller that understands
+        mysensors serial or mqtt topic formats 
     </p>
-    <ul>
-        <li>nodeId - configurable</li>
-        <li>childSensorId - configurable</li>
-        <li>messageType - configurable</li>
-        <li>ack - configurable</li>
-        <li>subType - configurable</li>
-        <li>payload - left untouched</li>
-    </ul>
-    <p>if "presentation" is checked, a presentation message will be sent
-    at startup of node-red (or a new flow is deployed). This can be used to
-    generate presentation of dummy nodes, that you create.
+    <h3>Output</h3>
+    <dl class="message-properties">
+        All parts, except payload, is set in the node configuration page
+        <dt>nodeId <span class="property-type">number</span></dt>
+        <dd></dd>
+        <dt>childSensorId <span class="property-type">number</span></dt>
+        <dd></dd>
+        <dt>messageType <span class="property-type">number</span></dt>
+        <dd></dd>
+        <dt>ack <span class="property-type">0 or 1</span></dt>
+        <dd></dd>
+        <dt>subType <span class="property-type">number</span></dt>
+        <dd></dd>
+        <dt>payload <span class="property-type">string</span></dt>
+        <dd></dd>
+    </dl>
+    <h3>Details</h3>
+    <p>
+        if "presentation" is checked, a presentation message will be sent at startup of node-red (or a new flow is deployed).
+        This can be used to generate presentation of dummy nodes, that you create.
     </p>
 </script>
 
