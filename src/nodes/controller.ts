@@ -9,7 +9,13 @@ export = (RED: Red) => {
         if (props.database) {
             this.database = RED.nodes.getNode(props.database) as IDbConfigNode;
             if (this.database.database) {
-                this.controller = new MysensorsController(this.database.database, props.handleid || false);
+                this.controller = new MysensorsController(
+                    this.database.database,
+                    props.handleid || false,
+                    props.timeresponse || false,
+                    props.timezone || 'UTC',
+                    props.measurementsystem || 'M',
+                );
                 this.on('input', (msg: IMysensorsMsg) => {
                     (this.controller).messageHandler(msg).then((msgOut: IMysensorsMsg| undefined) => {
                         this.send(msgOut);

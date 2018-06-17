@@ -34,6 +34,9 @@ export interface IDBProperties extends NodeProperties {
 export interface IControllerProperties extends NodeProperties {
     database?: NodeId;
     handleid?: boolean;
+    timeresponse?: boolean;
+    timezone?: string;
+    measurementsystem?: string;
 }
 
 export interface IControllerConfig extends Node {
