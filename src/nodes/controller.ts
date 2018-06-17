@@ -12,7 +12,7 @@ export = (RED: Red) => {
                 this.controller = new MysensorsController(
                     this.database.database,
                     props.handleid || false,
-                    props.timeresponse || false,
+                    props.timeresponse || true,
                     props.timezone || 'UTC',
                     props.measurementsystem || 'M',
                 );

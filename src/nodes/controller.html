@@ -42,19 +42,6 @@
                 }
                 $('#nodelist').html(html);
             });
-            if (this.timeresponse) {
-                $('#timezoneselect').show();
-            } else {
-                $('#timezoneselect').hide();
-            }
-
-            $('#node-input-timeresponse').click(function() {
-                if (this.checked) {
-                    $('#timezoneselect').show();
-                } else {
-                    $('#timezoneselect').hide();
-                }
-            });
         }
     });
 </script>
@@ -75,15 +62,10 @@
     <div class="form-row">
         <label for="node-input-measurementsystem"><i class="icon-tag"></i> Units</label>
         <select id="node-input-measurementsystem">
-            <!--option value="N">Disabled</option-->
             <option value="M">Metric</option>
             <option value="I">Imperial</option>
         </select>
     </div>
-    <!--div class="form-row">
-        <label for="node-input-timeresponse"><i class="icon-tag"></i> Send time</label>
-        <input type="checkbox" id="node-input-timeresponse">
-    </div-->
     <div class="form-row" id="timezoneselect">
         <label for="node-input-timezone"><i class="icon-tag"></i> Timezone</label>
         <select id="node-input-timezone">
@@ -681,6 +663,7 @@
             <option value="Zulu">Zulu</option>
         </select>
     </div>
+    <div class="form-tips">Timezone is used to set the timezone on I_TIME messages sent to a node, requesting time</div>
     <div class="form-row">
         <label><i class="icon-book"></i> List of nodes</label>
         <table border="1px" style="width:100%">
