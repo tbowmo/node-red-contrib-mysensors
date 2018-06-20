@@ -20,7 +20,7 @@ export class MysensorsController {
 
     public async messageHandler(msg: IMysensorsMsg): Promise<IMysensorsMsg | undefined> {
         msg = AutoDecode(msg);
-        if (msg.nodeId) {
+        if (NullCheck.isDefinedOrNonNull(msg.nodeId)) {
             await this.database.nodeHeard(msg.nodeId);
         }
 

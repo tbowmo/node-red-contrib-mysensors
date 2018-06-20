@@ -61,7 +61,7 @@ export class Database implements IDatabase {
 
         const x = await db.get('select count(id) cnt from node');
         if (x.cnt === 0) {
-            for (let i = 0; i <= 255; i++) {
+            for (let i = 1; i <= 254; i++) {
                 db.run(`insert into node (id, used) values (${i}, 0)`);
             }
         }
