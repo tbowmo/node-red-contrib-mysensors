@@ -16,6 +16,7 @@ export class MysensorsController {
         private timeResponse: boolean,
         private timeZone: string,
         private measurementSystem: string,
+        private mqttRoot: string,
     ) { }
 
     public async messageHandler(msg: IMysensorsMsg): Promise<IMysensorsMsg | undefined> {
@@ -97,6 +98,7 @@ export class MysensorsController {
     private encode(msg: IMysensorsMsg| undefined) {
         let encoder: IDecoder| undefined;
         if (NullCheck.isDefinedOrNonNull(msg)) {
+            msg.topicRoot = this.mqttRoot;
             if (msg.origin === MsgOrigin.serial) {
                 encoder = new MysensorsSerial();
             } else if (msg.origin === MsgOrigin.mqtt) {

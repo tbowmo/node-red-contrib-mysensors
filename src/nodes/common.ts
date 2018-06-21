@@ -37,6 +37,7 @@ export interface IControllerProperties extends NodeProperties {
     timeresponse?: boolean;
     timezone?: string;
     measurementsystem?: string;
+    mqttroot?: string;
 }
 
 export interface IControllerConfig extends Node {

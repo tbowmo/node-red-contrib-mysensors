@@ -15,6 +15,7 @@ export = (RED: Red) => {
                     props.timeresponse || true,
                     props.timezone || 'UTC',
                     props.measurementsystem || 'M',
+                    props.mqttroot || 'mys-out',
                 );
                 this.on('input', (msg: IMysensorsMsg) => {
                     (this.controller).messageHandler(msg).then((msgOut: IMysensorsMsg| undefined) => {
