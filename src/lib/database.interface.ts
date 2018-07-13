@@ -13,9 +13,11 @@ export interface INodeData {
 }
 
 export interface ISensorData {
-    id: number;
     nodeId: number;
+    childId: number;
+    description: string;
     sType: mysensor_sensor;
+    lastHeard: Date;
 }
 
 export interface IDatabase {
@@ -26,4 +28,7 @@ export interface IDatabase {
     getFreeNodeId(): Promise<number>;
     close(): Promise<void>;
     setParent(node: string, last: string): Promise<void>;
+    child(nodeId: number, childId: number, type: number, description: string): Promise<void>;
+    childHeard(nodeId: number, childId: number): Promise<void>;
+    getChild(nodeId: number, childId: number): Promise<ISensorData>;
 }

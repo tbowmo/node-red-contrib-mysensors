@@ -9,7 +9,7 @@ export interface INodeMessage {
     topic?: string;
 }
 
-export interface IMysensorsMsg extends INodeMessage {
+export interface  IMysensorsMsg extends INodeMessage {
     topicRoot?: string;
     nodeId?: number;
     childSensorId?: number;
@@ -18,6 +18,7 @@ export interface IMysensorsMsg extends INodeMessage {
     ack?: 0|1;
     subType?: mysensor_data| mysensor_internal| mysensor_sensor| mysensor_stream;
     subTypeStr?: string;
+    sensorTypeStr?: string;
     origin?: MsgOrigin;
 }
 

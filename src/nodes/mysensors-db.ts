@@ -1,6 +1,6 @@
 import { NodeProperties, Red } from 'node-red';
 import { resolve } from 'path';
-import { Database } from '../lib/database-sqlite';
+import { DatabaseSqlite } from '../lib/database-sqlite';
 import { IDbConfigNode, IDBProperties } from './common';
 
 export = (RED: Red) => {
@@ -10,7 +10,7 @@ export = (RED: Red) => {
         this.file = config.file;
         try {
             if (this.file) {
-                this.database = new Database(this.file);
+                this.database = new DatabaseSqlite(this.file);
             }
         } catch (error) {
             if (error.code === 'SQLITE_CANTOPEN') {

@@ -17,8 +17,8 @@ export = (RED: Red) => {
         RED.nodes.createNode(this, config);
         this.mysDbg = new MysensorsDebugDecode();
 
-        this.on('input', (msg: IMysensorsMsg) => {
-            msg = AutoDecode(msg);
+        this.on('input', async (msg: IMysensorsMsg) => {
+            msg = await AutoDecode(msg);
             if (NullCheck.isDefinedOrNonNull(msg.nodeId)) {
                 let msgHeader = '';
                 let msgSubType: string | null = null;

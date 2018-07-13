@@ -20,9 +20,19 @@ export class MysensorsController {
     ) { }
 
     public async messageHandler(msg: IMysensorsMsg): Promise<IMysensorsMsg | undefined> {
-        msg = AutoDecode(msg);
+        msg = await AutoDecode(msg);
         if (NullCheck.isDefinedOrNonNull(msg.nodeId)) {
             await this.database.nodeHeard(msg.nodeId);
+            if (NullCheck.isDefinedOrNonNull(msg.childSensorId)) {
+                await this.database.childHeard(msg.nodeId, msg.childSensorId);
+            }
+        }
+
+        if (msg.messageType === mysensor_command.C_PRESENTATION &&
+            NullCheck.isDefinedOrNonNull(msg.childSensorId) &&
+            NullCheck.isDefinedOrNonNull(msg.nodeId) &&
+            NullCheck.isDefinedOrNonNull(msg.subType)) {
+                await this.database.child(msg.nodeId, msg.childSensorId, msg.subType, msg.payload);
         }
 
         if (msg.messageType === mysensor_command.C_INTERNAL) {

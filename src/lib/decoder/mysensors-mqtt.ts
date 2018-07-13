@@ -5,7 +5,7 @@ import { MysensorsDecoder } from './mysensors-decoder';
 
 export class MysensorsMqtt extends MysensorsDecoder implements IDecoder {
 
-    public decode(msg: INodeMessage): IMysensorsMsg| undefined {
+    public async decode(msg: INodeMessage): Promise<IMysensorsMsg| undefined> {
         if (NullCheck.isDefinedNonNullAndNotEmpty(msg.topic)) {
             const msgOut = msg as IMysensorsMsg;
             const split = msg.topic.toString().split('/');
@@ -17,7 +17,7 @@ export class MysensorsMqtt extends MysensorsDecoder implements IDecoder {
                 msgOut.ack = (split[split.length - 2] === '1') ? 1 : 0;
                 msgOut.subType = parseInt( split[split.length - 1], 10 );
                 msgOut.origin = MsgOrigin.mqtt;
-                return this.enrich(msgOut);
+                return await this.enrich(msgOut);
             }
         }
     }

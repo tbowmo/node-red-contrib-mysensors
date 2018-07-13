@@ -1,3 +1,4 @@
+import { IDatabase } from 'node-red-contrib-mysensors/src/lib/database.interface';
 import { IMysensorsMsg } from '../mysensors-msg';
 import {
     mysensor_command,
@@ -9,7 +10,13 @@ import {
 import { NullCheck } from '../nullcheck';
 
 export abstract class MysensorsDecoder {
-    protected enrich(msg: IMysensorsMsg): IMysensorsMsg {
+    protected enrichWithDb: boolean;
+
+    constructor(enrich?: boolean, private database?: IDatabase) {
+        this.enrichWithDb = enrich || false;
+    }
+
+    protected async enrich(msg: IMysensorsMsg): Promise<IMysensorsMsg> {
         if (NullCheck.isDefinedOrNonNull(msg.messageType)) {
             msg.messageTypeStr = mysensor_command[msg.messageType];
         }
@@ -28,6 +35,15 @@ export abstract class MysensorsDecoder {
                 case mysensor_command.C_STREAM:
                     msg.subTypeStr = mysensor_stream[msg.subType];
             }
+        }
+        if (this.enrichWithDb &&
+            NullCheck.isDefinedOrNonNull(msg.nodeId) &&
+            NullCheck.isDefinedOrNonNull(msg.childSensorId) &&
+            NullCheck.isDefinedOrNonNull(this.database)) {
+                const res = await this.database.getChild(msg.nodeId, msg.childSensorId);
+                if (NullCheck.isDefinedOrNonNull(res)) {
+                    msg.sensorTypeStr = mysensor_sensor[res.sType];
+                }
         }
         return msg;
     }

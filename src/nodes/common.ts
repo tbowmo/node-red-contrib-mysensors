@@ -15,9 +15,13 @@ export interface IEncodeProperties extends NodeProperties {
 /* Decode */
 export interface IDecodeProperties extends NodeProperties {
     mqtt: boolean;
+    enrich: boolean;
+    database?: NodeId;
 }
 export interface IDecodeEncodeConf extends Node {
     decoder: IDecoder;
+    database?: IDbConfigNode;
+    enrich: boolean;
 }
 
 /* DB */

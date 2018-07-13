@@ -3,8 +3,10 @@
         category: 'mysensors',
         color: '#a6bbcf',
         defaults: {
+            database: {value:"", type: "mysensorsdb", required: false},
             name: {value:""},
-            mqtt: {value: false, required:true}
+            mqtt: {value: false, required:true},
+            enrich: {value: false}
         },
         inputs:1,
         outputs:1,
@@ -15,7 +17,22 @@
             return this.name||type;
         },
         inputLabels: "MQTT topic or mysensors input",
-        outputLabels: ["decoded out"]
+        outputLabels: ["decoded out"],
+        oneditprepare: function() {
+            if ($('#node-input-enrich').is(':checked')) {
+                $('.databaseRow').show();
+            } else {
+                $('.databaseRow').hide();
+            }
+
+            $('#node-input-enrich').click(function() {
+                if (this.checked) {
+                    $('.databaseRow').show();
+                } else {
+                    $('.databaseRow').hide();
+                }
+            });
+        }
     });
 </script>
 
@@ -28,11 +45,22 @@
         <label for="node-input-mqtt"><i class="icon-tag"></i> MQTT</label>
         <input type="checkbox" id="node-input-mqtt">
     </div>
+    <div class="form-row">
+        <label for="node-input-enrich"><i class="icon-tag"></i> Use DB</label>
+        <input type="checkbox" id="node-input-enrich">
+    </div>
+    <div class="form-row databaseRow">
+        <label for="node-input-database"><i class="icon-tag"></i> Database</label>
+        <input type="text" id="node-input-database" placeholder="Database">
+    </div>
 </script>
 
 <script type="text/x-red" data-help-name="mysdecode">
     <p>
         Parses either <code>msg.payload</code> from mysensors serial format, or <code>msg.topic</code> if MQTT type is chosen
+    </p>
+    <p>
+        Note! If enrich is ticked off, then each message will result in a db query to the sqlite database
     </p>
     <h3>Input</h3>
     <dl class="message-properties">
@@ -60,6 +88,12 @@
     </dl>
     <h3>Details</h3>
     <p>
-        By checking off the MQTT option, this node operates on MQTT topics instead of MySensors serial protocol.
+        By ticking off the MQTT option, this node operates on MQTT topics instead of MySensors serial protocol.
+    </p>
+    <p>
+        If "use DB" is ticked, then the node will use the configured database, to retrieve
+        extra information about sensor type etc. given by the node during presentation, and add this to each message that passes
+        through the node.
+
     </p>
 </script>

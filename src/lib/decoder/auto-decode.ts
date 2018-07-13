@@ -3,13 +3,13 @@ import { NullCheck } from '../nullcheck';
 import { MysensorsMqtt } from './mysensors-mqtt';
 import { MysensorsSerial } from './mysensors-serial';
 
-export function AutoDecode(msg: IMysensorsMsg): IMysensorsMsg {
+export async function AutoDecode(msg: IMysensorsMsg): Promise<IMysensorsMsg> {
     if (NullCheck.isUndefinedOrNull(msg.nodeId)) {
         let msgTmp: IMysensorsMsg | undefined;
         if (NullCheck.isUndefinedNullOrEmpty(msg.topic)) {
-            msgTmp = new MysensorsSerial().decode(msg);
+            msgTmp = await new MysensorsSerial().decode(msg);
         } else {
-            msgTmp = new MysensorsMqtt().decode(msg);
+            msgTmp = await new MysensorsMqtt().decode(msg);
         }
         if (NullCheck.isDefinedOrNonNull(msgTmp)) {
             msg = msgTmp;

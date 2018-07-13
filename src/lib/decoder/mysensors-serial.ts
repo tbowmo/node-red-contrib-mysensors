@@ -4,7 +4,7 @@ import { IDecoder } from './decoder.interface';
 import { MysensorsDecoder } from './mysensors-decoder';
 
 export class MysensorsSerial extends MysensorsDecoder implements IDecoder {
-    public decode(msg: INodeMessage): IMysensorsMsg| undefined {
+    public async decode(msg: INodeMessage): Promise<IMysensorsMsg| undefined> {
         let message = msg.payload.toString();
         message = message.replace(/(\r\n|\n|\r)/gm, '');
         const tokens = message.split(';');
@@ -17,7 +17,7 @@ export class MysensorsSerial extends MysensorsDecoder implements IDecoder {
             msgOut.subType = parseInt(tokens[4], 10);
             msgOut.payload = tokens[5];
             msgOut.origin = MsgOrigin.serial;
-            return this.enrich(msgOut);
+            return await this.enrich(msgOut);
         }
     }
 
