@@ -3,7 +3,7 @@
   "author": {
     "name": "Thomas Bowman Mørch"
   },
-  "version": "3.2.0",
+  "version": "3.2.1",
   "scripts": {
     "build": "mkdir -p dist/nodes/ && cp -a src/nodes/*.html dist/nodes/ && cp -R src/migrations dist && tsc ",
     "pretest": "tsc",
