@@ -1,11 +1,7 @@
 import {
-    mysensor_command,
-    mysensor_data,
-    mysensor_internal,
-    mysensor_payload,
-    mysensor_sensor,
-    mysensor_stream,
-    } from './mysensors-types';
+    mysensor_command, mysensor_data, mysensor_internal, mysensor_payload, mysensor_sensor,
+    mysensor_stream
+} from './mysensors-types';
 
 /* tslint:disable:max-line-length */
 

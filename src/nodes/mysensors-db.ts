@@ -1,5 +1,6 @@
 import { NodeProperties, Red } from 'node-red';
 import { resolve } from 'path';
+
 import { DatabaseSqlite } from '../lib/database-sqlite';
 import { IDbConfigNode, IDBProperties } from './common';
 

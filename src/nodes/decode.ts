@@ -1,4 +1,5 @@
 import { Red } from 'node-red';
+
 import { MysensorsMqtt } from '../lib/decoder/mysensors-mqtt';
 import { MysensorsSerial } from '../lib/decoder/mysensors-serial';
 import { IMysensorsMsg } from '../lib/mysensors-msg';

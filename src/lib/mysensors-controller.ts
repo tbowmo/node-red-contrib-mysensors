@@ -1,4 +1,5 @@
 import * as moment from 'moment-timezone';
+
 import { IDatabase } from './database.interface';
 import { AutoDecode } from './decoder/auto-decode';
 import { IDecoder } from './decoder/decoder.interface';

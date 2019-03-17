@@ -1,7 +1,7 @@
 import { mysensor_sensor } from './mysensors-types';
 
 export interface INodeData {
-    id: number;
+    nodeId: number;
     label: string;
     sketchName: string;
     sketchVersion: string;

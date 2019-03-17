@@ -1,7 +1,9 @@
 import * as path from 'path';
 import { open } from 'sqlite';
+
 import { IDatabase, INodeData, ISensorData } from './database.interface';
 import { NullCheck } from './nullcheck';
+
 export class DatabaseSqlite implements IDatabase {
     private dbPromise: any;
 

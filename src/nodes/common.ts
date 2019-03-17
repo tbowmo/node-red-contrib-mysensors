@@ -1,4 +1,5 @@
 import { Node, NodeId, NodeProperties } from 'node-red';
+
 import { IDatabase } from '../lib/database.interface';
 import { IDecoder } from '../lib/decoder/decoder.interface';
 import { MysensorsController } from '../lib/mysensors-controller';

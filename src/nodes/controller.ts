@@ -1,4 +1,5 @@
 import { Red } from 'node-red';
+
 import { MysensorsController } from '../lib/mysensors-controller';
 import { IMysensorsMsg } from '../lib/mysensors-msg';
 import { IControllerConfig, IControllerProperties, IDbConfigNode } from './common';

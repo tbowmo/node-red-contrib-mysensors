@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import { IDatabase } from 'node-red-contrib-mysensors/src/lib/database.interface';
 import * as sinon from 'sinon';
+
 import { DatabaseSqlite } from './database-sqlite';
 import { MysensorsController } from './mysensors-controller';
 import { IMysensorsMsg } from './mysensors-msg';
