@@ -25,7 +25,7 @@
                     var c = data[index];
                     html = html + `<tr>
                         <td>
-                            ${c.id}
+                            ${c.nodeId}
                         </td>
                         <td>
                             ${c.sketchName}
@@ -37,7 +37,7 @@
                             ${c.lastHeard}
                         </td>
                         <td>
-                            ${(c.parentId !== c.id && c.parentId !== null)?c.parentId:''}
+                            ${(c.parentId !== c.nodeId && c.parentId !== null)?c.parentId:''}
                         </td>
                         </tr>`;
                 }
