@@ -51,6 +51,9 @@ export class MysensorsController {
                     return this.encode(await this.handleTimeResponse(msg));
                 case mysensor_internal.I_CONFIG:
                     return this.encode(await this.handleConfig(msg));
+                case mysensor_internal.I_BATTERY_LEVEL:
+                    await this.handleBattery(msg);
+                    break;
             }
         }
     }
@@ -95,6 +98,12 @@ export class MysensorsController {
         const m = r.exec(msg.payload);
         if (NullCheck.isDefinedOrNonNull(m)) {
             this.database.setParent(m[1], m[2]);
+        }
+    }
+
+    private async handleBattery(msg: IMysensorsMsg): Promise<void> {
+        if (NullCheck.isDefinedOrNonNull(msg.nodeId)) {
+            await this.database.setBatteryLevel(msg.nodeId, Number(msg.payload));
         }
     }
 
