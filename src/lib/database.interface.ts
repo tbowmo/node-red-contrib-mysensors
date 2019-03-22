@@ -10,6 +10,7 @@ export interface INodeData {
     used: 0|1;
     sensors: ISensorData[];
     lastRestart: Date;
+    batteryLevel: number;
 }
 
 export interface ISensorData {
@@ -31,4 +32,5 @@ export interface IDatabase {
     child(nodeId: number, childId: number, type: number, description: string): Promise<void>;
     childHeard(nodeId: number, childId: number): Promise<void>;
     getChild(nodeId: number, childId: number): Promise<ISensorData>;
+    setBatteryLevel(nodeId: number, batterylevel: number): Promise<void>;
 }

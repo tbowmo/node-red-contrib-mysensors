@@ -75,6 +75,11 @@ export class DatabaseSqlite implements IDatabase {
         return result;
     }
 
+    public async setBatteryLevel(nodeId: number, batteryLevel: number): Promise<void> {
+        const db = await this.dbPromise;
+        await db.run(`update node set batteryLevel=${batteryLevel} where nodeId=${nodeId}`);
+    }
+    
     private async checkDb(): Promise<void> {
         const db = await this.dbPromise;
 

@@ -39,6 +39,9 @@
                         <td>
                             ${(c.parentId !== c.nodeId && c.parentId !== null)?c.parentId:''}
                         </td>
+                        <td>
+                            ${c.batteryLevel}
+                        </td>
                         </tr>`;
                 }
                 $('#nodelist').html(html);
@@ -679,6 +682,7 @@
                     <th>version</th>
                     <th>last heard</th>
                     <th>via</th>
+                    <th>battery</th>
                 </tr>
             </thead>
             <tbody id="nodelist">
