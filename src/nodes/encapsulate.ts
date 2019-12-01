@@ -3,6 +3,7 @@ import { NodeProperties, Red } from 'node-red';
 import { IMysensorsMsg } from '../lib/mysensors-msg';
 import { mysensor_data, mysensor_internal, mysensor_sensor } from '../lib/mysensors-types';
 import { IEncapsulateConfig, IEncapsulateProperties } from './common';
+import { isNumber } from 'util';
 
 export = (RED: Red) => {
     RED.nodes.registerType('mysencap', function(this: IEncapsulateConfig, props: NodeProperties) {
@@ -65,7 +66,16 @@ export = (RED: Red) => {
                 mysVal = mysensor_internal;
                 break;
         }
-        res.json(JSON.stringify({data: Object.keys(mysVal).filter((k) => typeof mysVal[k as any] === 'number')}));
+        const kv = Object.keys(mysVal).filter((k) => typeof mysVal[k as any] === 'number').reduce((l: {}, k) => {
+            if (!isNumber(k)) {
+                l = {
+                    ...l,
+                    [k]: mysVal[k],
+                }
+            }
+            return l;
+        }, {})
+        res.json(JSON.stringify(kv));
     });
 };
 

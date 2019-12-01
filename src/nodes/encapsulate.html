@@ -223,10 +223,10 @@ function loadJsonTypes(type, selectId, selection) {
     $.getJSON('mysensordefs/'+type, function(data) {
         var index;
         var html = '';
-        data = JSON.parse(data).data;
-        for (index = 0; index < data.length; ++index) {
-        html = html + '<option value='+index+'>'+data[index]+'</option>';
-        }
+        data = JSON.parse(data);
+        Object.keys(data).forEach((item) => {
+            html = html + '<option value='+data[item]+'>'+item+'</option>';
+        });
         $('#'+selectId).html(html);
         $('#'+selectId).val($('#'+selection).val());
     });
