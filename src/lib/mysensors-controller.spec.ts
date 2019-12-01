@@ -10,7 +10,7 @@ import { mysensor_command, mysensor_internal } from './mysensors-types';
 describe('Controller test', () => {
     let db: IDatabase;
     let controller: MysensorsController;
-    sinon.stub(DatabaseSqlite.prototype, 'getFreeNodeId').callsFake(() => '777');
+    sinon.stub(DatabaseSqlite.prototype, 'getFreeNodeId').resolves(777);
     db = new DatabaseSqlite('dummy');
     controller = new MysensorsController(db, true, true, 'CET', 'M', 'mys-out');
 
@@ -24,8 +24,8 @@ describe('Controller test', () => {
             subType: mysensor_internal.I_ID_RESPONSE,
             topicRoot: 'mys-out',
         };
-        expect(await controller.messageHandler(input))
-            .to.include(expected);
+        const result = await controller.messageHandler(input);
+        expect(result).to.include(expected);
     });
 
     it('Serial config request', async () => {
