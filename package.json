@@ -3,7 +3,7 @@
   "author": {
     "name": "Thomas Bowman Mørch"
   },
-  "version": "3.2.2",
+  "version": "3.3.1",
   "scripts": {
     "build": "mkdir -p dist/nodes/ && cp -a src/nodes/*.html dist/nodes/ && cp -R src/migrations dist && tsc ",
     "pretest": "tsc",
@@ -24,7 +24,6 @@
   "bugs": {
     "url": "https://github.com/tbowmo/node-red-contrib-mysensors/issues"
   },
-  "bundleDependencies": false,
   "deprecated": false,
   "description": "Mysensors related nodes, for decoding / encoding mysensors serial protocol and MQTT topic, and wrapping arbitrary messages into mysensors compatible messages",
   "homepage": "https://github.com/tbowmo/node-red-contrib-mysensors",
