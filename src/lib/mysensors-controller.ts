@@ -1,5 +1,3 @@
-import * as moment from 'moment-timezone';
-
 import { IStorage } from './storage-interface';
 import { AutoDecode } from './decoder/auto-decode';
 import { IDecoder } from './decoder/decoder-interface';
@@ -8,6 +6,7 @@ import { MysensorsSerial } from './decoder/mysensors-serial';
 import { IMysensorsMsg, MsgOrigin } from './mysensors-msg';
 import { mysensor_command, mysensor_internal } from './mysensors-types';
 import { NullCheck } from './nullcheck';
+import { utcToZonedTime } from 'date-fns-tz';
 
 export class MysensorsController {
     constructor(
@@ -20,7 +19,7 @@ export class MysensorsController {
     ) {}
 
     public async messageHandler(
-        msg: IMysensorsMsg,
+        msg: Readonly<IMysensorsMsg>,
     ): Promise<IMysensorsMsg | undefined> {
         msg = await AutoDecode(msg);
         if (NullCheck.isDefinedOrNonNull(msg.nodeId)) {
@@ -67,48 +66,46 @@ export class MysensorsController {
     }
 
     private async handleConfig(
-        msg: IMysensorsMsg,
+        msg: Readonly<IMysensorsMsg>,
     ): Promise<IMysensorsMsg | undefined> {
         if (this.measurementSystem !== 'N') {
-            msg.payload = this.measurementSystem;
-            return msg;
+            const newMsg = {
+                ...msg,
+                payload: this.measurementSystem
+            };
+            return newMsg;
         }
     }
 
     private async handleTimeResponse(
-        msg: IMysensorsMsg,
+        msg: Readonly<IMysensorsMsg>,
     ): Promise<IMysensorsMsg | undefined> {
-        msg.subType = mysensor_internal.I_TIME;
+        const msgCopy = {...msg};
+        msgCopy.subType = mysensor_internal.I_TIME;
         if (this.timeResponse && msg.messageType) {
-            const offset = this.getTzOffsetSeconds();
-            let sec = Number(moment().tz(this.timeZone).format('X'));
-            sec = sec + offset;
-            msg.payload = sec.toString();
-            return msg;
+            if (this.timeZone === 'Z') {
+                msgCopy.payload = Math.trunc(new Date().getTime() / 1000).toString();
+            } else {
+                msgCopy.payload = Math.trunc(utcToZonedTime(new Date(), this.timeZone).getTime() / 1000).toString();
+            }
+            return msgCopy;
         }
-    }
-
-    private getTzOffsetSeconds(): number {
-        const tzData = moment().tz(this.timeZone).format('Z').split(':');
-        let seconds =
-            (Number(tzData[0].substr(1)) * 60 + Number(tzData[1])) * 60;
-        if (tzData[0].substr(0, 1) === '-') {
-            seconds = seconds * -1;
-        }
-        return seconds;
     }
 
     private async handleIdRequest(
-        msg: IMysensorsMsg,
+        msg: Readonly<IMysensorsMsg>,
     ): Promise<IMysensorsMsg | undefined> {
-        msg.subType = mysensor_internal.I_ID_RESPONSE;
         if (this.handleIds) {
-            msg.payload = (await this.database.getFreeNodeId()).toString();
-            return msg;
+            const newMsg = {
+                ...msg,
+                subType: mysensor_internal.I_ID_RESPONSE,
+                payload: (await this.database.getFreeNodeId()).toString()
+            };
+            return newMsg;
         }
     }
 
-    private async handleDebug(msg: IMysensorsMsg): Promise<void> {
+    private async handleDebug(msg: Readonly<IMysensorsMsg>): Promise<void> {
         const r = /TSF:MSG:READ,(\d+)-(\d+)-(\d+)/;
         const m = r.exec(msg.payload as string);
         if (NullCheck.isDefinedOrNonNull(m)) {
@@ -116,13 +113,13 @@ export class MysensorsController {
         }
     }
 
-    private async handleBattery(msg: IMysensorsMsg): Promise<void> {
+    private async handleBattery(msg: Readonly<IMysensorsMsg>): Promise<void> {
         if (NullCheck.isDefinedOrNonNull(msg.nodeId)) {
             await this.database.setBatteryLevel(msg.nodeId, Number(msg.payload));
         }
     }
 
-    private async handleSketchVersion(msg: IMysensorsMsg): Promise<void> {
+    private async handleSketchVersion(msg: Readonly<IMysensorsMsg>): Promise<void> {
         if (msg.subType === mysensor_internal.I_SKETCH_VERSION && msg.nodeId) {
             this.database.sketchVersion(msg.nodeId, msg.payload as string);
         } else if (
@@ -133,19 +130,19 @@ export class MysensorsController {
         }
     }
 
-    private encode(msg: IMysensorsMsg | undefined) {
-        let encoder: IDecoder | undefined;
+    private encode(msg: Readonly<IMysensorsMsg> | undefined) {
         if (NullCheck.isDefinedOrNonNull(msg)) {
-            msg.topicRoot = this.mqttRoot;
+            let encoder: IDecoder | undefined;
+
             if (msg.origin === MsgOrigin.serial) {
                 encoder = new MysensorsSerial();
             } else if (msg.origin === MsgOrigin.mqtt) {
                 encoder = new MysensorsMqtt();
             }
+            if (!encoder) {
+                return msg;
+            }
+            return encoder.encode({...msg, topicRoot: this.mqttRoot});
         }
-        if (encoder === undefined || msg === undefined) {
-            return msg;
-        }
-        return encoder.encode(msg);
     }
 }

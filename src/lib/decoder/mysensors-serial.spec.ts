@@ -5,10 +5,12 @@ import { MysensorsSerial } from './mysensors-serial';
 
 describe('Serial decode / encode', () => {
     let decode: MysensorsSerial;
+
     beforeEach(() => {
         decode = new MysensorsSerial();
     });
-    it('Should create correct decoded output when serial is received', () => {
+
+    it('Should create correct decoded output when serial is received', async () => {
         const msg: INodeMessage = {
             _msgid: 'id',
             payload: '1;2;3;0;5;6',
@@ -23,16 +25,16 @@ describe('Serial decode / encode', () => {
             payload: '6',
             subType: 5,
         };
-        const out = decode.decode(msg);
+        const out = await decode.decode(msg);
         expect(out).to.include(expected);
     });
 
-    it('if not mysensors formatted input return undefined', () => {
+    it('if not mysensors formatted input return undefined', async () => {
         const msg: INodeMessage = {
             _msgid: 'id',
             payload: '200',
         };
-        const out = decode.decode(msg);
+        const out = await decode.decode(msg);
         expect(out).to.eq(undefined);
     });
 

@@ -10,7 +10,7 @@ describe('MQTT decode / encode', () => {
         decode = new MysensorsMqtt();
     });
 
-    it('Should create correct decoded output when mqtt topic is received', () => {
+    it('Should create correct decoded output when mqtt topic is received', async () => {
         const msg: INodeMessage = {
             _msgid: '',
             payload: '6',
@@ -27,16 +27,16 @@ describe('MQTT decode / encode', () => {
             topicRoot: 'mys-in',
 
         };
-        const out = decode.decode(msg);
+        const out = await decode.decode(msg);
         expect(out).to.include(expected);
     });
 
-    it('if not mysensors formatted input return undefined', () => {
+    it('if not mysensors formatted input return undefined', async () => {
         const msg: INodeMessage = {
             _msgid: '',
             payload: '200',
         };
-        const out = decode.decode(msg);
+        const out = await decode.decode(msg);
         expect(out).to.eq(undefined);
     });
 
