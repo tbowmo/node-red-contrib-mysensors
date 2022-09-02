@@ -10,9 +10,12 @@ describe('Serial decode / encode', () => {
     });
     it('Should create correct decoded output when serial is received', () => {
         const msg: INodeMessage = {
+            _msgid: 'id',
             payload: '1;2;3;0;5;6',
         };
+
         const expected: IMysensorsMsg = {
+            _msgid: 'id',
             ack: 0,
             childSensorId: 2,
             messageType: 3,
@@ -25,7 +28,8 @@ describe('Serial decode / encode', () => {
     });
 
     it('if not mysensors formatted input return undefined', () => {
-        const msg: IMysensorsMsg = {
+        const msg: INodeMessage = {
+            _msgid: 'id',
             payload: '200',
         };
         const out = decode.decode(msg);
@@ -34,6 +38,7 @@ describe('Serial decode / encode', () => {
 
     it('Encode to mysensors serial message', () => {
         const msg: IMysensorsMsg = {
+            _msgid: 'id',
             ack: 0,
             childSensorId: 2,
             messageType: 6,

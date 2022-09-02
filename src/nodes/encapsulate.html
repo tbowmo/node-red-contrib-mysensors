@@ -1,10 +1,10 @@
 <script type="text/x-red" data-template-name="mysencap">
     <div class="form-row">
-        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
     <div class="form-row">
-        <label for="node-input-msgtype"><i class="icon-tag"></i> Message Type</label>
+        <label for="node-input-msgtype"><i class="fa fa-tag"></i> Message Type</label>
         <select id="node-input-msgtype">
             <option value="1">Set</option>
             <option value="2">Request</option>
@@ -12,70 +12,70 @@
         </select>
     </div>
     <div class="form-row">
-        <label for="node-input-nodeid"><i class="icon-tag"></i> Node ID</label>
+        <label for="node-input-nodeid"><i class="fa fa-tag"></i> Node ID</label>
         <input type="text" id="node-input-nodeid" placeholder="NodeId">
     </div>
     <div class="form-row node-childid">
-        <label for="node-input-childid"><i class="icon-tag"></i> Child ID</label>
+        <label for="node-input-childid"><i class="fa fa-tag"></i> Child ID</label>
         <input type="text" id="node-input-childid" placeholder="Child id">
     </div>
     <div class="form-row" id="node-input-row-subtype">
-        <label for="node-input-subtype"><i class="icon-tag"></i> Child type hide</label>
+        <label for="node-input-subtype"><i class="fa fa-tag"></i> Child type hide</label>
         <input type="text" id="node-input-subtype">
     </div>
     <div class="form-row" id="node-input-row-subtype-select">
-        <label for="node-input-subtype-select"><i class="icon-tag"></i> Child type</label>
+        <label for="node-input-subtype-select"><i class="fa fa-tag"></i> Child type</label>
         <select id="node-input-subtype-select">
         <select>
     </div>
     <div class="form-row" id="node-input-row-internal">
-        <label for="node-input-internal"><i class="icon-tag"></i> Internal msg hidden</label>
+        <label for="node-input-internal"><i class="fa fa-tag"></i> Internal msg hidden</label>
         <input type="text" id="node-input-internal">
     </div>
     <div class="form-row" id="node-input-row-internal-select">
-        <label for="node-input-internal-select"><i class="icon-tag"></i> Internal msg</label>
+        <label for="node-input-internal-select"><i class="fa fa-tag"></i> Internal msg</label>
         <select id="node-input-internal-select">
         </select>
     </div>
     <div class="form-row node-ack">
-        <label for="node-input-ack"><i class="icon-tag"></i> Ack</label>
+        <label for="node-input-ack"><i class="fa fa-tag"></i> Ack</label>
         <input type="checkbox" id="node-input-ack">
     </div>
     <div class="form-row node-presentation">
-        <label for="node-input-presentation"><i class="icon-tag"></i> Presentation</label>
+        <label for="node-input-presentation"><i class="fa fa-tag"></i> Presentation</label>
         <input type="checkbox" id="node-input-presentation">
     </div>
     <div class="form-row node-presentation-opts">
-        <label for="node-input-presentationtext"><i class="icon-tag"></i> Text</label>
+        <label for="node-input-presentationtext"><i class="fa fa-tag"></i> Text</label>
         <input type="text" id="node-input-presentationtext">
     </div>
     <div class="form-row" id="node-input-row-presentation">
-        <label for="node-input-presentationtype"><i class="icon-tag"></i> Type hide</label>
+        <label for="node-input-presentationtype"><i class="fa fa-tag"></i> Type hide</label>
         <input type="text" id="node-input-presentationtype">
     </div>
     <div class="form-row node-presentation-opts">
-        <label for="node-input-presentationtype-select"><i class="icon-tag"></i> Type</label>
+        <label for="node-input-presentationtype-select"><i class="fa fa-tag"></i> Type</label>
         <select id="node-input-presentationtype-select">
         </select>
     </div>
     <div class="form-row node-presentation-opts">
-        <label for="node-input-fullpresentation"><i class="icon-tag"></i> Present firmware</label>
+        <label for="node-input-fullpresentation"><i class="fa fa-tag"></i> Present firmware</label>
         <input type="checkbox" id="node-input-fullpresentation">
     </div>
     <div class="form-row node-presentation-full-opts">
-        <label for="node-input-firmwarename"><i class="icon-tag"></i> Firmware</label>
+        <label for="node-input-firmwarename"><i class="fa fa-tag"></i> Firmware</label>
         <input type="text" id="node-input-firmwarename">
     </div>
     <div class="form-row node-presentation-full-opts">
-        <label for="node-input-firmwareversion"><i class="icon-tag"></i> Version</label>
+        <label for="node-input-firmwareversion"><i class="fa fa-tag"></i> Version</label>
         <input type="text" id="node-input-firmwareversion">
     </div>
 </script>
 <script type="text/x-red" data-help-name="mysencap">
     <p>
-        Adds extra propperties to the message object, so it conforms to mysensor data. Send the resulting message through mysencode to convert 
+        Adds extra propperties to the message object, so it conforms to mysensor data. Send the resulting message through mysencode to convert
         into mysensors serial / mqtt topic format, that can be sent to either a mysensors node, or sent to another controller that understands
-        mysensors serial or mqtt topic formats 
+        mysensors serial or mqtt topic formats
     </p>
     <h3>Input</h3>
     <dl clas="message-properties">

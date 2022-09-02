@@ -1,6 +1,6 @@
 import { IMysensorsMsg, INodeMessage, MsgOrigin } from '../mysensors-msg';
 import { NullCheck } from '../nullcheck';
-import { IDecoder } from './decoder.interface';
+import { IDecoder } from './decoder-interface';
 import { MysensorsDecoder } from './mysensors-decoder';
 
 export class MysensorsSerial extends MysensorsDecoder implements IDecoder {
@@ -21,7 +21,7 @@ export class MysensorsSerial extends MysensorsDecoder implements IDecoder {
         }
     }
 
-    public encode(msg: IMysensorsMsg): INodeMessage| undefined {
+    public encode(msg: IMysensorsMsg): IMysensorsMsg| undefined {
         if (NullCheck.isDefinedOrNonNull(msg) && NullCheck.isDefinedOrNonNull(msg.nodeId)) {
             msg.payload = msg.nodeId + ';'
                 + msg.childSensorId + ';'

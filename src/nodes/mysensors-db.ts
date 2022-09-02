@@ -1,28 +1,22 @@
-import { NodeProperties, Red } from 'node-red';
-import { resolve } from 'path';
+import { NodeAPI } from 'node-red';
 
-import { DatabaseSqlite } from '../lib/database-sqlite';
+import { NoderedStorage } from '../lib/nodered-storage';
 import { IDbConfigNode, IDBProperties } from './common';
 
-export = (RED: Red) => {
-    RED.nodes.registerType('mysensorsdb', function MysensorsDb(this: IDbConfigNode, props: NodeProperties) {
-        const config = props as IDBProperties;
-        RED.nodes.createNode(this, config);
-        this.file = config.file;
-        try {
-            if (this.file) {
-                this.database = new DatabaseSqlite(this.file);
-            }
-        } catch (error) {
-            if (error.code === 'SQLITE_CANTOPEN') {
-                this.error(`${error.name}: ${error.message} ${resolve(config.file || '')}`);
-                return;
-           }
-            throw error;
-        }
+export = (RED: NodeAPI) => {
+    RED.nodes.registerType(
+        'mysensorsdb',
+        function MysensorsDb(this: IDbConfigNode, props: IDBProperties) {
+            RED.nodes.createNode(this, props);
+            this.contextType = props.contextType || 'flow';
+            this.contextKey = RED.util.parseContextStore(props.store);
+            const myContext = this.context()[this.contextType];
 
-        this.on('close', () => {
-            this.database.close();
-        });
-    });
-};
+            this.database = new NoderedStorage(myContext, this.contextKey.key, this.contextKey.store );
+
+            this.on('close', () => {
+                this.database.close();
+            });
+        },
+    );
+}

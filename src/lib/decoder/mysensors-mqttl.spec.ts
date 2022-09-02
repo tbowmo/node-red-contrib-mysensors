@@ -5,15 +5,19 @@ import { MysensorsMqtt } from './mysensors-mqtt';
 
 describe('MQTT decode / encode', () => {
     let decode: MysensorsMqtt;
+
     beforeEach(() => {
         decode = new MysensorsMqtt();
     });
+
     it('Should create correct decoded output when mqtt topic is received', () => {
         const msg: INodeMessage = {
+            _msgid: '',
             payload: '6',
             topic: 'mys-in/1/2/3/0/5',
         };
         const expected: IMysensorsMsg = {
+            _msgid: '',
             ack: 0,
             childSensorId: 2,
             messageType: 3,
@@ -28,7 +32,8 @@ describe('MQTT decode / encode', () => {
     });
 
     it('if not mysensors formatted input return undefined', () => {
-        const msg: IMysensorsMsg = {
+        const msg: INodeMessage = {
+            _msgid: '',
             payload: '200',
         };
         const out = decode.decode(msg);
@@ -37,6 +42,7 @@ describe('MQTT decode / encode', () => {
 
     it('Encode to mysensors mqtt message', () => {
         const msg: IMysensorsMsg = {
+            _msgid: '',
             ack: 0,
             childSensorId: 2,
             messageType: 6,

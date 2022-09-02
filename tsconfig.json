@@ -2,7 +2,7 @@
   "compilerOptions": {
     "module": "commonjs",
     "moduleResolution": "node",
-    "target": "es2015",
+    "target": "es2020",
     "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true,
