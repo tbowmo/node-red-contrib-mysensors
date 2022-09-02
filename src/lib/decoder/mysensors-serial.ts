@@ -4,7 +4,7 @@ import { IDecoder } from './decoder-interface';
 import { MysensorsDecoder } from './mysensors-decoder';
 
 export class MysensorsSerial extends MysensorsDecoder implements IDecoder {
-    public async decode(msg: INodeMessage): Promise<IMysensorsMsg| undefined> {
+    public async decode(msg: Readonly<INodeMessage>): Promise<IMysensorsMsg| undefined> {
         let message = msg.payload.toString();
         message = message.replace(/(\r\n|\n|\r)/gm, '');
         const tokens = message.split(';');
@@ -21,15 +21,13 @@ export class MysensorsSerial extends MysensorsDecoder implements IDecoder {
         }
     }
 
-    public encode(msg: IMysensorsMsg): IMysensorsMsg| undefined {
+    public encode(msg: Readonly<IMysensorsMsg>): IMysensorsMsg| undefined {
         if (NullCheck.isDefinedOrNonNull(msg) && NullCheck.isDefinedOrNonNull(msg.nodeId)) {
-            msg.payload = msg.nodeId + ';'
-                + msg.childSensorId + ';'
-                + msg.messageType + ';'
-                + msg.ack + ';'
-                + msg.subType + ';'
-                + msg.payload;
-            return msg;
+            return {
+                ...msg,
+                // eslint-disable-next-line max-len
+                payload: `${msg.nodeId};${msg.childSensorId};${msg.messageType};${msg.ack};${msg.subType};${msg.payload}`
+            };
         }
     }
 }

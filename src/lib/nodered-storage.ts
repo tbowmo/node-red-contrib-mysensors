@@ -16,10 +16,8 @@ export class NoderedStorage implements IStorage {
 
     private async getNodes(): Promise<Nodes> {
         const data = await this.context.get(this.storageKey, this.store);
-        if (data === undefined) {
-            return {};
-        }
-        return data as Nodes;
+
+        return (data || {}) as Nodes;
     }
 
     private async setNode(nodeId: number, data: Partial<INodeData>): Promise<void> {

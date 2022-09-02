@@ -3,7 +3,7 @@ import { NullCheck } from '../nullcheck';
 import { MysensorsMqtt } from './mysensors-mqtt';
 import { MysensorsSerial } from './mysensors-serial';
 
-export async function AutoDecode(msg: IMysensorsMsg): Promise<IMysensorsMsg> {
+export async function AutoDecode(msg: Readonly<IMysensorsMsg>): Promise<IMysensorsMsg> {
     if (NullCheck.isUndefinedOrNull(msg.nodeId)) {
         let msgTmp: IMysensorsMsg | undefined;
         if (!msg.topic) {
@@ -12,10 +12,11 @@ export async function AutoDecode(msg: IMysensorsMsg): Promise<IMysensorsMsg> {
             msgTmp = await new MysensorsMqtt().decode(msg as INodeMessage);
         }
         if (msgTmp) {
-            msg = msgTmp;
-        } else {
-            msg.origin = MsgOrigin.decoded;
+            return msgTmp;
         }
     }
-    return msg;
+    return {
+        ...msg,
+        origin: MsgOrigin.decoded
+    };
 }
