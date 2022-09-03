@@ -1,36 +1,47 @@
-<script type="text/javascript">
-    RED.nodes.registerType('mysensorsdb',{
-        category: 'config',
-        defaults: {
-            name: {value: ""},
-            file: {value: "sqlite", required: true}
-        },
-        label: function() {
-            return this.name || this.file;
-        }
-    });
-</script>
-
 <script type="text/x-red" data-template-name="mysensorsdb">
     <div class="form-row">
-        <label for="node-config-input-name"><i class="icon-tag"></i> Name</label>
-        <input type="text" id="node-config-input-name" placeholder="Name">
+        <label for="node-config-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-config-input-name" placeholder="Name" />
     </div>
-    <div class="form-row">
-        <label for="node-config-input-file"><i class="icon-bookmark"></i> File</label>
-        <input type="text" id="node-config-input-file" placeholder="/tmp/mysdb">
+    <div class="form-row" id="node-config-input-store-row">
+        <label for="node-config-input-store"><i class="fa fa-file"></i> Store</label>
+        <input type="text" id="node-config-input-store" />
     </div>
 </script>
 
 <script type="text/x-red" data-help-name="mysensorsdb">
     <p>
-        Database storage for mysensors ID table, enter location of the sqlite file
-    </p>
-    <h3>Details</h3>
-    <p>
-        The node will create the specified file for you. Make sure that the file is placed somewhere, that is kept during reboots etc (/tmp is not a good choice).
+        Storage for mysensors ID table, enter which context variable you want to store in,
+        it should probably be global and setup a persistent context store, so you do not
+        loose data between reboots of nodered
     </p>
     <p>
-        If you are running with the official node-red docker image, you could place the file in /data/<filename>, this will then be available in the volume that you should have defined, when creating the docker container
+        check node-red configuration guide for <a href="https://nodered.org/docs/user-guide/context">Working with context</a>,
+        to learn how to setup persistent context.
     </p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('mysensorsdb',{
+        category: 'config',
+        defaults: {
+            name: {value: ""},
+            store: {value: "mysensor-controller", required: true},
+            contextType: {value: 'global'}
+        },
+        label: function() {
+            return this.name || this.prefix
+        },
+        oneditprepare: function() {
+            $('#node-config-input-store').typedInput({
+                default: this.contextType || 'global',
+                types: ['flow', 'global']
+            })
+        },
+        oneditsave: function() {
+            var node = this
+            node.contextType = $('#node-config-input-store').typedInput('type')
+            node.store = $('#node-config-input-store').typedInput('value')
+        }
+    })
 </script>

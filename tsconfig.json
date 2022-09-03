@@ -2,7 +2,7 @@
   "compilerOptions": {
     "module": "commonjs",
     "moduleResolution": "node",
-    "target": "es2015",
+    "target": "es2020",
     "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true,
@@ -13,12 +13,14 @@
     "strict": true,
     "outDir": "./dist/",
     "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "noUnusedParameters": true,
+    "esModuleInterop": true,
   },
   "include": [
-    "**/*.ts"
+    "src/**/*.ts"
   ],
   "exclude": [
-    "node_modules/**/*"
+    "node_modules/**/*",
+    "src/**/*.spec.ts"
   ]
 }

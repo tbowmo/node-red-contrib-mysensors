@@ -1,19 +1,18 @@
 import { expect } from 'chai';
 import 'mocha';
-import { IMysensorsMsg, INodeMessage } from '../mysensors-msg';
+import { IMysensorsMsg, INodeMessage, IStrongMysensorsMsg } from '../mysensors-msg';
+import { mysensor_command } from '../mysensors-types';
 import { MysensorsMqtt } from './mysensors-mqtt';
 
 describe('MQTT decode / encode', () => {
-    let decode: MysensorsMqtt;
-    beforeEach(() => {
-        decode = new MysensorsMqtt();
-    });
-    it('Should create correct decoded output when mqtt topic is received', () => {
+    it('Should create correct decoded output when mqtt topic is received', async () => {
         const msg: INodeMessage = {
+            _msgid: '',
             payload: '6',
             topic: 'mys-in/1/2/3/0/5',
         };
         const expected: IMysensorsMsg = {
+            _msgid: '',
             ack: 0,
             childSensorId: 2,
             messageType: 3,
@@ -23,20 +22,22 @@ describe('MQTT decode / encode', () => {
             topicRoot: 'mys-in',
 
         };
-        const out = decode.decode(msg);
+        const out = await new MysensorsMqtt().decode(msg);
         expect(out).to.include(expected);
     });
 
-    it('if not mysensors formatted input return undefined', () => {
-        const msg: IMysensorsMsg = {
+    it('if not mysensors formatted input return undefined', async () => {
+        const msg: INodeMessage = {
+            _msgid: '',
             payload: '200',
         };
-        const out = decode.decode(msg);
-        expect(out).to.eq(undefined);
+        const out = await new MysensorsMqtt().decode(msg);
+        expect(out).to.equal(undefined);
     });
 
     it('Encode to mysensors mqtt message', () => {
-        const msg: IMysensorsMsg = {
+        const msg: IStrongMysensorsMsg<mysensor_command.C_PRESENTATION> = {
+            _msgid: '',
             ack: 0,
             childSensorId: 2,
             messageType: 6,
@@ -45,7 +46,7 @@ describe('MQTT decode / encode', () => {
             subType: 4,
             topicRoot: 'mys-out',
         };
-        const out = decode.encode(msg);
+        const out = new MysensorsMqtt().encode(msg);
         expect(out).to.include({topic: 'mys-out/1/2/6/0/4', payload: '100'});
     });
 });

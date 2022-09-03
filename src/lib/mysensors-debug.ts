@@ -1,5 +1,10 @@
+/* eslint-disable max-len */
 import {
-    mysensor_command, mysensor_data, mysensor_internal, mysensor_payload, mysensor_sensor,
+    mysensor_command,
+    mysensor_data,
+    mysensor_internal,
+    mysensor_payload,
+    mysensor_sensor,
     mysensor_stream
 } from './mysensors-types';
 
@@ -107,7 +112,7 @@ export class MysensorsDebugDecode {
         { re: 'TSF:SIR:CMD=(\\d+),VAL=(\\d+)', d: 'Get signal report  $1 , value:  $2 ' },
         { re: 'TSF:MSG:READ,(\\d+)-(\\d+)-(\\d+),s=(\\d+),c=(\\d+),t=(\\d+),pt=(\\d+),l=(\\d+),sg=(\\d+):(.*)', d: ' Received Message \r Sender : $1\r Last Node : $2\r Destination : $3\r Sensor Id : $4\r Command : {command:$5}\r Message Type : {type:$5:$6}\r Payload Type : {pt:$7}\r Payload Length : $8\r Signing : $9\r Payload : $10' },
         { re: 'TSF:MSG:SEND,(\\d+)-(\\d+)-(\\d+)-(\\d+),s=(\\d+),c=(\\d+),t=(\\d+),pt=(\\d+),l=(\\d+),sg=(\\d+),ft=(\\d+),st=(\\w+):(.*)', d: ' Sent Message \r Sender : $1\r Last Node : $2\r Next Node : $3\r Destination : $4\r Sensor Id : $5\r Command : {command:$6}\r Message Type :{type:$6:$7}\r Payload Type : {pt:$8}\r Payload Length : $9\r Signing : $10\r Failed uplink counter : $11\r Status : $12 (OK=success, NACK=no radio ACK received)\r Payload : $13' },
-        { re: '!TSF:MSG:SEND,(\\d+)-(\\d+)-(\\d+)-(\\d+),s=(\\d+),c=(\\d+),t=(\\d+),pt=(\\d+),l=(\\d+),sg=(\\d+),ft=(\\d+),st=(\\w+):(.*)', d: "<b style='color:red'>Sent Message \r Sender : $1\r Last Node : $2\r Next Node : $3\r Destination : $4\r Sensor Id : $5\r Command : {command:$6}\r Message Type :{type:$6:$7}\r Payload Type : {pt:$8}\r Payload Length : $9\r Signing : $10\r Failed uplink counter : $11\r Status : $12 (OK=success, NACK=no radio ACK received)\r Payload : $13" },
+        { re: '!TSF:MSG:SEND,(\\d+)-(\\d+)-(\\d+)-(\\d+),s=(\\d+),c=(\\d+),t=(\\d+),pt=(\\d+),l=(\\d+),sg=(\\d+),ft=(\\d+),st=(\\w+):(.*)', d: '<b style="color:red">Sent Message \r Sender : $1\r Last Node : $2\r Next Node : $3\r Destination : $4\r Sensor Id : $5\r Command : {command:$6}\r Message Type :{type:$6:$7}\r Payload Type : {pt:$8}\r Payload Length : $9\r Signing : $10\r Failed uplink counter : $11\r Status : $12 (OK=success, NACK=no radio ACK received)\r Payload : $13' },
 
         // Signing backend
 
@@ -177,25 +182,29 @@ export class MysensorsDebugDecode {
     constructor() {
         for (let i = 0, len = this.match.length; i < len; i++) {
             this.match[i].re = new RegExp('^' + this.rprefix + this.match[i].re);
-          }
+        }
     }
 
-    public decode(msg: string): string {
-        const found = false;
-        for (let i = 0, len = this.match.length; !found &&  i < len; i++) {
-            const r = this.match[i];
-            if (r.re instanceof RegExp) {
-                if (r.re.test(msg)) {
-                    msg = msg.replace(r.re, r.d);
-                    msg = msg.replace(/{command:(\d+)}/g, (__, m1) => mysensor_command[m1]);
-                    msg = msg.replace(/{pt:(\d+)}/g, (__, m1) => mysensor_payload[m1]);
-                    return msg.replace(/{type:(\d+):(\d+)}/g, (__, cmd, type) => {
+    public decode(msg: string): string | undefined {
+        for (const r of this.match) {
+            if (r.re instanceof RegExp && r.re.test(msg)) {
+                let outStr = msg.replace(r.re, r.d);
+                outStr = outStr.replace(
+                    /{command:(\d+)}/g,
+                    (__, m1) => mysensor_command[m1],
+                );
+                outStr = outStr.replace(
+                    /{pt:(\d+)}/g,
+                    (__, m1) => mysensor_payload[m1],
+                );
+                return outStr.replace(
+                    /{type:(\d+):(\d+)}/g,
+                    (__, cmd, type) => {
                         return this.type(Number(cmd), Number(type));
-                    });
-                }
+                    },
+                );
             }
         }
-        return msg;
     }
 
     private type(cmd: mysensor_command, type: number): string {

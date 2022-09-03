@@ -43,15 +43,15 @@
 
 <script type="text/x-red" data-template-name="mysencode">
     <div class="form-row">
-        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
     <div class="form-row">
-        <label for="node-input-mqtt"><i class="icon-tag"></i> MQTT</label>
+        <label for="node-input-mqtt"><i class="fa fa-tag"></i> MQTT</label>
         <input type="checkbox" id="node-input-mqtt">
     </div>
     <div class="form-row" id="node-input-row-mqtttopic">
-        <label for="node-input-mqtttopic"><i class="icon-tag"></i> Topic root</label>
+        <label for="node-input-mqtttopic"><i class="fa fa-tag"></i> Topic root</label>
         <input type="text" id="node-input-mqtttopic" placeholder="topic">
     </div>
 </script>
@@ -92,7 +92,7 @@
         <dt>payload <span class="property-type">string</span></dt>
         <dd>nodeId;childSensorId;messageType;ack;subType;payload</dd>
     </dl>
-    
+
     <h3>Details</h3>
     <p>
         By checking off the MQTT option, this node create a MQTT topic, compatible with mysensors, instead of MySensors serial protocol.

@@ -1,0 +1,37 @@
+{
+	"all": true,
+	"per-file": true,
+	"lines": 95,
+	"functions": 95,
+	"branches": 95,
+	"statements": 95,
+	"cache": false,
+	"watermarks": {
+		"lines": [95, 99],
+		"functions": [95, 99],
+		"branches": [90, 95],
+		"statements": [95, 99]
+	},
+	"exclude": [
+		"**/*.spec.ts"
+	],
+	"include": [
+		"src/lib/**/*.ts"
+	],
+	"extension": [
+		".ts"
+	],
+	"require": [
+		"ts-node/register"
+	],
+	"reporter": [
+		"text-summary",
+		"cobertura",
+		"json-summary",
+		"json",
+		"html"
+	],
+    "sourceMap": true,
+    "instrument": true,
+	"report-dir": "./.test_output/coverage"
+}
