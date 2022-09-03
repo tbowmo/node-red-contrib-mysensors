@@ -5,7 +5,6 @@ import { MysensorsMqtt } from './decoder/mysensors-mqtt';
 import { MysensorsSerial } from './decoder/mysensors-serial';
 import { IMysensorsMsg, IStrongMysensorsMsg, MsgOrigin, MysensorsCommand } from './mysensors-msg';
 import { mysensor_command, mysensor_internal } from './mysensors-types';
-import { NullCheck } from './nullcheck';
 import { utcToZonedTime } from 'date-fns-tz';
 
 export class MysensorsController {
@@ -112,7 +111,7 @@ export class MysensorsController {
     private async handleDebug(msg: Readonly<IStrongMysensorsMsg<mysensor_command.C_INTERNAL>>): Promise<void> {
         const r = /TSF:MSG:READ,(\d+)-(\d+)-(\d+)/;
         const m = r.exec(msg.payload as string);
-        if (NullCheck.isDefinedOrNonNull(m)) {
+        if (m) {
             this.database.setParent(Number(m[1]), Number(m[2]));
         }
     }
@@ -122,29 +121,29 @@ export class MysensorsController {
     }
 
     private async handleSketchVersion(msg: Readonly<IStrongMysensorsMsg<mysensor_command.C_INTERNAL>>): Promise<void> {
-        if (msg.subType === mysensor_internal.I_SKETCH_VERSION && msg.nodeId) {
+        if (msg.subType === mysensor_internal.I_SKETCH_VERSION) {
             this.database.sketchVersion(msg.nodeId, msg.payload as string);
-        } else if (
-            msg.subType === mysensor_internal.I_SKETCH_NAME &&
-            msg.nodeId
-        ) {
+        } else if (msg.subType === mysensor_internal.I_SKETCH_NAME) {
             this.database.sketchName(msg.nodeId, msg.payload as string);
         }
     }
 
     private encode(msg: Readonly<IStrongMysensorsMsg<MysensorsCommand>> | undefined) {
-        if (NullCheck.isDefinedOrNonNull(msg)) {
-            let encoder: IDecoder | undefined;
-
-            if (msg.origin === MsgOrigin.serial) {
-                encoder = new MysensorsSerial();
-            } else if (msg.origin === MsgOrigin.mqtt) {
-                encoder = new MysensorsMqtt();
-            }
-            if (!encoder) {
-                return msg;
-            }
-            return encoder.encode({...msg, topicRoot: this.mqttRoot});
+        if (!msg) {
+            return;
         }
+
+        let encoder: IDecoder | undefined;
+
+        if (msg.origin === MsgOrigin.serial) {
+            encoder = new MysensorsSerial();
+        } else if (msg.origin === MsgOrigin.mqtt) {
+            encoder = new MysensorsMqtt();
+        }
+        if (!encoder) {
+            return msg;
+        }
+        return encoder.encode({...msg, topicRoot: this.mqttRoot});
     }
+
 }

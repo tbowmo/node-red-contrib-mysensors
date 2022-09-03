@@ -1,16 +1,22 @@
-import { IMysensorsMsg, INodeMessage, IStrongMysensorsMsg, MsgOrigin, MysensorsCommand } from '../mysensors-msg';
-import { NullCheck } from '../nullcheck';
+import {
+    IMysensorsMsg,
+    INodeMessage,
+    IStrongMysensorsMsg,
+    MsgOrigin,
+    MysensorsCommand,
+    validateStrongMysensorsMsg,
+} from '../mysensors-msg';
 import { MysensorsMqtt } from './mysensors-mqtt';
 import { MysensorsSerial } from './mysensors-serial';
 
 export async function AutoDecode(
     msg: Readonly<IMysensorsMsg>
 ): Promise<IStrongMysensorsMsg<MysensorsCommand> | undefined> {
-    if (NullCheck.isDefinedOrNonNull(msg.nodeId) && NullCheck.isDefinedOrNonNull(msg.messageType)) {
+    if (validateStrongMysensorsMsg(msg)) {
         return {
             ...msg,
             origin: MsgOrigin.decoded,
-        } as IStrongMysensorsMsg<MysensorsCommand>;
+        };
     }
 
     if (!msg.topic) {

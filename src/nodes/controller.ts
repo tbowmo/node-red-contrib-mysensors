@@ -8,6 +8,7 @@ import {
     IDbConfigNode,
 } from './common';
 
+/* istanbul ignore next */
 export = (RED: NodeAPI): void => {
     RED.nodes.registerType(
         'myscontroller',

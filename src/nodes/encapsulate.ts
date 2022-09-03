@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { NodeAPI } from 'node-red';
 
 import { IMysensorsMsg } from '../lib/mysensors-msg';
@@ -44,14 +46,15 @@ export = (RED: NodeAPI) => {
                 }, 5000);
             }
 
-            this.on('input', (msg: IMysensorsMsg) => {
+            this.on('input', (msg: IMysensorsMsg, send, done) => {
                 const msgOut = this.sensor;
                 msgOut.payload = msg.payload;
                 if (this.sensor.messageType === 3) {
                     msgOut.childSensorId = 255;
                     msgOut.subType = this.internal;
                 }
-                this.send(msgOut);
+                send(msgOut);
+                done();
             });
         },
     );

@@ -1,3 +1,5 @@
+/* istanbul ignore next */
+
 import { Node, NodeDef } from 'node-red';
 
 import { IStorage } from '../lib/storage-interface';

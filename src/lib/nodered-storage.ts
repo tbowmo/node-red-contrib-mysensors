@@ -44,8 +44,8 @@ export class NoderedStorage implements IStorage {
     }
 
     private async setChild(nodeId: number, childId: number, data: Partial<ISensorData>) {
-        const sensors = (await this.getNodes())?.[nodeId].sensors || [];
-        const sensor = sensors.find((item) => item.childId === childId) || {
+        const children = (await this.getNodes())?.[nodeId].sensors || [];
+        const child = children.find((item) => item.childId === childId) || {
             childId,
             description: '',
             lastHeard: new Date(),
@@ -53,10 +53,11 @@ export class NoderedStorage implements IStorage {
             sType: 0,
         };
 
-        const newSensors = sensors.filter((item) => item.childId !== childId).concat([{
-            ...sensor,
+        const newSensors = children.filter((item) => item.childId !== childId).concat([{
+            ...child,
             ...data,
         }]);
+
         this.setNode(nodeId, {sensors: newSensors});
     }
 
@@ -106,8 +107,8 @@ export class NoderedStorage implements IStorage {
         };
     }
 
-    public async childHeard(_nodeId: number, _childId: number): Promise<void> {
-        return this.setChild(_nodeId, _childId, {lastHeard:new Date()});
+    public async childHeard(nodeId: number, childId: number): Promise<void> {
+        return this.setChild(nodeId, childId, {lastHeard:new Date()});
     }
 
     public async child(_nodeId: number, _childId: number, _type: number, _description: string): Promise<void> {

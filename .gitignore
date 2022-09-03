@@ -37,6 +37,8 @@ _lib
 _nodes
 
 dist/**/*
+.test_output
+.nyc_output
 
 src/**/*.js
 src/**/*.js.map

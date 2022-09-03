@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { NodeAPI } from 'node-red';
 
 import { NoderedStorage } from '../lib/nodered-storage';

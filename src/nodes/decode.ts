@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { NodeAPI } from 'node-red';
 
 import { MysensorsMqtt } from '../lib/decoder/mysensors-mqtt';
@@ -32,8 +34,12 @@ export = (RED: NodeAPI) => {
 
             RED.nodes.createNode(this, config);
 
-            this.on('input', async (msg: IMysensorsMsg) => {
-                this.send(await this.decoder.decode(msg as INodeMessage));
+            this.on('input', async (msg: IMysensorsMsg, send, done) => {
+                const message = await this.decoder.decode(msg as INodeMessage);
+                if (message) {
+                    send(message);
+                }
+                done();
             });
         },
     );

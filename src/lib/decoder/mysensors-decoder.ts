@@ -17,37 +17,34 @@ export abstract class MysensorsDecoder {
     }
 
     protected async enrich(msg: IStrongMysensorsMsg<MysensorsCommand>): Promise<IStrongMysensorsMsg<MysensorsCommand>> {
-        if (NullCheck.isDefinedOrNonNull(msg.messageType)) {
-            msg.messageTypeStr = mysensor_command[msg.messageType];
+        const newMsg: IStrongMysensorsMsg<MysensorsCommand> = {
+            ...msg
+        };
+        newMsg.messageTypeStr = mysensor_command[msg.messageType];
+        switch (msg.messageType)
+        {
+            case mysensor_command.C_INTERNAL:
+                newMsg.subTypeStr = mysensor_internal[msg.subType];
+                break;
+            case mysensor_command.C_PRESENTATION:
+                newMsg.subTypeStr = mysensor_sensor[msg.subType];
+                break;
+            case mysensor_command.C_REQ:
+            case mysensor_command.C_SET:
+                newMsg.subTypeStr = mysensor_data[msg.subType];
+                break;
+            case mysensor_command.C_STREAM:
+                newMsg.subTypeStr = mysensor_stream[msg.subType];
+                break;
         }
-        if (NullCheck.isDefinedOrNonNull(msg.subType)) {
-            switch (msg.messageType)
-            {
-                case mysensor_command.C_INTERNAL:
-                    msg.subTypeStr = mysensor_internal[msg.subType];
-                    break;
-                case mysensor_command.C_PRESENTATION:
-                    msg.subTypeStr = mysensor_sensor[msg.subType];
-                    break;
-                case mysensor_command.C_REQ:
-                case mysensor_command.C_SET:
-                    msg.subTypeStr = mysensor_data[msg.subType];
-                    break;
-                case mysensor_command.C_STREAM:
-                    msg.subTypeStr = mysensor_stream[msg.subType];
-                    break;
-            }
-        }
-        if (this.enrichWithDb &&
-            NullCheck.isDefinedOrNonNull(msg.nodeId) &&
-            NullCheck.isDefinedOrNonNull(msg.childSensorId) &&
-            NullCheck.isDefinedOrNonNull(this.database))
+        if (this.enrichWithDb && this.database)
         {
             const res = await this.database.getChild(msg.nodeId, msg.childSensorId);
             if (NullCheck.isDefinedOrNonNull(res)) {
-                msg.sensorTypeStr = mysensor_sensor[res.sType];
+                newMsg.sensorTypeStr = mysensor_sensor[res.sType];
             }
         }
-        return msg;
+
+        return newMsg;
     }
 }

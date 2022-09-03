@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { NodeDef, NodeAPI } from 'node-red';
 
 import { AutoDecode } from '../lib/decoder/auto-decode';

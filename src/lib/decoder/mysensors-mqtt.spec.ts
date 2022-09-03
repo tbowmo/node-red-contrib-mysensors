@@ -5,12 +5,6 @@ import { mysensor_command } from '../mysensors-types';
 import { MysensorsMqtt } from './mysensors-mqtt';
 
 describe('MQTT decode / encode', () => {
-    let decode: MysensorsMqtt;
-
-    beforeEach(() => {
-        decode = new MysensorsMqtt();
-    });
-
     it('Should create correct decoded output when mqtt topic is received', async () => {
         const msg: INodeMessage = {
             _msgid: '',
@@ -28,7 +22,7 @@ describe('MQTT decode / encode', () => {
             topicRoot: 'mys-in',
 
         };
-        const out = await decode.decode(msg);
+        const out = await new MysensorsMqtt().decode(msg);
         expect(out).to.include(expected);
     });
 
@@ -37,8 +31,8 @@ describe('MQTT decode / encode', () => {
             _msgid: '',
             payload: '200',
         };
-        const out = await decode.decode(msg);
-        expect(out).to.eq(undefined);
+        const out = await new MysensorsMqtt().decode(msg);
+        expect(out).to.equal(undefined);
     });
 
     it('Encode to mysensors mqtt message', () => {
@@ -52,7 +46,7 @@ describe('MQTT decode / encode', () => {
             subType: 4,
             topicRoot: 'mys-out',
         };
-        const out = decode.encode(msg);
+        const out = new MysensorsMqtt().encode(msg);
         expect(out).to.include({topic: 'mys-out/1/2/6/0/4', payload: '100'});
     });
 });

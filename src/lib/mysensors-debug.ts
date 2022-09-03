@@ -26,8 +26,14 @@ export class MysensorsDebugDecode {
             re: 'MCO:BGN:INIT (\\w+),CP=([^,]+),VER=(.*)',
             d: 'Core initialization of  $1 , with capabilities $2, library version $3',
         },
-        { re: 'MCO:BGN:BFR', d: 'Callback before()' },
-        { re: 'MCO:BGN:STP', d: 'Callback setup()' },
+        {
+            re: 'MCO:BGN:BFR',
+            d: 'Callback before()'
+        },
+        {
+            re: 'MCO:BGN:STP',
+            d: 'Callback setup()'
+        },
         {
             re: 'MCO:BGN:INIT OK,TSP=(.*)',
             d: 'Core initialized, transport status  $1 , (1=initialized, 0=not initialized, NA=not available)',
@@ -36,9 +42,18 @@ export class MysensorsDebugDecode {
             re: 'MCO:BGN:NODE UNLOCKED',
             d: 'Node successfully unlocked (see signing chapter)',
         },
-        { re: '!MCO:BGN:TSP FAIL', d: 'Transport initialization failed' },
-        { re: 'MCO:REG:REQ', d: 'Registration request' },
-        { re: 'MCO:REG:NOT NEEDED', d: 'No registration needed (i.e. GW)' },
+        {
+            re: '!MCO:BGN:TSP FAIL',
+            d: 'Transport initialization failed'
+        },
+        {
+            re: 'MCO:REG:REQ',
+            d: 'Registration request'
+        },
+        {
+            re: 'MCO:REG:NOT NEEDED',
+            d: 'No registration needed (i.e. GW)'
+        },
         {
             re: '!MCO:SND:NODE NOT REG',
             d: 'Node is not registered, cannot send message',
@@ -55,13 +70,22 @@ export class MysensorsDebugDecode {
             re: 'MCO:SLP:MS=(\\d+),SMS=(\\d+),I1=(\\d+),M1=(\\d+),I2=(\\d+),M2=(\\d+)',
             d: 'Sleep node, duration  $1  ms, SmartSleep= $2 , Int1= $3 , Mode1= $4 , Int2= $5 , Mode2= $6 ',
         },
-        { re: 'MCO:SLP:MS=(\\d+)', d: 'Sleep node, duration  $1  ms' },
-        { re: 'MCO:SLP:TPD', d: 'Sleep node, powerdown transport' },
+        {
+            re: 'MCO:SLP:MS=(\\d+)',
+            d: 'Sleep node, duration  $1  ms'
+        },
+        {
+            re: 'MCO:SLP:TPD',
+            d: 'Sleep node, powerdown transport'
+        },
         {
             re: 'MCO:SLP:WUP=(-?\\d+)',
             d: 'Node woke-up, reason/IRQ= $1  (-2=not possible, -1=timer, >=0 IRQ)',
         },
-        { re: '!MCO:SLP:FWUPD', d: 'Sleeping not possible, FW update ongoing' },
+        {
+            re: '!MCO:SLP:FWUPD',
+            d: 'Sleeping not possible, FW update ongoing'
+        },
         {
             re: '!MCO:SLP:REP',
             d: 'Sleeping not possible, repeater feature enabled',
@@ -74,9 +98,18 @@ export class MysensorsDebugDecode {
             re: 'MCO:NLK:NODE LOCKED. UNLOCK: GND PIN (\\d+) AND RESET',
             d: 'Node locked during booting, see signing documentation for additional information',
         },
-        { re: 'MCO:NLK:TPD', d: 'Powerdown transport' },
-        { re: 'TSM:INIT', d: 'Transition to  Init  state' },
-        { re: 'TSM:INIT:STATID=(\\d+)', d: 'Init static node id  $1 ' },
+        {
+            re: 'MCO:NLK:TPD',
+            d: 'Powerdown transport'
+        },
+        {
+            re: 'TSM:INIT',
+            d: 'Transition to  Init  state'
+        },
+        {
+            re: 'TSM:INIT:STATID=(\\d+)',
+            d: 'Init static node id  $1 '
+        },
         {
             re: 'TSM:INIT:TSP OK',
             d: 'Transport device configured and fully operational',
@@ -89,26 +122,50 @@ export class MysensorsDebugDecode {
             re: '!TSM:INIT:TSP FAIL',
             d: 'Transport device initialization failed',
         },
-        { re: 'TSM:FPAR', d: 'Transition to  Find Parent  state' },
+        {
+            re: 'TSM:FPAR',
+            d: 'Transition to  Find Parent  state'
+        },
         {
             re: 'TSM:FPAR:STATP=(\\d+)',
             d: 'Static parent  $1  has been set, skip finding parent',
         },
-        { re: 'TSM:FPAR:OK', d: 'Parent node identified' },
+        {
+            re: 'TSM:FPAR:OK',
+            d: 'Parent node identified'
+        },
         {
             re: '!TSM:FPAR:NO REPLY',
             d: 'No potential parents replied to find parent request',
         },
-        { re: '!TSM:FPAR:FAIL', d: 'Finding parent failed' },
-        { re: 'TSM:ID', d: 'Transition to  Request Id  state' },
-        { re: 'TSM:ID:OK,ID=(\\d+)', d: 'Node id  $1  is valid' },
-        { re: 'TSM:ID:REQ', d: 'Request node id from controller' },
+        {
+            re: '!TSM:FPAR:FAIL',
+            d: 'Finding parent failed'
+        },
+        {
+            re: 'TSM:ID',
+            d: 'Transition to  Request Id  state'
+        },
+        {
+            re: 'TSM:ID:OK,ID=(\\d+)',
+            d: 'Node id  $1  is valid'
+        },
+        {
+            re: 'TSM:ID:REQ',
+            d: 'Request node id from controller'
+        },
         {
             re: '!TSM:ID:FAIL,ID=(\\d+)',
             d: 'Id verification failed,  $1  is invalid',
         },
-        { re: 'TSM:UPL', d: 'Transition to  Check Uplink  state' },
-        { re: 'TSM:UPL:OK', d: 'Uplink OK, GW returned ping' },
+        {
+            re: 'TSM:UPL',
+            d: 'Transition to  Check Uplink  state'
+        },
+        {
+            re: 'TSM:UPL:OK',
+            d: 'Uplink OK, GW returned ping'
+        },
         {
             re: '!TSM:UPL:FAIL',
             d: 'Uplink check failed, i.e. GW could not be pinged',
@@ -117,7 +174,10 @@ export class MysensorsDebugDecode {
             re: 'TSM:READY:NWD REQ',
             d: 'Send transport network discovery request',
         },
-        { re: 'TSM:READY:SRT', d: 'Save routing table' },
+        {
+            re: 'TSM:READY:SRT',
+            d: 'Save routing table'
+        },
         {
             re: 'TSM:READY:ID=(\\d+),PAR=(\\d+),DIS=(\\d+)',
             d: 'Transport ready, node id  $1 , parent node id  $2 , distance to GW is  $3 ',
@@ -130,8 +190,14 @@ export class MysensorsDebugDecode {
             re: '!TSM:READY:FAIL,STATP',
             d: 'Too many failed uplink transmissions, static parent enforced',
         },
-        { re: 'TSM:READY', d: 'Transition to  Ready  state' },
-        { re: 'TSM:FAIL:DIS', d: 'Disable transport' },
+        {
+            re: 'TSM:READY',
+            d: 'Transition to  Ready  state'
+        },
+        {
+            re: 'TSM:FAIL:DIS',
+            d: 'Disable transport'
+        },
         {
             re: 'TSM:FAIL:CNT=(\\d+)',
             d: 'Transition to  Failure  state, consecutive failure counter is  $1 ',
@@ -449,31 +515,26 @@ export class MysensorsDebugDecode {
         }
     }
 
-    public decode(msg: string): string {
-        const found = false;
-        for (let i = 0, len = this.match.length; !found && i < len; i++) {
-            const r = this.match[i];
-            if (r.re instanceof RegExp) {
-                if (r.re.test(msg)) {
-                    msg = msg.replace(r.re, r.d);
-                    msg = msg.replace(
-                        /{command:(\d+)}/g,
-                        (__, m1) => mysensor_command[m1],
-                    );
-                    msg = msg.replace(
-                        /{pt:(\d+)}/g,
-                        (__, m1) => mysensor_payload[m1],
-                    );
-                    return msg.replace(
-                        /{type:(\d+):(\d+)}/g,
-                        (__, cmd, type) => {
-                            return this.type(Number(cmd), Number(type));
-                        },
-                    );
-                }
+    public decode(msg: string): string | undefined {
+        for (const r of this.match) {
+            if (r.re instanceof RegExp && r.re.test(msg)) {
+                let outStr = msg.replace(r.re, r.d);
+                outStr = outStr.replace(
+                    /{command:(\d+)}/g,
+                    (__, m1) => mysensor_command[m1],
+                );
+                outStr = outStr.replace(
+                    /{pt:(\d+)}/g,
+                    (__, m1) => mysensor_payload[m1],
+                );
+                return outStr.replace(
+                    /{type:(\d+):(\d+)}/g,
+                    (__, cmd, type) => {
+                        return this.type(Number(cmd), Number(type));
+                    },
+                );
             }
         }
-        return msg;
     }
 
     private type(cmd: mysensor_command, type: number): string {
