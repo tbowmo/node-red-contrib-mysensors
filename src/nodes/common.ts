@@ -30,7 +30,7 @@ export interface IDbConfigNode extends Node {
     database: IStorage
     contextType: 'flow' | 'global'
     contextKey: {
-        store?: string | undefined;
+        store?: string;
         key: string;
     }
 }

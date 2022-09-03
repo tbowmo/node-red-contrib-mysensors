@@ -11,14 +11,13 @@
 
 <script type="text/x-red" data-help-name="mysensorsdb">
     <p>
-        Database storage for mysensors ID table, enter location of the sqlite file
-    </p>
-    <h3>Details</h3>
-    <p>
-        The node will create the specified file for you. Make sure that the file is placed somewhere, that is kept during reboots etc (/tmp is not a good choice).
+        Storage for mysensors ID table, enter which context variable you want to store in,
+        it should probably be global and setup a persistent context store, so you do not
+        loose data between reboots of nodered
     </p>
     <p>
-        If you are running with the official node-red docker image, you could place the file in /data/<filename>, this will then be available in the volume that you should have defined, when creating the docker container
+        check node-red configuration guide for <a href="https://nodered.org/docs/user-guide/context">Working with context</a>,
+        to learn how to setup persistent context.
     </p>
 </script>
 

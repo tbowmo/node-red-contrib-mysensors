@@ -2,7 +2,7 @@ import { NodeAPI } from 'node-red';
 
 import { MysensorsMqtt } from '../lib/decoder/mysensors-mqtt';
 import { MysensorsSerial } from '../lib/decoder/mysensors-serial';
-import { IMysensorsMsg } from '../lib/mysensors-msg';
+import { IMysensorsMsg, validateStrongMysensorsMsg } from '../lib/mysensors-msg';
 import { IDecodeEncodeConf, IEncodeProperties } from './common';
 
 export = (RED: NodeAPI) => {
@@ -15,11 +15,14 @@ export = (RED: NodeAPI) => {
             } else {
                 this.decoder = new MysensorsSerial();
             }
-            this.on('input', (msg: IMysensorsMsg) => {
+            this.on('input', (msg: IMysensorsMsg, send, done) => {
                 if (props.mqtttopic !== '') {
                     msg.topicRoot = props.mqtttopic;
                 }
-                this.send(this.decoder.encode(msg));
+                if (validateStrongMysensorsMsg(msg)) {
+                    send(this.decoder.encode(msg));
+                }
+                done();
             });
         },
     );

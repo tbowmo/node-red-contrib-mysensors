@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import 'mocha';
-import { IMysensorsMsg, INodeMessage } from '../mysensors-msg';
+import { IMysensorsMsg, INodeMessage, IStrongMysensorsMsg } from '../mysensors-msg';
+import { mysensor_command } from '../mysensors-types';
 import { MysensorsMqtt } from './mysensors-mqtt';
 
 describe('MQTT decode / encode', () => {
@@ -41,7 +42,7 @@ describe('MQTT decode / encode', () => {
     });
 
     it('Encode to mysensors mqtt message', () => {
-        const msg: IMysensorsMsg = {
+        const msg: IStrongMysensorsMsg<mysensor_command.C_PRESENTATION> = {
             _msgid: '',
             ack: 0,
             childSensorId: 2,

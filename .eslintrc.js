@@ -20,7 +20,10 @@ module.exports = {
     'rules': {
         'indent': [
             'error',
-            4
+            4,
+            {
+                'SwitchCase': 1,
+            }
         ],
         'linebreak-style': [
             'error',
@@ -48,6 +51,10 @@ module.exports = {
         ],
         'eqeqeq': [
             'error'
+        ],
+        'complexity': [
+            'error',
+            11
         ]
     }
 };

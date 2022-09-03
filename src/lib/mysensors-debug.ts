@@ -14,7 +14,9 @@ interface IMatch {
 }
 
 export class MysensorsDebugDecode {
+
     private rprefix = '(?:\\d+ )?(?:mysgw: )?(?:Client 0: )?';
+
     private match: IMatch[] = [
         {
             re: 'MCO:BGN:INIT CP=([^,]+)',
@@ -476,15 +478,15 @@ export class MysensorsDebugDecode {
 
     private type(cmd: mysensor_command, type: number): string {
         switch (cmd) {
-        case mysensor_command.C_REQ:
-        case mysensor_command.C_SET:
-            return mysensor_data[type];
-        case mysensor_command.C_INTERNAL:
-            return mysensor_internal[type];
-        case mysensor_command.C_PRESENTATION:
-            return mysensor_sensor[type];
-        case mysensor_command.C_STREAM:
-            return mysensor_stream[type];
+            case mysensor_command.C_REQ:
+            case mysensor_command.C_SET:
+                return mysensor_data[type];
+            case mysensor_command.C_INTERNAL:
+                return mysensor_internal[type];
+            case mysensor_command.C_PRESENTATION:
+                return mysensor_sensor[type];
+            case mysensor_command.C_STREAM:
+                return mysensor_stream[type];
         }
         return '';
     }

@@ -72,7 +72,7 @@ The node uses node-red context for storage, which is normally in memory only, an
     }
 ```
 
-In this example all defaults to memory (keeping things as is), you can then set the myscontroller node to use the file storage for persistent data storage.
+In this example node-red defaults to memory (keeping things as is), and in addition it creates a secondary localfile storage (called `file`) which you can then set the myscontroller node to use for persistent data storage. Checkout [node-red documentation on context](https://nodered.org/docs/user-guide/context)
 
 The data is kept as a object on a single key entry in the context
 

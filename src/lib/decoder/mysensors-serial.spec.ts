@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import 'mocha';
-import { IMysensorsMsg, INodeMessage } from '../mysensors-msg';
+import { IMysensorsMsg, INodeMessage, IStrongMysensorsMsg } from '../mysensors-msg';
+import { mysensor_command } from '../mysensors-types';
 import { MysensorsSerial } from './mysensors-serial';
 
 describe('Serial decode / encode', () => {
@@ -39,7 +40,7 @@ describe('Serial decode / encode', () => {
     });
 
     it('Encode to mysensors serial message', () => {
-        const msg: IMysensorsMsg = {
+        const msg: IStrongMysensorsMsg<mysensor_command.C_PRESENTATION> = {
             _msgid: 'id',
             ack: 0,
             childSensorId: 2,

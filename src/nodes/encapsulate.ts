@@ -66,15 +66,15 @@ export = (RED: NodeAPI) => {
             let mysVal: any;
 
             switch (type) {
-            case 'subtype':
-                mysVal = mysensor_data;
-                break;
-            case 'presentation':
-                mysVal = mysensor_sensor;
-                break;
-            case 'internal':
-                mysVal = mysensor_internal;
-                break;
+                case 'subtype':
+                    mysVal = mysensor_data;
+                    break;
+                case 'presentation':
+                    mysVal = mysensor_sensor;
+                    break;
+                case 'internal':
+                    mysVal = mysensor_internal;
+                    break;
             }
 
             const kv = Object.keys(mysVal)

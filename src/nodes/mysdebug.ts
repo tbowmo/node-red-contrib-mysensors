@@ -10,7 +10,6 @@ import {
     mysensor_sensor,
     mysensor_stream,
 } from '../lib/mysensors-types';
-import { NullCheck } from '../lib/nullcheck';
 import { IDebugConfig } from './common';
 
 export = (RED: NodeAPI) => {
@@ -20,61 +19,68 @@ export = (RED: NodeAPI) => {
             RED.nodes.createNode(this, config);
             this.mysDbg = new MysensorsDebugDecode();
 
-            this.on('input', async (msg: IMysensorsMsg) => {
-                msg = await AutoDecode(msg);
-                if (NullCheck.isDefinedOrNonNull(msg.nodeId)) {
-                    let msgHeader = '';
-                    let msgSubType: string | null = null;
-                    if (NullCheck.isDefinedOrNonNull(msg.subType)) {
-                        switch (msg.messageType) {
-                        case mysensor_command.C_PRESENTATION:
-                            msgHeader = 'PRESENTATION';
-                            msgSubType = mysensor_sensor[msg.subType];
-                            break;
-                        case mysensor_command.C_SET:
-                            msgHeader = 'SET';
-                            msgSubType = mysensor_data[msg.subType];
-                            break;
-                        case mysensor_command.C_REQ:
-                            msgHeader = 'REQ';
-                            msgSubType = mysensor_data[msg.subType];
-                            break;
-                        case mysensor_command.C_INTERNAL:
-                            if (msg.subType === 9) {
-                                msg.payload = this.mysDbg.decode(
-                                        msg.payload as string,
-                                );
-                            } else {
-                                msgHeader = 'INTERNAL';
-                                msgSubType = mysensor_internal[msg.subType];
-                            }
-                            break;
-                        case mysensor_command.C_STREAM:
-                            msgHeader = 'STREAM';
-                            msgSubType = mysensor_stream[msg.subType];
-                            break;
-                        default:
-                            msg.payload =
-                                    'unsupported msgType ' + msg.messageType;
-                            break;
-                        }
-                    }
-                    if (msgSubType !== null) {
-                        msg.payload =
-                            msgHeader +
-                            'nodeId:' +
-                            msg.nodeId +
-                            'childId:' +
-                            msg.childSensorId +
-                            'SubType:' +
-                            msgSubType +
-                            'ACK:' +
-                            msg.ack +
-                            'Payload:' +
-                            msg.payload;
-                    }
+            this.on('input', async (incommingMsg: IMysensorsMsg, send, done) => {
+
+                const msg = await AutoDecode(incommingMsg);
+
+                if (!msg) {
+                    done();
+                    return;
                 }
-                this.send(msg);
+
+                let msgHeader = '';
+                let msgSubType: string | undefined;
+                switch (msg.messageType) {
+                    case mysensor_command.C_PRESENTATION:
+                        msgHeader = 'PRESENTATION';
+                        msgSubType = mysensor_sensor[msg.subType];
+                        break;
+                    case mysensor_command.C_SET:
+                        msgHeader = 'SET';
+                        msgSubType = mysensor_data[msg.subType];
+                        break;
+                    case mysensor_command.C_REQ:
+                        msgHeader = 'REQ';
+                        msgSubType = mysensor_data[msg.subType];
+                        break;
+                    case mysensor_command.C_INTERNAL:
+                        if (msg.subType === 9) {
+                            msg.payload = this.mysDbg.decode(
+                                    msg.payload as string,
+                            );
+                        } else {
+                            msgHeader = 'INTERNAL';
+                            msgSubType = mysensor_internal[msg.subType];
+                        }
+                        break;
+                    case mysensor_command.C_STREAM:
+                        msgHeader = 'STREAM';
+                        msgSubType = mysensor_stream[msg.subType];
+                        break;
+                    default:
+                        send({
+                            payload: 'unsupported msgType ' + (msg as {messageType: number}).messageType
+                        });
+                        done();
+                        return;
+                }
+
+                if (msgSubType !== null) {
+                    msg.payload =
+                        msgHeader +
+                        'nodeId:' +
+                        msg.nodeId +
+                        'childId:' +
+                        msg.childSensorId +
+                        'SubType:' +
+                        msgSubType +
+                        'ACK:' +
+                        msg.ack +
+                        'Payload:' +
+                        msg.payload;
+                }
+                send(msg);
+                done();
             });
         },
     );
