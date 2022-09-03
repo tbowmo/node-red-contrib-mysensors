@@ -203,21 +203,42 @@ export class MysensorsDebugDecode {
             d: 'Transition to  Failure  state, consecutive failure counter is  $1 ',
         },
 
-        { re: 'TSM:FAIL:PDT', d: 'Power-down transport' },
-        { re: 'TSM:FAIL:RE-INIT', d: 'Attempt to re-initialize transport' },
+        {
+            re: 'TSM:FAIL:PDT',
+            d: 'Power-down transport'
+        },
+        {
+            re: 'TSM:FAIL:RE-INIT',
+            d: 'Attempt to re-initialize transport'
+        },
         {
             re: 'TSF:CKU:OK,FCTRL',
             d: 'Uplink OK, flood control prevents pinging GW in too short intervals',
         },
-        { re: 'TSF:CKU:OK', d: 'Uplink OK' },
+        {
+            re: 'TSF:CKU:OK',
+            d: 'Uplink OK'
+        },
         {
             re: 'TSF:CKU:DGWC,O=(\\d+),N=(\\d+)',
             d: 'Uplink check revealed changed network topology, old distance  $1 , new distance  $2 ',
         },
-        { re: 'TSF:CKU:FAIL', d: 'No reply received when checking uplink' },
-        { re: 'TSF:SID:OK,ID=(\\d+)', d: 'Node id  $1  assigned' },
-        { re: '!TSF:SID:FAIL,ID=(\\d+)', d: 'Assigned id  $1  is invalid' },
-        { re: 'TSF:PNG:SEND,TO=(\\d+)', d: 'Send ping to destination  $1 ' },
+        {
+            re: 'TSF:CKU:FAIL',
+            d: 'No reply received when checking uplink'
+        },
+        {
+            re: 'TSF:SID:OK,ID=(\\d+)',
+            d: 'Node id  $1  assigned'
+        },
+        {
+            re: '!TSF:SID:FAIL,ID=(\\d+)',
+            d: 'Assigned id  $1  is invalid'
+        },
+        {
+            re: 'TSF:PNG:SEND,TO=(\\d+)',
+            d: 'Send ping to destination  $1 '
+        },
         {
             re: 'TSF:WUR:MS=(\\d+)',
             d: 'Wait until transport ready, timeout  $1 ',
@@ -255,13 +276,22 @@ export class MysensorsDebugDecode {
             re: 'TSF:MSG:PONG RECV,HP=(\\d+)',
             d: 'Pinged node replied with  $1  hops',
         },
-        { re: 'TSF:MSG:BC', d: 'Broadcast message received' },
-        { re: 'TSF:MSG:GWL OK', d: 'Link to GW ok' },
+        {
+            re: 'TSF:MSG:BC',
+            d: 'Broadcast message received'
+        },
+        {
+            re: 'TSF:MSG:GWL OK',
+            d: 'Link to GW ok'
+        },
         {
             re: 'TSF:MSG:FWD BC MSG',
             d: 'Controlled broadcast message forwarding',
         },
-        { re: 'TSF:MSG:REL MSG', d: 'Relay message' },
+        {
+            re: 'TSF:MSG:REL MSG',
+            d: 'Relay message'
+        },
         {
             re: 'TSF:MSG:REL PxNG,HP=(\\d+)',
             d: 'Relay PING/PONG message, increment hop counter to  $1 ',
@@ -274,22 +304,46 @@ export class MysensorsDebugDecode {
             re: '!TSF:MSG:PVER,(\\d+)!=(\\d+)',
             d: 'Message protocol version mismatch,  $1  (actual) !=  $2  (expected)',
         },
-        { re: '!TSF:MSG:SIGN VERIFY FAIL', d: 'Signing verification failed' },
+        {
+            re: '!TSF:MSG:SIGN VERIFY FAIL',
+            d: 'Signing verification failed'
+        },
         {
             re: '!TSF:MSG:REL MSG,NORP',
             d: 'Node received a message for relaying, but node is not a repeater, message skipped',
         },
-        { re: '!TSF:MSG:SIGN FAIL', d: 'Signing message failed' },
-        { re: '!TSF:MSG:GWL FAIL', d: 'GW uplink failed' },
-        { re: '!TSF:MSG:ID TK INVALID', d: 'Token for ID request invalid' },
-        { re: 'TSF:SAN:OK', d: 'Sanity check passed' },
+        {
+            re: '!TSF:MSG:SIGN FAIL',
+            d: 'Signing message failed'
+        },
+        {
+            re: '!TSF:MSG:GWL FAIL',
+            d: 'GW uplink failed'
+        },
+        {
+            re: '!TSF:MSG:ID TK INVALID',
+            d: 'Token for ID request invalid'
+        },
+        {
+            re: 'TSF:SAN:OK',
+            d: 'Sanity check passed'
+        },
         {
             re: '!TSF:SAN:FAIL',
             d: 'Sanity check failed, attempt to re-initialize radio',
         },
-        { re: 'TSF:CRT:OK', d: 'Clearing routing table successful' },
-        { re: 'TSF:LRT:OK', d: 'Loading routing table successful' },
-        { re: 'TSF:SRT:OK', d: 'Saving routing table successful' },
+        {
+            re: 'TSF:CRT:OK',
+            d: 'Clearing routing table successful'
+        },
+        {
+            re: 'TSF:LRT:OK',
+            d: 'Loading routing table successful'
+        },
+        {
+            re: 'TSF:SRT:OK',
+            d: 'Saving routing table successful'
+        },
         {
             re: '!TSF:RTE:FPAR ACTIVE',
             d: 'Finding parent active, message not sent',
@@ -306,10 +360,22 @@ export class MysensorsDebugDecode {
             re: '!TSF:SND:TNR',
             d: 'Transport not ready, message cannot be sent',
         },
-        { re: 'TSF:TDI:TSL', d: 'Set transport to sleep' },
-        { re: 'TSF:TDI:TPD', d: 'Power down transport' },
-        { re: 'TSF:TRI:TRI', d: 'Reinitialise transport' },
-        { re: 'TSF:TRI:TSB', d: 'Set transport to standby' },
+        {
+            re: 'TSF:TDI:TSL',
+            d: 'Set transport to sleep'
+        },
+        {
+            re: 'TSF:TDI:TPD',
+            d: 'Power down transport'
+        },
+        {
+            re: 'TSF:TRI:TRI',
+            d: 'Reinitialise transport'
+        },
+        {
+            re: 'TSF:TRI:TSB',
+            d: 'Set transport to standby'
+        },
         {
             re: 'TSF:SIR:CMD=(\\d+),VAL=(\\d+)',
             d: 'Get signal report  $1 , value:  $2 ',
@@ -329,20 +395,38 @@ export class MysensorsDebugDecode {
 
         // Signing backend
 
-        { re: 'SGN:INI:BND OK', d: 'Backend has initialized ok' },
-        { re: '!SGN:INI:BND FAIL', d: 'Backend has not initialized ok' },
-        { re: 'SGN:PER:OK', d: 'Personalization data is ok' },
+        {
+            re: 'SGN:INI:BND OK',
+            d: 'Backend has initialized ok'
+        },
+        {
+            re: '!SGN:INI:BND FAIL',
+            d: 'Backend has not initialized ok'
+        },
+        {
+            re: 'SGN:PER:OK',
+            d: 'Personalization data is ok'
+        },
         {
             re: '!SGN:PER:TAMPERED',
             d: 'Personalization data has been tampered',
         },
-        { re: 'SGN:PRE:SGN REQ', d: 'Signing required' },
+        {
+            re: 'SGN:PRE:SGN REQ',
+            d: 'Signing required'
+        },
         {
             re: 'SGN:PRE:SGN REQ,TO=(\\d+)',
             d: 'Tell node  $1  that we require signing',
         },
-        { re: 'SGN:PRE:SGN REQ,FROM=(\\d+)', d: ' Node  $1  require signing' },
-        { re: 'SGN:PRE:SGN NREQ', d: 'Signing not required' },
+        {
+            re: 'SGN:PRE:SGN REQ,FROM=(\\d+)',
+            d: ' Node  $1  require signing'
+        },
+        {
+            re: 'SGN:PRE:SGN NREQ',
+            d: 'Signing not required'
+        },
         {
             re: 'SGN:PRE:SGN REQ,TO=(\\d+)',
             d: 'Tell node  $1  that we do not require signing',
@@ -355,7 +439,10 @@ export class MysensorsDebugDecode {
             re: '!SGN:PRE:SGN NREQ,FROM=(\\d+) REJ',
             d: 'Node  $1  does not require signing but used to (requirement remain unchanged)',
         },
-        { re: 'SGN:PRE:WHI REQ', d: 'Whitelisting required' },
+        {
+            re: 'SGN:PRE:WHI REQ',
+            d: 'Whitelisting required'
+        },
         {
             re: 'SGN:PRE:WHI REQ;TO=(\\d+)',
             d: 'Tell  $1  that we require whitelisting',
@@ -364,7 +451,10 @@ export class MysensorsDebugDecode {
             re: 'SGN:PRE:WHI REQ,FROM=(\\d+)',
             d: 'Node  $1  require whitelisting',
         },
-        { re: 'SGN:PRE:WHI NREQ', d: ' Whitelisting not required' },
+        {
+            re: 'SGN:PRE:WHI NREQ',
+            d: ' Whitelisting not required'
+        },
         {
             re: 'SGN:PRE:WHI NREQ,TO=(\\d+)',
             d: 'Tell node  $1  that we do not require whitelisting',
@@ -385,7 +475,10 @@ export class MysensorsDebugDecode {
             re: '!SGN:PRE:XMT,TO=(\\d+) FAIL',
             d: 'Presentation data not properly transmitted to node  $1 ',
         },
-        { re: 'SGN:PRE:WAIT GW', d: 'Waiting for gateway presentation data' },
+        {
+            re: 'SGN:PRE:WAIT GW',
+            d: 'Waiting for gateway presentation data'
+        },
         {
             re: '!SGN:PRE:VER=(\\d+)',
             d: 'Presentation version  $1  is not supported',
@@ -406,9 +499,18 @@ export class MysensorsDebugDecode {
             re: '!SGN:SGN:NCE REQ,TO=(\\d+) FAIL',
             d: 'Nonce request not properly transmitted to node  $1 ',
         },
-        { re: '!SGN:SGN:NCE TMO', d: 'Timeout waiting for nonce' },
-        { re: 'SGN:SGN:SGN', d: 'Message signed' },
-        { re: '!SGN:SGN:SGN FAIL', d: 'Message failed to be signed' },
+        {
+            re: '!SGN:SGN:NCE TMO',
+            d: 'Timeout waiting for nonce'
+        },
+        {
+            re: 'SGN:SGN:SGN',
+            d: 'Message signed'
+        },
+        {
+            re: '!SGN:SGN:SGN FAIL',
+            d: 'Message failed to be signed'
+        },
         {
             re: 'SGN:SGN:NREQ=(\\d+)',
             d: 'Node  $1  does not require signed messages',
@@ -425,8 +527,14 @@ export class MysensorsDebugDecode {
             re: '!SGN:VER:NSG',
             d: 'Message was not signed, but it should have been',
         },
-        { re: '!SGN:VER:FAIL', d: 'Verification failed' },
-        { re: 'SGN:VER:OK', d: 'Verification succeeded' },
+        {
+            re: '!SGN:VER:FAIL',
+            d: 'Verification failed'
+        },
+        {
+            re: 'SGN:VER:OK',
+            d: 'Verification succeeded'
+        },
         {
             re: 'SGN:VER:LEFT=(\\d+)',
             d: ' $1  number of failed verifications left in a row before node is locked',
@@ -455,24 +563,42 @@ export class MysensorsDebugDecode {
             re: '!SGN:NCE:XMT,TO=(\\d+) FAIL',
             d: 'Nonce data not properly transmitted to node  $1 ',
         },
-        { re: '!SGN:NCE:GEN', d: 'Failed to generate nonce' },
+        {
+            re: '!SGN:NCE:GEN',
+            d: 'Failed to generate nonce'
+        },
         {
             re: 'SGN:NCE:NSUP (DROPPED)',
             d: 'Ignored nonce/request for nonce (signing not supported)',
         },
-        { re: 'SGN:NCE:FROM=(\\d+)', d: 'Received nonce from node  $1 ' },
+        {
+            re: 'SGN:NCE:FROM=(\\d+)',
+            d: 'Received nonce from node  $1 '
+        },
         {
             re: 'SGN:NCE:(\\d+)!=(\\d+) (DROPPED)',
             d: 'Ignoring nonce as it did not come from the desgination of the message to sign',
         },
-        { re: '!SGN:BND:INIT FAIL', d: 'Failed to initialize signing backend' },
-        { re: '!SGN:BND:PWD<8', d: 'Signing password too short' },
-        { re: '!SGN:BND:PER', d: 'Backend not personalized' },
+        {
+            re: '!SGN:BND:INIT FAIL',
+            d: 'Failed to initialize signing backend'
+        },
+        {
+            re: '!SGN:BND:PWD<8',
+            d: 'Signing password too short'
+        },
+        {
+            re: '!SGN:BND:PER',
+            d: 'Backend not personalized'
+        },
         {
             re: '!SGN:BND:SER',
             d: 'Could not get device unique serial from backend',
         },
-        { re: '!SGN:BND:TMR', d: 'Backend timed out' },
+        {
+            re: '!SGN:BND:TMR',
+            d: 'Backend timed out'
+        },
         {
             re: '!SGN:BND:SIG,SIZE,(\\d+)>(\\d+)',
             d: 'Refusing to sign message with length  $1  because it is bigger than allowed size  $2  ',
@@ -493,7 +619,10 @@ export class MysensorsDebugDecode {
             re: '!SGN:BND:VER,IDENT=(\\d+)',
             d: 'Verification failed, identifier  $1  is unknown',
         },
-        { re: 'SGN:BND:VER WHI,ID=(\\d+)', d: 'Id  $1  found in whitelist' },
+        {
+            re: 'SGN:BND:VER WHI,ID=(\\d+)',
+            d: 'Id  $1  found in whitelist'
+        },
         {
             re: 'SGN:BND:VER WHI,SERIAL=(.*)',
             d: 'Expecting serial  $1  for this sender',
@@ -506,7 +635,10 @@ export class MysensorsDebugDecode {
             re: 'SGN:BND:NONCE=(.*)',
             d: 'Calculating signature using nonce  $1 ',
         },
-        { re: 'SGN:BND:HMAC=(.*)', d: 'Calculated signature is  $1 ' },
+        {
+            re: 'SGN:BND:HMAC=(.*)',
+            d: 'Calculated signature is  $1 '
+        },
     ];
 
     constructor() {
