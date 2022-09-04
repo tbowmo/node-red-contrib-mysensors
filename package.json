@@ -3,7 +3,10 @@
     "author": {
         "name": "Thomas Bowman Mørch"
     },
-    "version": "4.0.2",
+    "version": "4.0.3",
+    "engines": {
+        "node": ">=16.0.0"
+    },
     "scripts": {
         "postcoverage": "nyc check-coverage --functions 50 --branches 50 --statements 90",
         "build": "mkdir -p dist/nodes/ && cp -ar src/nodes/*.html dist/nodes/ && tsc ",
@@ -27,23 +30,6 @@
     "bugs": {
         "url": "https://github.com/tbowmo/node-red-contrib-mysensors/issues"
     },
-    "nycx": {
-        "include": [
-            "src/**/*.ts"
-        ],
-        "extension": [
-            ".ts"
-        ],
-        "require": [
-            "ts-node/register"
-        ],
-        "reporter": [
-            "text-summary",
-            "html"
-        ],
-        "sourceMap": true,
-        "instrument": true
-    },
     "deprecated": false,
     "description": "Mysensors related nodes, for decoding / encoding mysensors serial protocol and MQTT topic, and wrapping arbitrary messages into mysensors compatible messages",
     "homepage": "https://github.com/tbowmo/node-red-contrib-mysensors",
@@ -59,6 +45,7 @@
     "license": "GPL-2.0",
     "main": "index.js",
     "node-red": {
+        "version": ">=3.0",
         "nodes": {
             "mysdecode": "dist/nodes/decode.js",
             "mysencode": "dist/nodes/encode.js",

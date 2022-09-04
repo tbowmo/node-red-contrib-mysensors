@@ -1,0 +1,256 @@
+[
+    {
+        "id": "50fab8d88513fff8",
+        "type": "mysdecode",
+        "z": "631f2df853fdf880",
+        "database": "1d1ced330982e64e",
+        "name": "",
+        "mqtt": false,
+        "enrich": true,
+        "x": 830,
+        "y": 240,
+        "wires": [
+            [
+                "efac5ec036f7597a"
+            ]
+        ]
+    },
+    {
+        "id": "efac5ec036f7597a",
+        "type": "debug",
+        "z": "631f2df853fdf880",
+        "name": "Mysensors decoded from serial",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1090,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "bdd6b94f5022e698",
+        "type": "myscontroller",
+        "z": "631f2df853fdf880",
+        "database": "1d1ced330982e64e",
+        "name": "",
+        "handleid": true,
+        "timeresponse": true,
+        "timezone": "Europe/Copenhagen",
+        "measurementsystem": "M",
+        "mqttroot": "mys-out",
+        "x": 630,
+        "y": 380,
+        "wires": [
+            [
+                "f1a261912450dc79"
+            ]
+        ]
+    },
+    {
+        "id": "f1a261912450dc79",
+        "type": "debug",
+        "z": "631f2df853fdf880",
+        "name": "Controller return message",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 850,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "4b2b0cb473a98e41",
+        "type": "mysencap",
+        "z": "631f2df853fdf880",
+        "name": "",
+        "nodeid": "5",
+        "childid": "1",
+        "subtype": "2",
+        "internal": 0,
+        "ack": false,
+        "msgtype": 1,
+        "presentation": true,
+        "presentationtype": "7",
+        "presentationtext": "test node",
+        "fullpresentation": true,
+        "firmwarename": "Firmware 1",
+        "firmwareversion": "1.1",
+        "x": 330,
+        "y": 380,
+        "wires": [
+            [
+                "0681c355ace3a6c0",
+                "e645f9769eb677aa",
+                "5d9864c80f53b964"
+            ]
+        ]
+    },
+    {
+        "id": "49c241794aa6e101",
+        "type": "inject",
+        "z": "631f2df853fdf880",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 100,
+        "y": 380,
+        "wires": [
+            [
+                "4b2b0cb473a98e41"
+            ]
+        ]
+    },
+    {
+        "id": "0681c355ace3a6c0",
+        "type": "mysencode",
+        "z": "631f2df853fdf880",
+        "name": "",
+        "mqtt": false,
+        "mqtttopic": "",
+        "x": 610,
+        "y": 240,
+        "wires": [
+            [
+                "50fab8d88513fff8",
+                "5a92bb1204c7a0ce"
+            ]
+        ]
+    },
+    {
+        "id": "5a92bb1204c7a0ce",
+        "type": "debug",
+        "z": "631f2df853fdf880",
+        "name": "Mysensors encoded serial",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 850,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "e645f9769eb677aa",
+        "type": "debug",
+        "z": "631f2df853fdf880",
+        "name": "Encapsulated message",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 630,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "b2581e60c920ba9b",
+        "type": "inject",
+        "z": "631f2df853fdf880",
+        "name": "Node time request (MQTT topic)",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "mys-in/5/1/3/0/1",
+        "payload": "",
+        "payloadType": "str",
+        "x": 170,
+        "y": 240,
+        "wires": [
+            [
+                "5d9864c80f53b964"
+            ]
+        ]
+    },
+    {
+        "id": "54d66bda4ce0c269",
+        "type": "mysdebug",
+        "z": "631f2df853fdf880",
+        "name": "",
+        "x": 630,
+        "y": 440,
+        "wires": [
+            [
+                "ec7aa00387adaa0b"
+            ]
+        ]
+    },
+    {
+        "id": "ec7aa00387adaa0b",
+        "type": "debug",
+        "z": "631f2df853fdf880",
+        "name": "Mysensors debug output",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 850,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "5d9864c80f53b964",
+        "type": "junction",
+        "z": "631f2df853fdf880",
+        "x": 480,
+        "y": 340,
+        "wires": [
+            [
+                "bdd6b94f5022e698",
+                "54d66bda4ce0c269"
+            ]
+        ]
+    },
+    {
+        "id": "1d1ced330982e64e",
+        "type": "mysensorsdb",
+        "name": "test",
+        "store": "mysensor-controller",
+        "contextType": "global"
+    }
+]
