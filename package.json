@@ -30,23 +30,6 @@
     "bugs": {
         "url": "https://github.com/tbowmo/node-red-contrib-mysensors/issues"
     },
-    "nycx": {
-        "include": [
-            "src/**/*.ts"
-        ],
-        "extension": [
-            ".ts"
-        ],
-        "require": [
-            "ts-node/register"
-        ],
-        "reporter": [
-            "text-summary",
-            "html"
-        ],
-        "sourceMap": true,
-        "instrument": true
-    },
     "deprecated": false,
     "description": "Mysensors related nodes, for decoding / encoding mysensors serial protocol and MQTT topic, and wrapping arbitrary messages into mysensors compatible messages",
     "homepage": "https://github.com/tbowmo/node-red-contrib-mysensors",
