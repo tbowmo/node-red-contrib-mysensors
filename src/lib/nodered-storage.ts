@@ -44,7 +44,10 @@ export class NoderedStorage implements IStorage {
     }
 
     private async setChild(nodeId: number, childId: number, data: Partial<ISensorData>) {
-        const children = (await this.getNodes())?.[nodeId].sensors || [];
+        const children = (await this.getNodes())?.[nodeId]?.sensors;
+        if (!children) { // We do not have parent node, so do _not_ try to set any child sensor information
+            return;
+        }
         const child = children.find((item) => item.childId === childId) || {
             childId,
             description: '',

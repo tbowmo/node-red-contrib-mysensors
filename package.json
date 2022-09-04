@@ -3,7 +3,7 @@
     "author": {
         "name": "Thomas Bowman Mørch"
     },
-    "version": "4.0.1",
+    "version": "4.0.2",
     "scripts": {
         "postcoverage": "nyc check-coverage --functions 50 --branches 50 --statements 90",
         "build": "mkdir -p dist/nodes/ && cp -ar src/nodes/*.html dist/nodes/ && tsc ",
