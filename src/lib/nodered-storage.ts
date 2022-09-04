@@ -9,13 +9,13 @@ type Nodes = {
 export class NoderedStorage implements IStorage {
 
     constructor(
-        private context: NodeContextData,
+        private context: NodeContextData | undefined,
         private storageKey: string,
         private store = 'default'
     ) { }
 
     private async getNodes(): Promise<Nodes> {
-        const data = await this.context.get(this.storageKey, this.store);
+        const data = await this.context?.get(this.storageKey, this.store);
 
         return (data || {}) as Nodes;
     }
@@ -40,7 +40,7 @@ export class NoderedStorage implements IStorage {
             ...data
         };
 
-        return this.context.set(this.storageKey, nodes, this.store);
+        return this.context?.set(this.storageKey, nodes, this.store);
     }
 
     private async setChild(nodeId: number, childId: number, data: Partial<ISensorData>) {

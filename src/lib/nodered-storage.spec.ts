@@ -334,4 +334,12 @@ describe('lib/nodered-storage', () => {
             }
         }, 'test-store');
     });
+
+    it('should handle undefined context gracefully', async () => {
+        const nodeRedStorage = new NoderedStorage(undefined, '');
+
+        const result = await nodeRedStorage.setBatteryLevel(1, 2);
+
+        expect(result).to.equal(undefined);
+    });
 });
