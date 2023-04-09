@@ -1,6 +1,5 @@
 import { expect } from 'chai';
 import { useSinonSandbox } from '../../test/sinon';
-
 import { MysensorsController } from './mysensors-controller';
 import { IMysensorsMsg, IStrongMysensorsMsg } from './mysensors-msg';
 import { mysensor_command, mysensor_internal } from './mysensors-types';

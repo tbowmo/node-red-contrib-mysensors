@@ -25,9 +25,8 @@ export interface IStorage {
     nodeHeard(nodeId: number): Promise<void>
     sketchName(nodeId: number, name: string): Promise<void>
     sketchVersion(nodeId: number, version: string): Promise<void>
-    getNodeList(): Promise<INodeData[]>
-    getFreeNodeId(): Promise<number>
-    close(): Promise<void>
+    getNodeList(): Promise<INodeData[] | undefined>
+    getFreeNodeId(): Promise<number | undefined>
     setParent(nodeId: number, last: number): Promise<void>
     child(
         nodeId: number,
@@ -36,6 +35,6 @@ export interface IStorage {
         description: string,
     ): Promise<void>
     childHeard(nodeId: number, childId: number): Promise<void>
-    getChild(nodeId: number, childId: number): Promise<ISensorData>
+    getChild(nodeId: number, childId: number): Promise<ISensorData | undefined>
     setBatteryLevel(nodeId: number, batterylevel: number): Promise<void>
 }

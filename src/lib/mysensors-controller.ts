@@ -99,10 +99,14 @@ export class MysensorsController {
         msg: Readonly<IStrongMysensorsMsg<mysensor_command.C_INTERNAL>>,
     ): Promise<IStrongMysensorsMsg<mysensor_command.C_INTERNAL> | undefined> {
         if (this.handleIds) {
+            const newNodeId = await this.database.getFreeNodeId();
+            if (!newNodeId) {
+                return;
+            }
             const newMsg = {
                 ...msg,
                 subType: mysensor_internal.I_ID_RESPONSE,
-                payload: (await this.database.getFreeNodeId()).toString()
+                payload: newNodeId.toString()
             };
             return newMsg;
         }
