@@ -219,6 +219,5 @@ export class MysensorsDebugDecode {
             case mysensor_command.C_STREAM:
                 return mysensor_stream[type];
         }
-        return '';
     }
 }

@@ -80,13 +80,9 @@ export class NoderedStorage implements IStorage {
         return Object.values(await this.getNodes()).filter((item) => item.used);
     }
 
-    public async getFreeNodeId(): Promise<number> {
+    public async getFreeNodeId(): Promise<number | undefined> {
         const freeNode = Object.values(await this.getNodes()).find((item) => !item.used);
-        return freeNode?.nodeId || 255;
-    }
-
-    public async close(): Promise<void> {
-        return;
+        return freeNode?.nodeId;
     }
 
     public async setParent(nodeId: number, last: number): Promise<void> {
@@ -99,9 +95,9 @@ export class NoderedStorage implements IStorage {
 
 
     /** child nodes, dummy implementation for now */
-    public async getChild(nodeId: number, childId: number): Promise<ISensorData> {
+    public async getChild(nodeId: number, childId: number): Promise<ISensorData | undefined> {
         const nodes = await this.getNodes();
-        return (nodes[nodeId]?.sensors || []).find((item) => item.childId === childId) || {
+        return nodes[nodeId]?.sensors?.find((item) => item.childId === childId) || {
             childId,
             nodeId,
             description: '',

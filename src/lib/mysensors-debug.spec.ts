@@ -11,6 +11,17 @@ describe('lib/mysensors-debug', () => {
         expect(result).to.equal('Core initialization with capabilities (SIGNING)');
     });
 
+    it('should decode command C_REQ', () => {
+        const debug = new MysensorsDebugDecode();
+
+        // Fake testvalue, but excercises most of the regex replace methods
+        const testValue = 'MCO:BGN:BFR {command:2} {type:1:2}';
+
+        const result = debug.decode(testValue);
+
+        expect(result).to.equal('Callback before() C_REQ V_LIGHT');
+    });
+
     it('should decode command C_SET', () => {
         const debug = new MysensorsDebugDecode();
 

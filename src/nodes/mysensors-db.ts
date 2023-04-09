@@ -15,10 +15,6 @@ export = (RED: NodeAPI) => {
             const myContext = this.context()[this.contextType];
 
             this.database = new NoderedStorage(myContext, this.contextKey.key, this.contextKey.store );
-
-            this.on('close', () => {
-                this.database.close();
-            });
         },
     );
 }

@@ -151,6 +151,35 @@ describe('lib/nodered-storage', () => {
         }, 'test-store');
     });
 
+    it('should not set child node if there is no parent', async () => {
+        const {get, set, nodeRedStorage} = setupStub();
+        get.returns({
+            '2': {
+                batteryLevel: -1,
+                nodeId: 2,
+                label: '',
+                lastHeard: new Date('1972-01-01T00:00:00.000Z'),
+                lastRestart: new Date('1972-01-01T00:00:00.000Z'),
+                parentId: -1,
+                sensors: [
+                    {
+                        childId: 5,
+                        description: 'not-altered',
+                        lastHeard: new Date('1969-01-01T00:00:00.000Z'),
+                        nodeId: 2,
+                        sType: 0,
+                    },
+                ],
+                sketchName: 'not-altered',
+                sketchVersion: 'not-valid',
+                used: 1
+            }
+        });
+        await nodeRedStorage.childHeard(3, 5);
+
+        sinon.assert.notCalled(set);
+    });
+
     it('should get list of nodes', async () => {
         const { get, nodeRedStorage } = setupStub();
 
