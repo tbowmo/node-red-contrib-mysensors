@@ -37,7 +37,7 @@ _lib
 _nodes
 
 dist/**/*
-.test_output
+.coverage
 .nyc_output
 
 src/**/*.js
