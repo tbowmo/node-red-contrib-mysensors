@@ -1,4 +1,6 @@
 # node-red-contrib-mysensors
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=tbowmo_node-red-small-timer&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=tbowmo_node-red-small-timer)
+![Sonar cloud test](https://github.com/tbowmo/node-red-small-timer/actions/workflows/sonarcloud.yml/badge.svg)
 
 A node-RED [mysensors](http://www.mysensors.org) protocol decoder / encoder / wrapper package, including basic controller functionality
 Contains a node to decode / encode mysensors serial protocol to / from node-red messages, and a node for adding mysensors specific data like sensor type, nodeid etc. which can then be sent to mysensors network

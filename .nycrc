@@ -24,14 +24,7 @@
 	"require": [
 		"ts-node/register"
 	],
-	"reporter": [
-		"text-summary",
-		"cobertura",
-		"json-summary",
-		"json",
-		"html"
-	],
     "sourceMap": true,
     "instrument": true,
-	"report-dir": "./.test_output/coverage"
+	"report-dir": "./.coverage"
 }

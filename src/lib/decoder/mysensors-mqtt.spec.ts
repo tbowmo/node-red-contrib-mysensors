@@ -40,13 +40,13 @@ describe('MQTT decode / encode', () => {
             _msgid: '',
             ack: 0,
             childSensorId: 2,
-            messageType: 6,
+            messageType: mysensor_command.C_PRESENTATION,
             nodeId: 1,
             payload: '100',
             subType: 4,
             topicRoot: 'mys-out',
         };
         const out = new MysensorsMqtt().encode(msg);
-        expect(out).to.include({topic: 'mys-out/1/2/6/0/4', payload: '100'});
+        expect(out).to.include({topic: 'mys-out/1/2/0/0/4', payload: '100'});
     });
 });

@@ -15,6 +15,7 @@ describe('lib/nodered-storage', () => {
             set,
             keys,
         };
+        sinon.clock.setSystemTime(new Date('2023-01-01 01:00Z'));
 
         return {
             get,
@@ -35,8 +36,8 @@ describe('lib/nodered-storage', () => {
                 batteryLevel: -1,
                 nodeId: 1,
                 label: '',
-                lastHeard: new Date('1970-01-01T00:00:00.000Z'),
-                lastRestart: new Date('1970-01-01T00:00:00.000Z'),
+                lastHeard: new Date('2023-01-01T01:00:00.000Z'),
+                lastRestart: new Date('2023-01-01T01:00:00.000Z'),
                 parentId: -1,
                 sensors: [],
                 sketchName: '',
@@ -56,8 +57,8 @@ describe('lib/nodered-storage', () => {
                 batteryLevel: -1,
                 nodeId: 2,
                 label: '',
-                lastHeard: new Date('1970-01-01T00:00:00.000Z'),
-                lastRestart: new Date('1970-01-01T00:00:00.000Z'),
+                lastHeard: new Date('2023-01-01T01:00:00.000Z'),
+                lastRestart: new Date('2023-01-01T01:00:00.000Z'),
                 parentId: -1,
                 sensors: [],
                 sketchName: 'test',
@@ -69,13 +70,14 @@ describe('lib/nodered-storage', () => {
 
     it('should set sketch version', async () => {
         const {get, set, nodeRedStorage} = setupStub();
+
         get.returns({
             '2': {
                 batteryLevel: -1,
                 nodeId: 2,
                 label: '',
-                lastHeard: new Date('1972-01-01T00:00:00.000Z'),
-                lastRestart: new Date('1972-01-01T00:00:00.000Z'),
+                lastHeard: new Date('2023-01-01T01:00:00.000Z'),
+                lastRestart: new Date('2023-01-01T01:00:00.000Z'),
                 parentId: -1,
                 sensors: [],
                 sketchName: 'not-altered',
@@ -90,8 +92,8 @@ describe('lib/nodered-storage', () => {
                 batteryLevel: -1,
                 nodeId: 2,
                 label: '',
-                lastHeard: new Date('1972-01-01T00:00:00.000Z'),
-                lastRestart: new Date('1972-01-01T00:00:00.000Z'),
+                lastHeard: new Date('2023-01-01T01:00:00.000Z'),
+                lastRestart: new Date('2023-01-01T01:00:00.000Z'),
                 parentId: -1,
                 sensors: [],
                 sketchName: 'not-altered',
@@ -139,7 +141,7 @@ describe('lib/nodered-storage', () => {
                     {
                         childId: 5,
                         description: 'not-altered',
-                        lastHeard: new Date('1970-01-01T00:00:00.000Z'),
+                        lastHeard: new Date('2023-01-01T01:00:00.000Z'),
                         nodeId: 2,
                         sType: 0,
                     },
@@ -244,7 +246,7 @@ describe('lib/nodered-storage', () => {
             childId: 2,
             sType: 0,
             description: '',
-            lastHeard: new Date('1970-01-01'),
+            lastHeard: new Date('2023-01-01T01:00:00.000Z'),
         });
     });
 
@@ -305,7 +307,7 @@ describe('lib/nodered-storage', () => {
                         childId: 2,
                         sType: 5,
                         description: 'some description',
-                        lastHeard: new Date('1970-01-01'),
+                        lastHeard: new Date('2023-01-01T01:00:00.000Z'),
                     }
                 ],
             }
