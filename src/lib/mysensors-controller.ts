@@ -26,7 +26,7 @@ export class MysensorsController {
             return;
         }
 
-        this.updateHeard(msg);
+        await this.updateHeard(msg);
 
         if (
             msg.messageType === mysensor_command.C_PRESENTATION
@@ -117,7 +117,7 @@ export class MysensorsController {
         const r = /TSF:MSG:READ,(\d+)-(\d+)-(\d+)/;
         const m = r.exec(msg.payload as string);
         if (m) {
-            this.database.setParent(Number(m[1]), Number(m[2]));
+            return this.database.setParent(Number(m[1]), Number(m[2]));
         }
     }
 
@@ -127,9 +127,9 @@ export class MysensorsController {
 
     private async handleSketchVersion(msg: Readonly<IStrongMysensorsMsg<mysensor_command.C_INTERNAL>>): Promise<void> {
         if (msg.subType === mysensor_internal.I_SKETCH_VERSION) {
-            this.database.sketchVersion(msg.nodeId, msg.payload as string);
+            return this.database.sketchVersion(msg.nodeId, msg.payload as string);
         } else if (msg.subType === mysensor_internal.I_SKETCH_NAME) {
-            this.database.sketchName(msg.nodeId, msg.payload as string);
+            return this.database.sketchName(msg.nodeId, msg.payload as string);
         }
     }
 
