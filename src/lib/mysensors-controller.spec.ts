@@ -140,6 +140,8 @@ describe('Controller test', () => {
     it('should decoded time request', async () => {
         const { controller } = setupTest();
 
+        sinon.clock.setSystemTime(new Date('2023-01-01 00:00Z'));
+
         const request: IMysensorsMsg = {
             _msgid: '',
             ack: 0,
@@ -152,7 +154,7 @@ describe('Controller test', () => {
 
         const expected: IStrongMysensorsMsg<mysensor_command.C_INTERNAL> = {
             _msgid: '',
-            payload: '0',
+            payload: '1672531200',
             ack: 0,
             childSensorId: 255,
             messageType: mysensor_command.C_INTERNAL,
