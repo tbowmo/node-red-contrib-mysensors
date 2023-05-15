@@ -40,16 +40,16 @@ describe('Serial decode / encode', () => {
     });
 
     it('Encode to mysensors serial message', () => {
-        const msg: IStrongMysensorsMsg<mysensor_command.C_PRESENTATION> = {
+        const msg: IStrongMysensorsMsg<mysensor_command.C_REQ> = {
             _msgid: 'id',
             ack: 0,
             childSensorId: 2,
-            messageType: 6,
+            messageType: mysensor_command.C_REQ,
             nodeId: 1,
             payload: '100',
             subType: 4,
         };
         const out = decode.encode(msg);
-        expect(out).to.include({payload: '1;2;6;0;4;100'});
+        expect(out).to.include({payload: '1;2;2;0;4;100'});
     });
 });

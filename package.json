@@ -11,11 +11,11 @@
         "postcoverage": "nyc check-coverage --functions 50 --branches 50 --statements 90",
         "build": "mkdir -p dist/nodes/ && cp -ar src/nodes/*.html dist/nodes/ && tsc ",
         "prepublish": "npm run build",
-        "mocha": "mocha -r ts-node/register -r source-map-support/register",
-        "coverage": "nyc --clean --cache false --reporter=text-summary --reporter=html mocha --forbid-only -r ts-node/register -r source-map-support/register 'src/**/*.spec.ts'",
+        "mocha": "TZ=Z mocha -r ts-node/register -r source-map-support/register",
+        "coverage": "TZ=Z nyc --clean --cache false --reporter=text-summary --reporter=html mocha --forbid-only -r ts-node/register -r source-map-support/register 'src/**/*.spec.ts'",
         "format": "prettier --write src/**/*.ts",
         "lint": "tsc --noEmit && eslint src/**/*.ts",
-        "coverage:ci": "nyc --clean --cache false --reporter=lcov mocha --forbid-only -r ts-node/register -r source-map-support/register 'src/**/*.spec.ts'"
+        "coverage:ci": "TZ=Z nyc --clean --cache false --reporter=lcov mocha --forbid-only -r ts-node/register -r source-map-support/register 'src/**/*.spec.ts'"
     },
     "husky": {
         "hooks": {

@@ -7,7 +7,7 @@ import { mysensor_command, mysensor_internal } from './mysensors-types';
 describe('Controller test', () => {
     const sinon = useSinonSandbox();
 
-    function setupTest() {
+    function setupTest(timeZone = 'CET') {
         const storage = {
             getFreeNodeId: sinon.stub().resolves(777),
             getChild: sinon.stub().resolves(''),
@@ -28,7 +28,7 @@ describe('Controller test', () => {
                 storage,
                 true,
                 true,
-                'CET',
+                timeZone,
                 'M',
                 'mys-out',
             ),
@@ -137,8 +137,38 @@ describe('Controller test', () => {
         expect(result).to.include(expected);
     });
 
-    it('should decoded time request', async () => {
+    it('should decoded time request CET zone', async () => {
         const { controller } = setupTest();
+
+        sinon.clock.setSystemTime(new Date('2023-01-01 00:00Z'));
+
+        const request: IMysensorsMsg = {
+            _msgid: '',
+            ack: 0,
+            childSensorId: 255,
+            messageType: mysensor_command.C_INTERNAL,
+            nodeId: 10,
+            payload: '',
+            subType: mysensor_internal.I_TIME,
+        };
+
+        const expected: IStrongMysensorsMsg<mysensor_command.C_INTERNAL> = {
+            _msgid: '',
+            payload: '1672534800',
+            ack: 0,
+            childSensorId: 255,
+            messageType: mysensor_command.C_INTERNAL,
+            nodeId: 10,
+            origin: 0,
+            subType: mysensor_internal.I_TIME,
+        };
+
+        const result = await controller.messageHandler(request);
+        expect(result).to.deep.equal(expected);
+    });
+
+    it('should decoded time request ZULU zone', async () => {
+        const { controller } = setupTest('Z');
 
         sinon.clock.setSystemTime(new Date('2023-01-01 00:00Z'));
 

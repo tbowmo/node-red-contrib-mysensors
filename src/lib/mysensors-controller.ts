@@ -85,6 +85,7 @@ export class MysensorsController {
     ): Promise<IStrongMysensorsMsg<mysensor_command.C_INTERNAL> | undefined> {
         const msgCopy = {...msg};
         msgCopy.subType = mysensor_internal.I_TIME;
+
         if (this.timeResponse && msg.messageType) {
             if (this.timeZone === 'Z') {
                 msgCopy.payload = Math.trunc(new Date().getTime() / 1000).toString();
