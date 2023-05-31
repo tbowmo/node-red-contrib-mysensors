@@ -1,8 +1,14 @@
 import { INodeMessage, IStrongMysensorsMsg, MsgOrigin, MysensorsCommand } from '../mysensors-msg';
+import { IStorage } from '../storage-interface';
 import { IDecoder } from './decoder-interface';
 import { MysensorsDecoder } from './mysensors-decoder';
 
 export class MysensorsSerial extends MysensorsDecoder implements IDecoder {
+
+    constructor(enrich?: boolean, database?: IStorage, private addNewline = false) {
+        super(enrich, database);
+    }
+
     public async decode(msg: Readonly<INodeMessage>): Promise<IStrongMysensorsMsg<MysensorsCommand>| undefined> {
         let message = msg.payload.toString();
         message = message.replace(/(\r\n|\n|\r)/gm, '');
@@ -27,10 +33,18 @@ export class MysensorsSerial extends MysensorsDecoder implements IDecoder {
     public encode(
         msg: Readonly<IStrongMysensorsMsg<MysensorsCommand>>
     ): IStrongMysensorsMsg<MysensorsCommand> {
+        // eslint-disable-next-line max-len
+        const payload = [
+            msg.nodeId,
+            msg.childSensorId,
+            msg.messageType,
+            msg.ack,
+            msg.subType,
+            msg.payload
+        ].join(';');
         return {
             ...msg,
-            // eslint-disable-next-line max-len
-            payload: `${msg.nodeId};${msg.childSensorId};${msg.messageType};${msg.ack};${msg.subType};${msg.payload}`
+            payload: `${payload}${this.addNewline ? '\n' : ''}`
         };
     }
 }

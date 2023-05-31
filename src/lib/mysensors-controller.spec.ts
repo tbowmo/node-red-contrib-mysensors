@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { useSinonSandbox } from '../../test/sinon';
 import { MysensorsController } from './mysensors-controller';
-import { IMysensorsMsg, IStrongMysensorsMsg } from './mysensors-msg';
+import { IMysensorsMsg, IStrongMysensorsMsg, MsgOrigin } from './mysensors-msg';
 import { mysensor_command, mysensor_internal } from './mysensors-types';
 
 describe('Controller test', () => {
@@ -31,11 +31,27 @@ describe('Controller test', () => {
                 timeZone,
                 'M',
                 'mys-out',
+                false,
             ),
         };
     }
 
-    it('MQTT ID Request', async () => {
+    it('should not respond to an id request if no id can be retrieved', async () => {
+        const { controller, storage } = setupTest();
+        storage.getFreeNodeId.resolves(undefined);
+        const input: IMysensorsMsg = {
+            _msgid: '',
+            payload: '',
+            topic: 'mys-in/255/255/3/0/3',
+            origin: MsgOrigin.serial,
+        };
+
+        const result = await controller.messageHandler(input);
+        
+        expect(result).to.equal(undefined);
+    });
+
+    it('should respond to a mqtt id request with a new id', async () => {
         const { controller } = setupTest();
         const input: IMysensorsMsg = {
             _msgid: '',

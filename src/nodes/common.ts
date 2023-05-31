@@ -50,6 +50,7 @@ export interface IControllerProperties extends NodeDef {
     timezone?: string
     measurementsystem?: string
     mqttroot?: string
+    addSerialNewline?: boolean
 }
 
 export interface IControllerConfig extends Node {

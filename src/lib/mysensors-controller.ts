@@ -15,6 +15,7 @@ export class MysensorsController {
         private timeZone: string,
         private measurementSystem: string,
         private mqttRoot: string,
+        private addSerialNewline: boolean,
     ) {}
 
     public async messageHandler(
@@ -71,54 +72,62 @@ export class MysensorsController {
     private async handleConfig(
         msg: Readonly<IStrongMysensorsMsg<mysensor_command.C_INTERNAL>>,
     ): Promise<IStrongMysensorsMsg<mysensor_command.C_INTERNAL> | undefined> {
-        if (this.measurementSystem !== 'N') {
-            const newMsg = {
-                ...msg,
-                payload: this.measurementSystem
-            };
-            return newMsg;
+        if (this.measurementSystem === 'N') {
+            return;
         }
+        
+        return {
+            ...msg,
+            payload: this.measurementSystem
+        };
     }
 
     private async handleTimeResponse(
         msg: Readonly<IStrongMysensorsMsg<mysensor_command.C_INTERNAL>>,
     ): Promise<IStrongMysensorsMsg<mysensor_command.C_INTERNAL> | undefined> {
+        if (!this.timeResponse || !msg.messageType) {
+            return;
+        }
+
         const msgCopy = {...msg};
         msgCopy.subType = mysensor_internal.I_TIME;
 
-        if (this.timeResponse && msg.messageType) {
-            if (this.timeZone === 'Z') {
-                msgCopy.payload = Math.trunc(new Date().getTime() / 1000).toString();
-            } else {
-                msgCopy.payload = Math.trunc(utcToZonedTime(new Date(), this.timeZone).getTime() / 1000).toString();
-            }
-            return msgCopy;
+        if (this.timeZone === 'Z') {
+            msgCopy.payload = Math.trunc(new Date().getTime() / 1000).toString();
+        } else {
+            msgCopy.payload = Math.trunc(utcToZonedTime(new Date(), this.timeZone).getTime() / 1000).toString();
         }
+        return msgCopy;
+        
     }
 
     private async handleIdRequest(
         msg: Readonly<IStrongMysensorsMsg<mysensor_command.C_INTERNAL>>,
     ): Promise<IStrongMysensorsMsg<mysensor_command.C_INTERNAL> | undefined> {
-        if (this.handleIds) {
-            const newNodeId = await this.database.getFreeNodeId();
-            if (!newNodeId) {
-                return;
-            }
-            const newMsg = {
-                ...msg,
-                subType: mysensor_internal.I_ID_RESPONSE,
-                payload: newNodeId.toString()
-            };
-            return newMsg;
+        if (!this.handleIds) {
+            return;
         }
+        
+        const newNodeId = await this.database.getFreeNodeId();
+        if (!newNodeId) {
+            return;
+        }
+        
+        return {
+            ...msg,
+            subType: mysensor_internal.I_ID_RESPONSE,
+            payload: newNodeId.toString()
+        };
     }
 
     private async handleDebug(msg: Readonly<IStrongMysensorsMsg<mysensor_command.C_INTERNAL>>): Promise<void> {
         const r = /TSF:MSG:READ,(\d+)-(\d+)-(\d+)/;
         const m = r.exec(msg.payload as string);
-        if (m) {
-            return this.database.setParent(Number(m[1]), Number(m[2]));
+        if (!m) {
+            return;
         }
+        
+        return this.database.setParent(Number(m[1]), Number(m[2]));
     }
 
     private async handleBattery(msg: Readonly<IStrongMysensorsMsg<mysensor_command.C_INTERNAL>>): Promise<void> {
@@ -141,7 +150,7 @@ export class MysensorsController {
         let encoder: IDecoder | undefined;
 
         if (msg.origin === MsgOrigin.serial) {
-            encoder = new MysensorsSerial();
+            encoder = new MysensorsSerial(undefined, undefined, this.addSerialNewline);
         } else if (msg.origin === MsgOrigin.mqtt) {
             encoder = new MysensorsMqtt();
         }

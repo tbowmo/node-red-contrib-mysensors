@@ -9,7 +9,8 @@
             timeresponse: {value: true},
             timezone: {value: 'UTC'},
             measurementsystem: {value: 'M'},
-            mqttroot: {value: 'mys-out'}
+            mqttroot: {value: 'mys-out'},
+            addSerialNewline: { value: true}
         },
         inputs:1,
         outputs:1,
@@ -21,26 +22,25 @@
             $.getJSON('mysensornodes/' + this.database, function(data) {
                 data = JSON.parse(data).data;
                 var html = '';
-                for(index = 0; index < data.length; ++index) {
-                    var c = data[index];
+                for(const item of data) {
                     html = html + `<tr>
                         <td>
-                            ${c.nodeId}
+                            ${item.nodeId}
                         </td>
                         <td>
-                            ${c.sketchName}
+                            ${item.sketchName}
                         </td>
                         <td>
-                            ${c.sketchVersion}
+                            ${item.sketchVersion}
                         </td>
                         <td>
-                            ${c.lastHeard}
+                            ${item.lastHeard}
                         </td>
                         <td>
-                            ${(c.parentId !== c.nodeId && c.parentId !== null)?c.parentId:''}
+                            ${(item.parentId !== item.nodeId && item.parentId !== null)?item.parentId:''}
                         </td>
                         <td>
-                            ${c.batteryLevel}
+                            ${item.batteryLevel}
                         </td>
                         </tr>`;
                 }
@@ -56,26 +56,26 @@
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
     <div class="form-row">
-        <label for="node-input-mqttroot"><i class="fa fa-tag"></i> MQTT root</label>
+        <label for="node-input-mqttroot">MQTT root</label>
         <input type="text" id="node-input-mqttroot" placeholder="mys-out">
     </div>
     <div class="form-row">
-        <label for="node-input-database"><i class="fa fa-tag"></i> Database</label>
+        <label for="node-input-database">Database</label>
         <input type="text" id="node-input-database" placeholder="Database">
     </div>
     <div class="form-row">
-        <label for="node-input-handleid"><i class="fa fa-tag"></i> Handle IDs</label>
+        <label for="node-input-handleid"> Handle IDs</label>
         <input type="checkbox" id="node-input-handleid">
     </div>
     <div class="form-row">
-        <label for="node-input-measurementsystem"><i class="fa fa-tag"></i> Units</label>
+        <label for="node-input-measurementsystem">Units</label>
         <select id="node-input-measurementsystem">
             <option value="M">Metric</option>
             <option value="I">Imperial</option>
         </select>
     </div>
     <div class="form-row" id="timezoneselect">
-        <label for="node-input-timezone"><i class="fa fa-tag"></i> Timezone</label>
+        <label for="node-input-timezone">Timezone</label>
         <select id="node-input-timezone">
             <option value="Africa/Abidjan">Africa/Abidjan</option>
             <option value="Africa/Accra">Africa/Accra</option>
@@ -672,6 +672,10 @@
         </select>
     </div>
     <div class="form-tips">Timezone is used to set the timezone on I_TIME messages sent to a node, requesting time</div>
+    <div class="form-row">
+        <label for="node-input-addSerialNewline">Add newline to mysensors serial protocol output</label>
+        <input type="checkbox" id="node-input-add-newline">
+    </div>
     <div class="form-row">
         <label><i class="fa fa-book"></i> List of nodes</label>
         <table border="1px" style="width:100%">

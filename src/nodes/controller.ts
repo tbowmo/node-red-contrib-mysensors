@@ -15,33 +15,35 @@ export = (RED: NodeAPI): void => {
         function (this: IControllerConfig, props: IControllerProperties): void {
             RED.nodes.createNode(this, props);
 
-            if (props.database) {
-                this.database = RED.nodes.getNode(
-                    props.database,
-                ) as IDbConfigNode;
-
-                if (this.database.database) {
-                    this.controller = new MysensorsController(
-                        this.database.database,
-                        props.handleid || false,
-                        props.timeresponse || true,
-                        props.timezone || 'UTC',
-                        props.measurementsystem || 'M',
-                        props.mqttroot || 'mys-out',
-                    );
-
-                    this.on('input', (msg: IMysensorsMsg, send, done) => {
-                        this.controller
-                            .messageHandler(msg)
-                            .then((msgOut: IMysensorsMsg | undefined) => {
-                                if (msgOut) {
-                                    send(msgOut);
-                                }
-                                done();
-                            });
-                    });
-                }
+            if (!props.database) {
+                return;
             }
+
+            this.database = RED.nodes.getNode(
+                props.database,
+            ) as IDbConfigNode;
+            
+            this.controller = new MysensorsController(
+                this.database.database,
+                props.handleid ?? false,
+                props.timeresponse ?? true,
+                props.timezone ?? 'UTC',
+                props.measurementsystem ?? 'M',
+                props.mqttroot ?? 'mys-out',
+                props.addSerialNewline ?? false,
+            );
+
+            this.on('input', async (msg: IMysensorsMsg, send, done) => {
+                try {
+                    const msgOut = await this.controller.messageHandler(msg);
+                    if (msgOut) {
+                        send(msgOut);
+                    }
+                    done();
+                } catch (err) {
+                    done(err as Error);
+                }
+            });
         },
     );
 
