@@ -1,4 +1,4 @@
-<script type="text/x-red" data-template-name="mysencap">
+<script type="text/html" data-template-name="mysencap">
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
@@ -71,7 +71,7 @@
         <input type="text" id="node-input-firmwareversion">
     </div>
 </script>
-<script type="text/x-red" data-help-name="mysencap">
+<script type="text/html" data-help-name="mysencap">
     <p>
         Adds extra propperties to the message object, so it conforms to mysensor data. Send the resulting message through mysencode to convert
         into mysensors serial / mqtt topic format, that can be sent to either a mysensors node, or sent to another controller that understands
@@ -209,19 +209,24 @@ function sortOptions(selectTag) {
     var options = $('#'+selectTag+' option');
     var arr = options.map(function(_, o) { return { t:
     $(o).text(), v: o.value }; }).get();
-    arr.sort(function(o1, o2) { return o1.t > o2.t ? 1 : o1.t <
-    o2.t ? -1 : 0; });
+    arr.sort((o1, o2) => { 
+        if (o1.t > o2.t) {
+            return 1;
+        }
+        if (o1.t < o2.t) {
+            return -1;
+        }
+        return 0; 
+    });
     options.each(function(i, o) {
         o.value = arr[i].v;
         $(o).text(arr[i].t);
-//              if (parseInt(arr[i].v) == parseInt(selected)) $(o).prop('selected',true);
     });
     $('#'+selectTag).val(selected);
 }
 
 function loadJsonTypes(type, selectId, selection) {
     $.getJSON('mysensordefs/'+type, function(data) {
-        var index;
         var html = '';
         data = JSON.parse(data);
         Object.keys(data).forEach((item) => {

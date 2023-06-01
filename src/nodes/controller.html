@@ -50,7 +50,7 @@
     });
 </script>
 
-<script type="text/x-red" data-template-name="myscontroller">
+<script type="text/html" data-template-name="myscontroller">
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
@@ -64,8 +64,13 @@
         <input type="text" id="node-input-database" placeholder="Database">
     </div>
     <div class="form-row">
-        <label for="node-input-handleid"> Handle IDs</label>
-        <input type="checkbox" id="node-input-handleid">
+        <label><i class="fa fa-cog"></i> Options</label>
+        <div style="display:inline-block;" class="mysensor-options">
+            <div>
+                <label><input type="checkbox" id="node-input-handleid"> Handle IDs</label>
+                <label><input type="checkbox" id="node-input-addSerialNewline"> Add newline to MySerial encoded output</label>
+            </div>
+        </div>
     </div>
     <div class="form-row">
         <label for="node-input-measurementsystem">Units</label>
@@ -673,12 +678,8 @@
     </div>
     <div class="form-tips">Timezone is used to set the timezone on I_TIME messages sent to a node, requesting time</div>
     <div class="form-row">
-        <label for="node-input-addSerialNewline">Add newline to mysensors serial protocol output</label>
-        <input type="checkbox" id="node-input-add-newline">
-    </div>
-    <div class="form-row">
         <label><i class="fa fa-book"></i> List of nodes</label>
-        <table border="1px" style="width:100%">
+        <table class="node-table">
             <thead>
                 <tr>
                     <th>id</th>
@@ -695,7 +696,7 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="myscontroller">
+<script type="text/html" data-help-name="myscontroller">
     <p>Controller node for mysensors network. It is capable of keeping track of used node IDs, and can hand out ned node IDs upon request from new nodes</p>
 
     <h3>Input</h3>
@@ -723,6 +724,8 @@
         <dd>Sends a node ID if 'Handle IDs' is checked</dd>
         </dl>
         Output message is using the same format at incomming, so can be sent directly back into the mysensors network (Serial/MQTT)
+
+        If <code>Add newline to MySerial encoded output</code> is checked, then a newline is added when sending a serial type message.
     </p>
     <p>
         The node collects data about nodes that it hears on the mysensors network, such as nodeID, sketchname, timestamp for when it was heard last etc.
@@ -730,3 +733,30 @@
         the current list of nodes will be shown in the configuration panel of the controller node
     </p>
 </script>
+
+<style>
+    .node-table {
+        border: 1px solid;
+        width: 100%;
+    }
+
+    .node-table th, .node-table td {
+        border: 1px solid;
+    }
+
+    .mysensor-options label {
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        vertical-align: baseline;
+        width: 120px !important;
+        white-space: nowrap;
+    }
+
+    .mysensor-options input {
+        width: auto !important;
+        vertical-align: baseline !important;
+    }
+</style>
