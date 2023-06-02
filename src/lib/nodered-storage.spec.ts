@@ -1,36 +1,36 @@
-import { expect } from 'chai';
-import { NodeContextData } from 'node-red';
-import { useSinonSandbox } from '../../test/sinon';
-import {NoderedStorage} from './nodered-storage';
+import { expect } from 'chai'
+import { NodeContextData } from 'node-red'
+import { useSinonSandbox } from '../../test/sinon'
+import {NoderedStorage} from './nodered-storage'
 
 describe('lib/nodered-storage', () => {
-    const sinon = useSinonSandbox();
+    const sinon = useSinonSandbox()
 
     function setupStub(storageKey = 'test-key', store = 'test-store') {
-        const get = sinon.stub().named('get');
-        const set = sinon.stub().named('set');
-        const keys = sinon.stub().named('keys');
+        const get = sinon.stub().named('get')
+        const set = sinon.stub().named('set')
+        const keys = sinon.stub().named('keys')
         const context: NodeContextData = {
             get,
             set,
             keys,
-        };
-        sinon.clock.setSystemTime(new Date('2023-01-01 01:00Z'));
+        }
+        sinon.clock.setSystemTime(new Date('2023-01-01 01:00Z'))
 
         return {
             get,
             set,
             keys,
-            nodeRedStorage: new NoderedStorage(context, storageKey, store)
-        };
+            nodeRedStorage: new NoderedStorage(context, storageKey, store),
+        }
     }
 
     it('should set node heard attribute', async () => {
-        const {get, set, nodeRedStorage} = setupStub();
+        const {get, set, nodeRedStorage} = setupStub()
 
-        await nodeRedStorage.nodeHeard(1);
+        await nodeRedStorage.nodeHeard(1)
 
-        sinon.assert.calledOnce(get);
+        sinon.assert.calledOnce(get)
         sinon.assert.calledWith(set, 'test-key', {
             '1': {
                 batteryLevel: -1,
@@ -42,15 +42,15 @@ describe('lib/nodered-storage', () => {
                 sensors: [],
                 sketchName: '',
                 sketchVersion: '',
-                used: 1
-            }
-        });
-    });
+                used: 1,
+            },
+        })
+    })
 
     it('should set sketch name', async () => {
-        const {set, nodeRedStorage} = setupStub();
+        const {set, nodeRedStorage} = setupStub()
 
-        await nodeRedStorage.sketchName(2, 'test');
+        await nodeRedStorage.sketchName(2, 'test')
 
         sinon.assert.calledWith(set, 'test-key', {
             '2': {
@@ -63,13 +63,13 @@ describe('lib/nodered-storage', () => {
                 sensors: [],
                 sketchName: 'test',
                 sketchVersion: '',
-                used: 1
-            }
-        });
-    });
+                used: 1,
+            },
+        })
+    })
 
     it('should set sketch version', async () => {
-        const {get, set, nodeRedStorage} = setupStub();
+        const {get, set, nodeRedStorage} = setupStub()
 
         get.returns({
             '2': {
@@ -82,10 +82,10 @@ describe('lib/nodered-storage', () => {
                 sensors: [],
                 sketchName: 'not-altered',
                 sketchVersion: 'not-valid',
-                used: 1
-            }
-        });
-        await nodeRedStorage.sketchVersion(2, '1.5');
+                used: 1,
+            },
+        })
+        await nodeRedStorage.sketchVersion(2, '1.5')
 
         sinon.assert.calledWith(set, 'test-key', {
             '2': {
@@ -98,13 +98,13 @@ describe('lib/nodered-storage', () => {
                 sensors: [],
                 sketchName: 'not-altered',
                 sketchVersion: '1.5',
-                used: 1
-            }
-        });
-    });
+                used: 1,
+            },
+        })
+    })
 
     it('should set child as heard', async () => {
-        const {get, set, nodeRedStorage} = setupStub();
+        const {get, set, nodeRedStorage} = setupStub()
         get.returns({
             '2': {
                 batteryLevel: -1,
@@ -124,10 +124,10 @@ describe('lib/nodered-storage', () => {
                 ],
                 sketchName: 'not-altered',
                 sketchVersion: 'not-valid',
-                used: 1
-            }
-        });
-        await nodeRedStorage.childHeard(2, 5);
+                used: 1,
+            },
+        })
+        await nodeRedStorage.childHeard(2, 5)
 
         sinon.assert.calledWith(set, 'test-key', {
             '2': {
@@ -148,13 +148,13 @@ describe('lib/nodered-storage', () => {
                 ],
                 sketchName: 'not-altered',
                 sketchVersion: 'not-valid',
-                used: 1
-            }
-        }, 'test-store');
-    });
+                used: 1,
+            },
+        }, 'test-store')
+    })
 
     it('should not set child node if there is no parent', async () => {
-        const {get, set, nodeRedStorage} = setupStub();
+        const {get, set, nodeRedStorage} = setupStub()
         get.returns({
             '2': {
                 batteryLevel: -1,
@@ -174,16 +174,16 @@ describe('lib/nodered-storage', () => {
                 ],
                 sketchName: 'not-altered',
                 sketchVersion: 'not-valid',
-                used: 1
-            }
-        });
-        await nodeRedStorage.childHeard(3, 5);
+                used: 1,
+            },
+        })
+        await nodeRedStorage.childHeard(3, 5)
 
-        sinon.assert.notCalled(set);
-    });
+        sinon.assert.notCalled(set)
+    })
 
     it('should get list of nodes', async () => {
-        const { get, nodeRedStorage } = setupStub();
+        const { get, nodeRedStorage } = setupStub()
 
         get.resolves({
             '1': {
@@ -193,21 +193,21 @@ describe('lib/nodered-storage', () => {
             '2': {
                 sketchName: 'unknown',
                 used: false,
-            }
-        });
+            },
+        })
 
-        const result = await nodeRedStorage.getNodeList();
+        const result = await nodeRedStorage.getNodeList()
 
         expect(result).to.deep.equal([
             {
                 sketchName: 'heard',
                 used: true,
-            }
-        ]);
-    });
+            },
+        ])
+    })
 
     it('should get a free node id to assign to a new node', async () => {
-        const { get, nodeRedStorage } = setupStub();
+        const { get, nodeRedStorage } = setupStub()
 
         get.resolves({
             '1': {
@@ -219,27 +219,27 @@ describe('lib/nodered-storage', () => {
                 nodeId: 2,
                 sketchName: 'unknown',
                 used: false,
-            }
-        });
+            },
+        })
 
-        const result = await nodeRedStorage.getFreeNodeId();
+        const result = await nodeRedStorage.getFreeNodeId()
 
-        expect(result).to.equal(2);
-    });
+        expect(result).to.equal(2)
+    })
 
     it('should get default child info if none is found', async () => {
-        const { get, nodeRedStorage } = setupStub();
+        const { get, nodeRedStorage } = setupStub()
 
         get.resolves({
             '1': {
                 nodeId: 1,
                 sketchName: 'heard',
                 used: true,
-                sensors: []
-            }
-        });
+                sensors: [],
+            },
+        })
 
-        const result = await nodeRedStorage.getChild(1, 2);
+        const result = await nodeRedStorage.getChild(1, 2)
 
         expect(result).to.deep.equal({
             nodeId: 1,
@@ -247,11 +247,11 @@ describe('lib/nodered-storage', () => {
             sType: 0,
             description: '',
             lastHeard: new Date('2023-01-01T01:00:00.000Z'),
-        });
-    });
+        })
+    })
 
     it('should get child info from context', async () => {
-        const { get, nodeRedStorage } = setupStub();
+        const { get, nodeRedStorage } = setupStub()
 
         get.resolves({
             '1': {
@@ -265,12 +265,12 @@ describe('lib/nodered-storage', () => {
                         lastHeard: new Date('1985-01-01'),
                         description: 'known child',
                         sType: 2,
-                    }
-                ]
-            }
-        });
+                    },
+                ],
+            },
+        })
 
-        const result = await nodeRedStorage.getChild(1, 2);
+        const result = await nodeRedStorage.getChild(1, 2)
 
         expect(result).to.deep.equal({
             nodeId: 1,
@@ -278,11 +278,11 @@ describe('lib/nodered-storage', () => {
             sType: 2,
             description: 'known child',
             lastHeard: new Date('1985-01-01'),
-        });
-    });
+        })
+    })
 
     it('should set child details', async() => {
-        const { get, set, nodeRedStorage } = setupStub();
+        const { get, set, nodeRedStorage } = setupStub()
 
         get.resolves({
             '1': {
@@ -290,12 +290,12 @@ describe('lib/nodered-storage', () => {
                 sketchName: 'heard',
                 used: true,
                 sensors: [],
-            }
-        });
+            },
+        })
 
-        const result = await nodeRedStorage.child(1, 2, 5, 'some description');
+        const result = await nodeRedStorage.child(1, 2, 5, 'some description')
 
-        expect(result).to.equal(undefined);
+        expect(result).to.equal(undefined)
         sinon.assert.calledWith(set, 'test-key', {
             '1': {
                 nodeId: 1,
@@ -308,14 +308,14 @@ describe('lib/nodered-storage', () => {
                         sType: 5,
                         description: 'some description',
                         lastHeard: new Date('2023-01-01T01:00:00.000Z'),
-                    }
+                    },
                 ],
-            }
-        }, 'test-store');
-    });
+            },
+        }, 'test-store')
+    })
 
     it('should set parent node', async () => {
-        const { get, set, nodeRedStorage } = setupStub();
+        const { get, set, nodeRedStorage } = setupStub()
 
         get.resolves({
             '1': {
@@ -323,12 +323,12 @@ describe('lib/nodered-storage', () => {
                 sketchName: 'heard',
                 used: true,
                 sensors: [],
-            }
-        });
+            },
+        })
 
-        const result = await nodeRedStorage.setParent(1, 2);
+        const result = await nodeRedStorage.setParent(1, 2)
 
-        expect(result).to.equal(undefined);
+        expect(result).to.equal(undefined)
         sinon.assert.calledWith(set, 'test-key', {
             '1': {
                 nodeId: 1,
@@ -336,12 +336,12 @@ describe('lib/nodered-storage', () => {
                 used: true,
                 sensors: [],
                 parentId: 2,
-            }
-        }, 'test-store');
-    });
+            },
+        }, 'test-store')
+    })
 
     it('should set batterylevel for node', async () => {
-        const { get, set, nodeRedStorage } = setupStub();
+        const { get, set, nodeRedStorage } = setupStub()
 
         get.resolves({
             '1': {
@@ -349,12 +349,12 @@ describe('lib/nodered-storage', () => {
                 sketchName: 'heard',
                 used: true,
                 sensors: [],
-            }
-        });
+            },
+        })
 
-        const result = await nodeRedStorage.setBatteryLevel(1, 2);
+        const result = await nodeRedStorage.setBatteryLevel(1, 2)
 
-        expect(result).to.equal(undefined);
+        expect(result).to.equal(undefined)
         sinon.assert.calledWith(set, 'test-key', {
             '1': {
                 nodeId: 1,
@@ -362,15 +362,15 @@ describe('lib/nodered-storage', () => {
                 used: true,
                 sensors: [],
                 batteryLevel: 2,
-            }
-        }, 'test-store');
-    });
+            },
+        }, 'test-store')
+    })
 
     it('should handle undefined context gracefully', async () => {
-        const nodeRedStorage = new NoderedStorage(undefined, '');
+        const nodeRedStorage = new NoderedStorage(undefined, '')
 
-        const result = await nodeRedStorage.setBatteryLevel(1, 2);
+        const result = await nodeRedStorage.setBatteryLevel(1, 2)
 
-        expect(result).to.equal(undefined);
-    });
-});
+        expect(result).to.equal(undefined)
+    })
+})

@@ -1,4 +1,4 @@
-import { mysensor_sensor } from './mysensors-types';
+import { mysensor_sensor } from './mysensors-types'
 
 export type INodeData = {
     nodeId: number

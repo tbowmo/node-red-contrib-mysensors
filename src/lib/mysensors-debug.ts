@@ -5,8 +5,8 @@ import {
     mysensor_internal,
     mysensor_payload,
     mysensor_sensor,
-    mysensor_stream
-} from './mysensors-types';
+    mysensor_stream,
+} from './mysensors-types'
 
 /* tslint:disable:max-line-length */
 
@@ -16,7 +16,7 @@ interface IMatch {
 }
 
 export class MysensorsDebugDecode {
-    private rprefix =  '(?:\\d+ )?(?:mysgw: )?(?:Client 0: )?';
+    private rprefix =  '(?:\\d+ )?(?:mysgw: )?(?:Client 0: )?'
     private  match: IMatch[] = [
         { re: 'MCO:BGN:INIT CP=([^,]+)', d: 'Core initialization with capabilities $1' },
         { re: 'MCO:BGN:INIT (\\w+),CP=([^,]+),VER=(.*)', d: 'Core initialization of  $1 , with capabilities $2, library version $3' },
@@ -177,47 +177,47 @@ export class MysensorsDebugDecode {
         { re: '!SGN:BND:VER WHI,ID=(\\d+) MISSING', d: 'Id  $1  not found in whitelist' },
         { re: 'SGN:BND:NONCE=(.*)', d: 'Calculating signature using nonce  $1 ' },
         { re: 'SGN:BND:HMAC=(.*)', d: 'Calculated signature is  $1 ' },
-    ];
+    ]
 
     constructor() {
         for (let i = 0, len = this.match.length; i < len; i++) {
-            this.match[i].re = new RegExp('^' + this.rprefix + this.match[i].re);
+            this.match[i].re = new RegExp('^' + this.rprefix + this.match[i].re)
         }
     }
 
     public decode(msg: string): string | undefined {
         for (const r of this.match) {
             if (r.re instanceof RegExp && r.re.test(msg)) {
-                let outStr = msg.replace(r.re, r.d);
+                let outStr = msg.replace(r.re, r.d)
                 outStr = outStr.replace(
                     /{command:(\d+)}/g,
                     (__, m1) => mysensor_command[m1],
-                );
+                )
                 outStr = outStr.replace(
                     /{pt:(\d+)}/g,
                     (__, m1) => mysensor_payload[m1],
-                );
+                )
                 return outStr.replace(
                     /{type:(\d+):(\d+)}/g,
                     (__, cmd, type) => {
-                        return this.type(Number(cmd), Number(type));
+                        return this.type(Number(cmd), Number(type))
                     },
-                );
+                )
             }
         }
     }
 
     private type(cmd: mysensor_command, type: number): string {
         switch (cmd) {
-            case mysensor_command.C_REQ:
-            case mysensor_command.C_SET:
-                return mysensor_data[type];
-            case mysensor_command.C_INTERNAL:
-                return mysensor_internal[type];
-            case mysensor_command.C_PRESENTATION:
-                return mysensor_sensor[type];
-            case mysensor_command.C_STREAM:
-                return mysensor_stream[type];
+        case mysensor_command.C_REQ:
+        case mysensor_command.C_SET:
+            return mysensor_data[type]
+        case mysensor_command.C_INTERNAL:
+            return mysensor_internal[type]
+        case mysensor_command.C_PRESENTATION:
+            return mysensor_sensor[type]
+        case mysensor_command.C_STREAM:
+            return mysensor_stream[type]
         }
     }
 }

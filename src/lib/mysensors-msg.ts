@@ -1,11 +1,11 @@
-import { NodeMessageInFlow } from 'node-red';
+import { NodeMessageInFlow } from 'node-red'
 import {
     mysensor_command,
     mysensor_data,
     mysensor_internal,
     mysensor_sensor,
     mysensor_stream,
-} from './mysensors-types';
+} from './mysensors-types'
 
 export interface INodeMessage extends NodeMessageInFlow {
     payload: string
@@ -60,10 +60,10 @@ export enum MsgOrigin {
 }
 
 export function validateStrongMysensorsMsg(
-    input: IMysensorsMsg | IStrongMysensorsMsg<MysensorsCommand>
+    input: IMysensorsMsg | IStrongMysensorsMsg<MysensorsCommand>,
 ): input is IStrongMysensorsMsg<MysensorsCommand> {
     return input.nodeId !== undefined
         && input.childSensorId !== undefined
         && input.messageType !== undefined
-        && input.subType !== undefined;
+        && input.subType !== undefined
 }

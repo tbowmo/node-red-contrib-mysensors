@@ -1,13 +1,10 @@
-/* istanbul ignore next */
-
-import { Node, NodeDef } from 'node-red';
-
-import { IStorage } from '../lib/storage-interface';
-import { IDecoder } from '../lib/decoder/decoder-interface';
-import { MysensorsController } from '../lib/mysensors-controller';
-import { MysensorsDebugDecode } from '../lib/mysensors-debug';
-import { IMysensorsMsg } from '../lib/mysensors-msg';
-import { mysensor_sensor } from '../lib/mysensors-types';
+import { Node, NodeDef } from 'node-red'
+import { IStorage } from '../lib/storage-interface'
+import { IDecoder } from '../lib/decoder/decoder-interface'
+import { MysensorsController } from '../lib/mysensors-controller'
+import { MysensorsDebugDecode } from '../lib/mysensors-debug'
+import { IMysensorsMsg } from '../lib/mysensors-msg'
+import { mysensor_sensor } from '../lib/mysensors-types'
 
 /* Encode */
 export interface IEncodeProperties extends NodeDef {

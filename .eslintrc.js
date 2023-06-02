@@ -1,60 +1,76 @@
 module.exports = {
-    'env': {
-        'es2021': true,
-        'node': true
+    env: {
+        es2021: true,
+        node: true,
     },
-    'extends': [
+    extends: [
         'eslint:recommended',
-        'plugin:@typescript-eslint/recommended'
+        'plugin:@typescript-eslint/recommended',
     ],
-    'overrides': [
+    overrides: [
     ],
-    'parser': '@typescript-eslint/parser',
-    'parserOptions': {
-        'ecmaVersion': 'latest',
-        'sourceType': 'module'
+    parser: '@typescript-eslint/parser',
+    parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
     },
-    'plugins': [
-        '@typescript-eslint'
+    plugins: [
+        '@typescript-eslint',
+        'import',
+        'import-newlines',
     ],
-    'rules': {
-        'indent': [
+    root: true,
+    rules: {
+        'import/order': 'off',
+        'eol-last': 'error',
+        'comma-dangle': [
+            'warn',
+            'always-multiline',
+        ],
+        indent: [
             'error',
             4,
-            {
-                'SwitchCase': 1,
-            }
         ],
         'linebreak-style': [
             'error',
-            'unix'
+            'unix',
         ],
-        'quotes': [
-            'error',
-            'single'
+        quotes: [
+            'warn',
+            'single',
+            { avoidEscape: true },
         ],
-        'semi': [
-            'error',
-            'always'
+        semi: [
+            'warn',
+            'never',
         ],
         'max-len': [
             'error',
             {
-                'code' : 120
-            }
+                'code' : 180,
+            },
         ],
         'no-console': [
-            'error'
+            'warn',
         ],
-        'curly': [
-            'error'
-        ],
-        'eqeqeq': [
-            'error'
-        ],
-        'complexity': [
+        curly: [
             'error',
-            11
-        ]
-    }
-};
+        ],
+        eqeqeq: [
+            'error',
+        ],
+        complexity: [
+            'error',
+            11,
+        ],
+        'import-newlines/enforce': [
+            'error',
+            {
+                items: 2,
+                'max-len': 180,
+                semi: false,
+            },
+        ],
+
+    },
+}
