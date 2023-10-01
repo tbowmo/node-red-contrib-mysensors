@@ -1,17 +1,20 @@
 <script type="text/javascript">
-    RED.nodes.registerType('mysdebug',{
-        category: 'mysensors',
-        color: '#a6bbcf',
-        defaults: {
-            name: {value: ""}
-        },
-        inputs:1,
-        outputs:1,
-        icon: "file.png",
-        label: function() {
-            return this.name || "mysdebug";
+    RED.nodes.registerType(
+        'mysdebug',
+        {
+            category: 'mysensors',
+            color: '#a6bbcf',
+            defaults: {
+                name: {value: ""}
+            },
+            inputs:1,
+            outputs:1,
+            icon: "file.png",
+            label: function() {
+                return this.name || "mysdebug";
+            }
         }
-    });
+    );
 </script>
 
 <script type="text/html" data-template-name="mysdebug">
@@ -31,4 +34,9 @@
         This node is transport agnostic, meaning that it will automatically detect if input is in mysensors serial format (in <code>msg.payload</code>),
         MQTT with <code>msg.topic</code> set, or if it is already decoded by a mysdecode node.
     </p>
+    <h3>References</h3>
+    <ul>
+        <li><a href="https://github.com/tbowmo/node-red-contrib-mysensors">Github</a> - The github repository</li>
+        <li><a href="https://mysensors.org">MySensors</a></li>
+    </ul>
 </script>

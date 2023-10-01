@@ -1,19 +1,19 @@
-import {MysensorsDecoder} from './mysensors-decoder';
-import { IStrongMysensorsMsg, MysensorsCommand } from '../mysensors-msg';
-import { expect } from 'chai';
-import { useSinonSandbox } from '../../../test/sinon';
+import {MysensorsDecoder} from './mysensors-decoder'
+import { IStrongMysensorsMsg, MysensorsCommand } from '../mysensors-msg'
+import { expect } from 'chai'
+import { useSinonSandbox } from '../../../test/sinon'
 
 describe('lib/decoder/mysensors-decoder', () => {
-    const sinon = useSinonSandbox();
+    const sinon = useSinonSandbox()
 
     class dummy extends MysensorsDecoder {
         public testEnrich(msg: IStrongMysensorsMsg<MysensorsCommand>) {
-            return this.enrich(msg);
+            return this.enrich(msg)
         }
     }
 
     it('should descriptions for C_SET message', async () => {
-        const decoder = new dummy(false);
+        const decoder = new dummy(false)
 
         const result = await decoder.testEnrich({
             ack: 0,
@@ -22,7 +22,7 @@ describe('lib/decoder/mysensors-decoder', () => {
             messageType: 1,
             nodeId: 1,
             subType: 1,
-        });
+        })
 
         expect(result).to.deep.equal({
             _msgid: '',
@@ -33,11 +33,11 @@ describe('lib/decoder/mysensors-decoder', () => {
             nodeId: 1,
             subType: 1,
             subTypeStr: 'V_HUM',
-        });
-    });
+        })
+    })
 
     it('should descriptions for C_REQ message', async () => {
-        const decoder = new dummy(false);
+        const decoder = new dummy(false)
 
         const result = await decoder.testEnrich({
             ack: 0,
@@ -46,7 +46,7 @@ describe('lib/decoder/mysensors-decoder', () => {
             messageType: 2,
             nodeId: 1,
             subType: 5,
-        });
+        })
 
         expect(result).to.deep.equal({
             _msgid: '',
@@ -57,11 +57,11 @@ describe('lib/decoder/mysensors-decoder', () => {
             nodeId: 1,
             subType: 5,
             subTypeStr: 'V_FORECAST',
-        });
-    });
+        })
+    })
 
     it('should return descriptions for STREAM message', async() => {
-        const decoder = new dummy(false);
+        const decoder = new dummy(false)
 
         const result = await decoder.testEnrich({
             ack: 0,
@@ -70,7 +70,7 @@ describe('lib/decoder/mysensors-decoder', () => {
             messageType: 4,
             nodeId: 1,
             subType: 1,
-        });
+        })
 
         expect(result).to.deep.equal({
             _msgid: '',
@@ -81,16 +81,16 @@ describe('lib/decoder/mysensors-decoder', () => {
             nodeId: 1,
             subType: 1,
             subTypeStr: 'ST_FIRMWARE_CONFIG_RESPONSE',
-        });
+        })
 
-    });
+    })
 
     it('should enrich with database lookup', async() => {
         const database = {
             getChild: sinon.stub().resolves({sType: 1}),
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } as any;
-        const decoder = new dummy(true, database);
+        } as any
+        const decoder = new dummy(true, database)
 
         const result = await decoder.testEnrich({
             ack: 0,
@@ -99,7 +99,7 @@ describe('lib/decoder/mysensors-decoder', () => {
             messageType: 1,
             nodeId: 1,
             subType: 1,
-        });
+        })
 
         expect(result).to.deep.equal({
             _msgid: '',
@@ -111,6 +111,6 @@ describe('lib/decoder/mysensors-decoder', () => {
             subType: 1,
             subTypeStr: 'V_HUM',
             sensorTypeStr: 'S_MOTION',
-        });
-    });
-});
+        })
+    })
+})

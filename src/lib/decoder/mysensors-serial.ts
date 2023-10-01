@@ -1,18 +1,23 @@
-import { INodeMessage, IStrongMysensorsMsg, MsgOrigin, MysensorsCommand } from '../mysensors-msg';
-import { IStorage } from '../storage-interface';
-import { IDecoder } from './decoder-interface';
-import { MysensorsDecoder } from './mysensors-decoder';
+import {
+    INodeMessage,
+    IStrongMysensorsMsg,
+    MsgOrigin,
+    MysensorsCommand,
+} from '../mysensors-msg'
+import { IStorage } from '../storage-interface'
+import { IDecoder } from './decoder-interface'
+import { MysensorsDecoder } from './mysensors-decoder'
 
 export class MysensorsSerial extends MysensorsDecoder implements IDecoder {
 
     constructor(enrich?: boolean, database?: IStorage, private addNewline = false) {
-        super(enrich, database);
+        super(enrich, database)
     }
 
     public async decode(msg: Readonly<INodeMessage>): Promise<IStrongMysensorsMsg<MysensorsCommand>| undefined> {
-        let message = msg.payload.toString();
-        message = message.replace(/(\r\n|\n|\r)/gm, '');
-        const tokens = message.split(';');
+        let message = msg.payload.toString()
+        message = message.replace(/(\r\n|\n|\r)/gm, '')
+        const tokens = message.split(';')
 
         if (tokens.length === 6) {
             const msgOut: IStrongMysensorsMsg<MysensorsCommand> = {
@@ -23,15 +28,15 @@ export class MysensorsSerial extends MysensorsDecoder implements IDecoder {
                 ack: tokens[3] === '1' ? 1 : 0,
                 subType: parseInt(tokens[4], 10),
                 payload: tokens[5],
-                origin: MsgOrigin.serial
-            };
+                origin: MsgOrigin.serial,
+            }
 
-            return this.enrich(msgOut);
+            return this.enrich(msgOut)
         }
     }
 
     public encode(
-        msg: Readonly<IStrongMysensorsMsg<MysensorsCommand>>
+        msg: Readonly<IStrongMysensorsMsg<MysensorsCommand>>,
     ): IStrongMysensorsMsg<MysensorsCommand> {
         // eslint-disable-next-line max-len
         const payload = [
@@ -40,11 +45,11 @@ export class MysensorsSerial extends MysensorsDecoder implements IDecoder {
             msg.messageType,
             msg.ack,
             msg.subType,
-            msg.payload
-        ].join(';');
+            msg.payload,
+        ].join(';')
         return {
             ...msg,
-            payload: `${payload}${this.addNewline ? '\n' : ''}`
-        };
+            payload: `${payload}${this.addNewline ? '\n' : ''}`,
+        }
     }
 }
