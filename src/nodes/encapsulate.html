@@ -73,16 +73,21 @@
 </script>
 <script type="text/html" data-help-name="mysencap">
     <p>
-        Adds extra propperties to the message object, so it conforms to mysensor data. Send the resulting message through mysencode to convert
-        into mysensors serial / mqtt topic format, that can be sent to either a mysensors node, or sent to another controller that understands
-        mysensors serial or mqtt topic formats
+        Adds extra propperties to the message object, to make it conform to mysensor data format. Send the resulting message through mysencode
+        to convert into mysensors serial / mqtt topic format, that can be sent to either a mysensors node, or sent to another controller that
+        understands mysensors serial or mqtt topic formats
     </p>
     <h3>Input</h3>
-    <dl clas="message-properties">
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">number, string</span></dt>
+        <dd>payload that you want sent out on the mysensors network</dd>
     </dl>
     <h3>Output</h3>
     <dl class="message-properties">
-        All parts, except payload, is set in the node configuration page
+        <dt>payload <span class="property-type">number, string</span></dt>
+        <dd>payload that you want sent out on the mysensors network</dd>
+        <br />
+        All properties below, is set in the node configuration page
         <dt>nodeId <span class="property-type">number</span></dt>
         <dd></dd>
         <dt>childSensorId <span class="property-type">number</span></dt>
@@ -93,148 +98,151 @@
         <dd></dd>
         <dt>subType <span class="property-type">number</span></dt>
         <dd></dd>
-        <dt>payload <span class="property-type">string</span></dt>
-        <dd></dd>
     </dl>
     <h3>Details</h3>
     <p>
-        if "presentation" is checked, a presentation message will be sent at startup of node-red (or a new flow is deployed).
-        This can be used to generate presentation of dummy nodes, that you create.
+        If <code>presentation</code> is checked, a presentation message will be sent when node-red starts, or flows are deployed.
+        The purpose is to generate a mysensors comaptible presentation of dummy nodes created in node-red.
     </p>
     <h3>References</h3>
-        <ul>
-            <li><a href="https://www.mysensors.org/download/serial_api_20">MySensors Serial API</a></li>
-        </ul>
+    <ul>
+        <li><a href="https://github.com/tbowmo/node-red-contrib-mysensors">Github</a> - The github repository</li>
+        <li><a href="https://mysensors.org">MySensors</a></li>
+        <li><a href="https://www.mysensors.org/download/serial_api_20">MySensors Serial API</a></li>
+    </ul>
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('mysencap',{
-        category: 'mysensors',
-        color: '#a6bbcf',
-        defaults: {
-            name: {value:""},
-            nodeid: {value:0, required:true},
-            childid: {value:0, required:true},
-            subtype: {value:0},
-            internal: {value:0},
-            ack : {value:false, required:true},
-            msgtype: {value:1, required:true},
-            presentation: {value : false, required:false},
-            presentationtype: {value:0},
-            presentationtext: {value:""},
-            fullpresentation: {value:false, required:false},
-            firmwarename : {value:""},
-            firmwareversion : {value:""}
+    RED.nodes.registerType(
+        'mysencap',
+        {
+            category: 'mysensors',
+            color: '#a6bbcf',
+            defaults: {
+                name: {value: ""},
+                nodeid: {value:0, required:true},
+                childid: {value:0, required:true},
+                subtype: {value:0},
+                internal: {value:0},
+                ack : {value:false, required:true},
+                msgtype: {value:1, required:true},
+                presentation: {value : false, required:false},
+                presentationtype: {value:0},
+                presentationtext: {value:""},
+                fullpresentation: {value:false, required:false},
+                firmwarename : {value:""},
+                firmwareversion : {value:""}
 
-        },
-        inputs:1,
-        outputs:1,
-        icon: "envelope.png",
-        label: function() {
-            return this.name|| "encapsulate: " + this.nodeid + ":" + this.childid + ":" +
-            this.msgtype + ":0:" + this.subtype+"<payload>";
-        },
-        oneditprepare: function() {
-            $('#node-input-row-internal').hide();
-            $('#node-input-row-subtype').hide();
-            $('#node-input-row-presentation').hide();
+            },
+            inputs:1,
+            outputs:1,
+            icon: "envelope.png",
+            label: function() {
+                return this.name|| "encapsulate: " + this.nodeid + ":" + this.childid + ":" +
+                this.msgtype + ":0:" + this.subtype+"<payload>";
+            },
+            oneditprepare: function() {
+                $('#node-input-row-internal').hide();
+                $('#node-input-row-subtype').hide();
+                $('#node-input-row-presentation').hide();
 
-            loadJsonTypes('subtype', 'node-input-subtype-select', 'node-input-subtype');
-            loadJsonTypes('presentation','node-input-presentationtype-select','node-input-presentationtype');
-            loadJsonTypes('internal','node-input-internal-select','node-input-internal');
+                loadJsonTypes('subtype', 'node-input-subtype-select', 'node-input-subtype');
+                loadJsonTypes('presentation','node-input-presentationtype-select','node-input-presentationtype');
+                loadJsonTypes('internal','node-input-internal-select','node-input-internal');
 
-            if (!$('#node-input-presentation').is(':checked')) {
-                $('.node-presentation-opts').hide();
-            }
+                if (!$('#node-input-presentation').is(':checked')) {
+                    $('.node-presentation-opts').hide();
+                }
 
-            if (!$('#node-input-fullpresentation').is(':checked')) {
-                $('.node-presentation-full-opts').hide();
-            }
+                if (!$('#node-input-fullpresentation').is(':checked')) {
+                    $('.node-presentation-full-opts').hide();
+                }
 
-            if ($('#node-input-msgtype option:selected').val() == "3") {
-                showInternal();
-            } else {
-                showSetReq();
-            }
-
-            $("#node-input-msgtype").change(function() {
-                var id = $("#node-input-msgtype option:selected").val();
-                if (id == "3") {
+                if ($('#node-input-msgtype option:selected').val() == "3") {
                     showInternal();
                 } else {
                     showSetReq();
                 }
-            });
 
-            $('#node-input-presentation').click(function() {
-                if (this.checked) {
-                    $('.node-presentation-opts').show();
-                } else {
-                    $('.node-presentation-opts').hide();
-                }
-                if (!$('#node-input-fullpresentation').is(':checked')) $('.node-presentation-full-opts').hide();
-                else $('.node-presentation-full-opts').show();
-            });
-            $('#node-input-fullpresentation').click(function() {
-                if (this.checked) {
-                    $('.node-presentation-full-opts').show();
-                } else {
-                    $('.node-presentation-full-opts').hide();
-                }
-            });
-        },
-        oneditsave : function() {
-            $('#node-input-internal').val($('#node-input-internal-select').val());
-            $('#node-input-subtype').val($('#node-input-subtype-select').val());
-            $('#node-input-presentationtype').val($('#node-input-presentationtype-select').val());
+                $("#node-input-msgtype").change(function() {
+                    var id = $("#node-input-msgtype option:selected").val();
+                    if (id == "3") {
+                        showInternal();
+                    } else {
+                        showSetReq();
+                    }
+                });
+
+                $('#node-input-presentation').click(function() {
+                    if (this.checked) {
+                        $('.node-presentation-opts').show();
+                    } else {
+                        $('.node-presentation-opts').hide();
+                    }
+                    if (!$('#node-input-fullpresentation').is(':checked')) $('.node-presentation-full-opts').hide();
+                    else $('.node-presentation-full-opts').show();
+                });
+                $('#node-input-fullpresentation').click(function() {
+                    if (this.checked) {
+                        $('.node-presentation-full-opts').show();
+                    } else {
+                        $('.node-presentation-full-opts').hide();
+                    }
+                });
+            },
+            oneditsave : function() {
+                $('#node-input-internal').val($('#node-input-internal-select').val());
+                $('#node-input-subtype').val($('#node-input-subtype-select').val());
+                $('#node-input-presentationtype').val($('#node-input-presentationtype-select').val());
+            }
         }
-    });
+    );
 
-function showSetReq() {
-    $("#node-input-row-subtype-select").show();
-    $("#node-input-row-internal-select").hide();
-    $(".node-childid").show();
-    $(".node-presentation").show();
-}
+    function showSetReq() {
+        $("#node-input-row-subtype-select").show();
+        $("#node-input-row-internal-select").hide();
+        $(".node-childid").show();
+        $(".node-presentation").show();
+    }
 
-function showInternal() {
-    $("#node-input-row-subtype-select").hide();
-    $("#node-input-row-internal-select").show();
-    $(".node-childid").hide();
-    $(".node-presentation").hide();
-}
+    function showInternal() {
+        $("#node-input-row-subtype-select").hide();
+        $("#node-input-row-internal-select").show();
+        $(".node-childid").hide();
+        $(".node-presentation").hide();
+    }
 
-function sortOptions(selectTag) {
-    var selected = $('#'+selectTag).val();
-    var options = $('#'+selectTag+' option');
-    var arr = options.map(function(_, o) { return { t:
-    $(o).text(), v: o.value }; }).get();
-    arr.sort((o1, o2) => { 
-        if (o1.t > o2.t) {
-            return 1;
-        }
-        if (o1.t < o2.t) {
-            return -1;
-        }
-        return 0; 
-    });
-    options.each(function(i, o) {
-        o.value = arr[i].v;
-        $(o).text(arr[i].t);
-    });
-    $('#'+selectTag).val(selected);
-}
-
-function loadJsonTypes(type, selectId, selection) {
-    $.getJSON('mysensordefs/'+type, function(data) {
-        var html = '';
-        data = JSON.parse(data);
-        Object.keys(data).forEach((item) => {
-            html = html + '<option value='+data[item]+'>'+item+'</option>';
+    function sortOptions(selectTag) {
+        var selected = $('#'+selectTag).val();
+        var options = $('#'+selectTag+' option');
+        var arr = options.map(function(_, o) { return { t:
+        $(o).text(), v: o.value }; }).get();
+        arr.sort((o1, o2) => { 
+            if (o1.t > o2.t) {
+                return 1;
+            }
+            if (o1.t < o2.t) {
+                return -1;
+            }
+            return 0; 
         });
-        $('#'+selectId).html(html);
-        $('#'+selectId).val($('#'+selection).val());
-    });
-    sortOptions(selectId);
-}
+        options.each(function(i, o) {
+            o.value = arr[i].v;
+            $(o).text(arr[i].t);
+        });
+        $('#'+selectTag).val(selected);
+    }
+
+    function loadJsonTypes(type, selectId, selection) {
+        $.getJSON('mysensordefs/'+type, function(data) {
+            var html = '';
+            data = JSON.parse(data);
+            Object.keys(data).forEach((item) => {
+                html = html + '<option value='+data[item]+'>'+item+'</option>';
+            });
+            $('#'+selectId).html(html);
+            $('#'+selectId).val($('#'+selection).val());
+        });
+        sortOptions(selectId);
+    }
 </script>

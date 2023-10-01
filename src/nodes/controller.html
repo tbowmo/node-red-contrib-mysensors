@@ -1,53 +1,56 @@
 <script type="text/javascript">
-    RED.nodes.registerType('myscontroller',{
-        category: 'mysensors',
-        color: '#a6bbcf',
-        defaults: {
-            database: {value:"", type: "mysensorsdb"},
-            name: {value:""},
-            handleid: {value: true},
-            timeresponse: {value: true},
-            timezone: {value: 'UTC'},
-            measurementsystem: {value: 'M'},
-            mqttroot: {value: 'mys-out'},
-            addSerialNewline: { value: true}
-        },
-        inputs:1,
-        outputs:1,
-        icon: "cog.png",
-        label: function() {
-            return this.name||"myscontroller";
-        },
-        oneditprepare: function() {
-            $.getJSON('mysensornodes/' + this.database, function(data) {
-                data = JSON.parse(data).data;
-                var html = '';
-                for(const item of data) {
-                    html = html + `<tr>
-                        <td>
-                            ${item.nodeId}
-                        </td>
-                        <td>
-                            ${item.sketchName}
-                        </td>
-                        <td>
-                            ${item.sketchVersion}
-                        </td>
-                        <td>
-                            ${item.lastHeard}
-                        </td>
-                        <td>
-                            ${(item.parentId !== item.nodeId && item.parentId !== null)?item.parentId:''}
-                        </td>
-                        <td>
-                            ${item.batteryLevel}
-                        </td>
-                        </tr>`;
-                }
-                $('#nodelist').html(html);
-            });
+    RED.nodes.registerType(
+        'myscontroller',
+        {
+            category: 'mysensors',
+            color: '#a6bbcf',
+            defaults: {
+                database: {value:"", type: "mysensorsdb"},
+                name: {value: ""},
+                handleid: {value: true},
+                timeresponse: {value: true},
+                timezone: {value: 'UTC'},
+                measurementsystem: {value: 'M'},
+                mqttroot: {value: 'mys-out'},
+                addSerialNewline: { value: true}
+            },
+            inputs:1,
+            outputs:1,
+            icon: "cog.png",
+            label: function() {
+                return this.name||"myscontroller";
+            },
+            oneditprepare: function() {
+                $.getJSON('mysensornodes/' + this.database, function(data) {
+                    data = JSON.parse(data).data;
+                    var html = '';
+                    for(const item of data) {
+                        html = html + `<tr>
+                            <td>
+                                ${item.nodeId}
+                            </td>
+                            <td>
+                                ${item.sketchName}
+                            </td>
+                            <td>
+                                ${item.sketchVersion}
+                            </td>
+                            <td>
+                                ${item.lastHeard}
+                            </td>
+                            <td>
+                                ${(item.parentId !== item.nodeId && item.parentId !== null)?item.parentId:''}
+                            </td>
+                            <td>
+                                ${item.batteryLevel}
+                            </td>
+                            </tr>`;
+                    }
+                    $('#nodelist').html(html);
+                });
+            }
         }
-    });
+    );
 </script>
 
 <script type="text/html" data-template-name="myscontroller">
@@ -716,22 +719,25 @@
     <p>
         The node will generate an output message on reception of the following internal messages in the MySensors protocol:
         <dl class="message-properties">
-        <dt>I_CONFIG</dt>
-        <dd>Sends either [M]etric of [I]mperial, depending on units setting in the node</dd>
-        <dt>I_TIME</dt>
-        <dd>Sends a unix timestamp, corrected with timezone offset</dd>
-        <dt>I_ID_REQUEST</dt>
-        <dd>Sends a node ID if 'Handle IDs' is checked</dd>
+            <dt>I_CONFIG</dt>
+            <dd>Sends either [M]etric of [I]mperial, depending on units setting in the node</dd>
+            <dt>I_TIME</dt>
+            <dd>Sends a unix timestamp, corrected with timezone offset</dd>
+            <dt>I_ID_REQUEST</dt>
+            <dd>Sends a node ID if 'Handle IDs' is checked</dd>
         </dl>
-        Output message is using the same format at incomming, so can be sent directly back into the mysensors network (Serial/MQTT)
-
+        Output message is using the same format at incomming, so can be sent directly back into the mysensors network (Serial/MQTT) <br />
         If <code>Add newline to MySerial encoded output</code> is checked, then a newline is added when sending a serial type message.
     </p>
     <p>
         The node collects data about nodes that it hears on the mysensors network, such as nodeID, sketchname, timestamp for when it was heard last etc.
-
         the current list of nodes will be shown in the configuration panel of the controller node
     </p>
+    <h3>References</h3>
+    <ul>
+        <li><a href="https://github.com/tbowmo/node-red-contrib-mysensors">Github</a> - The github repository</li>
+        <li><a href="https://mysensors.org">MySensors</a></li>
+    </ul>
 </script>
 
 <style>

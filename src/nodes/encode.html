@@ -1,44 +1,47 @@
 <script type="text/javascript">
-    RED.nodes.registerType('mysencode',{
-        category: 'mysensors',
-        color: '#a6bbcf',
-        defaults: {
-            name: {value: ""},
-            mqtt: {value: false, required:true},
-            mqtttopic: {value: ""}
-        },
-        inputs:1,
-        outputs:1,
-        icon: "arrow-in.png",
-        label: function() {
-            var type = "mysencode serial";
-            if (this.mqtt) {
-                type = "mysencode mqtt";
-                if (this.mqtttopic) {
-                    type = type + " " + this.mqtttopic;
+    RED.nodes.registerType(
+        'mysencode',
+        {
+            category: 'mysensors',
+            color: '#a6bbcf',
+            defaults: {
+                name: {value: ""},
+                mqtt: {value: false, required:true},
+                mqtttopic: {value: ""}
+            },
+            inputs:1,
+            outputs:1,
+            icon: "arrow-in.png",
+            label: function() {
+                var type = "mysencode serial";
+                if (this.mqtt) {
+                    type = "mysencode mqtt";
+                    if (this.mqtttopic) {
+                        type = type + " " + this.mqtttopic;
+                    }
                 }
-            }
-            return this.name || type;
-        },
-        inputLabels: "Message input",
-        outputLabels: ["MQTT / Mysensors output"],
-        align:"right",
-        oneditprepare: function() {
-            if ($('#node-input-mqtt').is(':checked')) {
-                $('#node-input-row-mqtttopic').show();
-            } else {
-                $('#node-input-row-mqtttopic').hide();
-            }
-
-            $('#node-input-mqtt').click(function() {
-                if (this.checked) {
+                return this.name || type;
+            },
+            inputLabels: "Message input",
+            outputLabels: ["MQTT / Mysensors output"],
+            align:"right",
+            oneditprepare: function() {
+                if ($('#node-input-mqtt').is(':checked')) {
                     $('#node-input-row-mqtttopic').show();
                 } else {
                     $('#node-input-row-mqtttopic').hide();
                 }
-            });
+
+                $('#node-input-mqtt').click(function() {
+                    if (this.checked) {
+                        $('#node-input-row-mqtttopic').show();
+                    } else {
+                        $('#node-input-row-mqtttopic').hide();
+                    }
+                });
+            }
         }
-    });
+    );
 </script>
 
 <script type="text/html" data-template-name="mysencode">
@@ -95,7 +98,12 @@
 
     <h3>Details</h3>
     <p>
-        By checking off the MQTT option, this node create a MQTT topic, compatible with mysensors, instead of MySensors serial protocol.
-        Setting Topic root overwrites incomming msg.topicRoot for MQTT mode.
+        By checking off <code>MQTT</code> the node creates a MQTT topic, compatible with mysensors, instead of MySensors serial protocol.
+        Setting <code>topic root</code> overwrites incomming msg.topic for MQTT mode.
     <p>
+    <h3>References</h3>
+    <ul>
+        <li><a href="https://github.com/tbowmo/node-red-contrib-mysensors">Github</a> - The github repository</li>
+        <li><a href="https://mysensors.org">MySensors</a></li>
+    </ul>   
 </script>

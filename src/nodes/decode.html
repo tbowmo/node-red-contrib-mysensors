@@ -1,39 +1,42 @@
 <script type="text/javascript">
-    RED.nodes.registerType('mysdecode',{
-        category: 'mysensors',
-        color: '#a6bbcf',
-        defaults: {
-            database: {value:"", type: "mysensorsdb", required: false},
-            name: {value:""},
-            mqtt: {value: false, required:true},
-            enrich: {value: false}
-        },
-        inputs:1,
-        outputs:1,
-        icon: "arrow-in.png",
-        label: function() {
-            var type = "mysdecode serial";
-            if (this.mqtt) type = "mysdecode mqtt";
-            return this.name||type;
-        },
-        inputLabels: "MQTT topic or mysensors input",
-        outputLabels: ["decoded out"],
-        oneditprepare: function() {
-            if ($('#node-input-enrich').is(':checked')) {
-                $('.databaseRow').show();
-            } else {
-                $('.databaseRow').hide();
-            }
-
-            $('#node-input-enrich').click(function() {
-                if (this.checked) {
+    RED.nodes.registerType(
+        'mysdecode',
+        {
+            category: 'mysensors',
+            color: '#a6bbcf',
+            defaults: {
+                database: {value:"", type: "mysensorsdb", required: false},
+                name: {value: ""},
+                mqtt: {value: false, required:true},
+                enrich: {value: false}
+            },
+            inputs:1,
+            outputs:1,
+            icon: "arrow-in.png",
+            label: function() {
+                var type = "mysdecode serial";
+                if (this.mqtt) type = "mysdecode mqtt";
+                return this.name||type;
+            },
+            inputLabels: "MQTT topic or mysensors input",
+            outputLabels: ["decoded out"],
+            oneditprepare: function() {
+                if ($('#node-input-enrich').is(':checked')) {
                     $('.databaseRow').show();
                 } else {
                     $('.databaseRow').hide();
                 }
-            });
+
+                $('#node-input-enrich').click(function() {
+                    if (this.checked) {
+                        $('.databaseRow').show();
+                    } else {
+                        $('.databaseRow').hide();
+                    }
+                });
+            }
         }
-    });
+    );
 </script>
 
 <script type="text/html" data-template-name="mysdecode">
@@ -59,13 +62,11 @@
     <p>
         Parses either <code>msg.payload</code> from mysensors serial format, or <code>msg.topic</code> if MQTT type is chosen
     </p>
-    <p>
-        Note! If enrich is ticked off, then each message will result in a db query to the sqlite database
-    </p>
     <h3>Input</h3>
     <dl class="message-properties">
-        <dt>payload</dt>
-        <dt>topic</dt>
+        <dt>payload <span class="property-type">string</span></dt>
+        <dd>Mysensors serial / mqtt payload format</dd>
+        <dt>topic <span class="property-type">string</span></dt>
     </dl>
     <h3>Output</h3>
     <dl class="message-properties">
@@ -91,9 +92,13 @@
         By ticking off the MQTT option, this node operates on MQTT topics instead of MySensors serial protocol.
     </p>
     <p>
-        If "use DB" is ticked, then the node will use the configured database, to retrieve
-        extra information about sensor type etc. given by the node during presentation, and add this to each message that passes
+        If <code>use DB</code> is checked, the node will use the configured database to retrieve extra information about 
+        sensor type etc. given by the node during presentation, and add this to each message that passes
         through the node.
-
     </p>
+    <h3>References</h3>
+    <ul>
+        <li><a href="https://github.com/tbowmo/node-red-contrib-mysensors">Github</a> - The github repository</li>
+        <li><a href="https://mysensors.org">MySensors</a></li>
+    </ul>
 </script>
